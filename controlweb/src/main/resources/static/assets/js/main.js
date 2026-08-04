@@ -161,6 +161,32 @@
 
     initUserProfile();
 
+    // El sidebar tiene su propio scroll (position: fixed + overflow-y: auto) y cada
+    // click en un link recarga la pagina completa (no es una SPA), asi que sin esto
+    // el scroll siempre vuelve arriba y hay que bajar de nuevo para llegar a una
+    // opcion cercana a la que se acaba de usar.
+    function initSidebarScroll() {
+      var sidebar = document.querySelector(".admin-sidebar");
+      if (!sidebar) {
+        return;
+      }
+      var key = "adminHMD.sidebarScrollTop";
+      try {
+        var saved = window.sessionStorage.getItem(key);
+        if (saved !== null) {
+          sidebar.scrollTop = parseInt(saved, 10) || 0;
+        }
+        sidebar.addEventListener("scroll", function () {
+          window.sessionStorage.setItem(key, String(sidebar.scrollTop));
+        }, { passive: true });
+      } catch (error) {
+        // almacenamiento no disponible (p.ej. navegacion privada): se ignora y
+        // el scroll simplemente se comporta como antes.
+      }
+    }
+
+    initSidebarScroll();
+
     if (!sidebarToggle) {
       return;
     }

@@ -16,15 +16,15 @@ public final class CatalogoModulos {
 	}
 
 	private static final List<ModuloOpcion> MODULOS = List.of(
-			new ModuloOpcion("producto", "Productos", "Catálogo"),
 			new ModuloOpcion("zona", "Zonas", "Catálogo"),
 			new ModuloOpcion("ubicacion", "Ubicaciones", "Catálogo"),
 
+			new ModuloOpcion("producto", "Productos", "Inventario"),
 			new ModuloOpcion("lote", "Lotes", "Inventario"),
 			new ModuloOpcion("inventario", "Existencias", "Inventario"),
 
 			new ModuloOpcion("solicitud", "Solicitudes", "Movimientos"),
-			new ModuloOpcion("detallesolicitud", "Detalle Solicitud", "Movimientos"),
+			new ModuloOpcion("detallesolicitud", "Reservas", "Movimientos"),
 			new ModuloOpcion("entrega", "Entregas", "Movimientos"),
 			new ModuloOpcion("detalleentrega", "Detalle Entrega", "Movimientos"),
 			new ModuloOpcion("tipo", "Tipos de Movimiento", "Movimientos"),

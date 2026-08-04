@@ -51,6 +51,9 @@
 							<td th:text="${indice.idProducto}"></td>
 							<td th:text="${indice.idUbicacion}"></td>
 							<td class="text-end">
+								<a class="btn btn-warning btn-sm"
+									th:href="@{/detallesolicitud/nuevo(idLote=${indice.idLote},idProducto=${indice.idProducto})}"><i
+									class="bi bi-bookmark-check" aria-hidden="true"></i> Reservar</a>
 								<a class="btn btn-light btn-sm" th:href="@{/lote/editar/{id}(id=${indice.idLote})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
 								<a class="btn btn-outline-danger btn-sm" th:href="@{/lote/eliminar/{id}(id=${indice.idLote})}"

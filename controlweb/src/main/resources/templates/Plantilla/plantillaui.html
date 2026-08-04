@@ -27,12 +27,8 @@
 			</div>
 
 			<nav class="sidebar-nav" th:with="mp=${session.modulosPermitidos}">
-				<th:block th:if="${mp != null and (mp.contains('producto') or mp.contains('zona') or mp.contains('ubicacion'))}">
+				<th:block th:if="${mp != null and (mp.contains('zona') or mp.contains('ubicacion'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
-				<a class="nav-link" th:if="${mp.contains('producto')}" th:href="@{/producto}">
-					<span class="nav-icon"><i class="bi bi-box" aria-hidden="true"></i></span>
-					<span class="nav-text">Productos</span>
-				</a>
 				<a class="nav-link" th:if="${mp.contains('zona')}" th:href="@{/zona}">
 					<span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
 					<span class="nav-text">Zonas</span>
@@ -43,8 +39,12 @@
 				</a>
 				</th:block>
 
-				<th:block th:if="${mp != null and (mp.contains('lote') or mp.contains('inventario'))}">
+				<th:block th:if="${mp != null and (mp.contains('producto') or mp.contains('lote') or mp.contains('inventario'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Inventario</span>
+				<a class="nav-link" th:if="${mp.contains('producto')}" th:href="@{/producto}">
+					<span class="nav-icon"><i class="bi bi-box" aria-hidden="true"></i></span>
+					<span class="nav-text">Productos</span>
+				</a>
 				<a class="nav-link" th:if="${mp.contains('lote')}" th:href="@{/lote}">
 					<span class="nav-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
 					<span class="nav-text">Lotes</span>
@@ -63,7 +63,7 @@
 				</a>
 				<a class="nav-link" th:if="${mp.contains('detallesolicitud')}" th:href="@{/detallesolicitud}">
 					<span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
-					<span class="nav-text">Detalle Solicitud</span>
+					<span class="nav-text">Reservas</span>
 				</a>
 				<a class="nav-link" th:if="${mp.contains('entrega')}" th:href="@{/entrega}">
 					<span class="nav-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>

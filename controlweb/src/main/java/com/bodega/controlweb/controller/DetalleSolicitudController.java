@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bodega.controlweb.model.dto.request.DetalleSolicitudRequestDto;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
@@ -35,8 +36,12 @@ public class DetalleSolicitudController {
     }
 
     @GetMapping("/nuevo")
-    public String crearDetalleSolicitud(Model model) {
-        model.addAttribute("detalleSolicitud", new DetalleSolicitudRequestDto());
+    public String crearDetalleSolicitud(@RequestParam(required = false) Integer idLote,
+            @RequestParam(required = false) Integer idProducto, Model model) {
+        DetalleSolicitudRequestDto nuevo = new DetalleSolicitudRequestDto();
+        nuevo.setIdLote(idLote);
+        nuevo.setIdProducto(idProducto);
+        model.addAttribute("detalleSolicitud", nuevo);
         model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
         model.addAttribute("opcionesSolicitud", servicioSolicitud.listarOpciones());
         model.addAttribute("opcionesLote", servicioLote.listarOpciones());
