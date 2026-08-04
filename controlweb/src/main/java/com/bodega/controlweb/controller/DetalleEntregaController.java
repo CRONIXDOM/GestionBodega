@@ -15,6 +15,7 @@ import com.bodega.controlweb.service.IDetalleSolicitudService;
 import com.bodega.controlweb.service.IEntregaService;
 import com.bodega.controlweb.service.ILoteService;
 import com.bodega.controlweb.service.IProductoService;
+import com.bodega.controlweb.util.MensajesError;
 
 @Controller
 @RequestMapping("/detalleentrega")
@@ -48,9 +49,19 @@ public class DetalleEntregaController {
     }
 
     @PostMapping("/guardar")
-    public String guardarDetalleEntrega(@ModelAttribute DetalleEntregaRequestDto detalleEntrega) {
-        servicioAPI.guardarDetalleEntrega(detalleEntrega);
-        return "redirect:/detalleentrega";
+    public String guardarDetalleEntrega(@ModelAttribute DetalleEntregaRequestDto detalleEntrega, Model model) {
+        try {
+            servicioAPI.guardarDetalleEntrega(detalleEntrega);
+            return "redirect:/detalleentrega";
+        } catch (Exception ex) {
+            model.addAttribute("detalleEntrega", detalleEntrega);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            model.addAttribute("opcionesEntrega", servicioEntrega.listarOpciones());
+            model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+            model.addAttribute("opcionesDetalleSolicitud", servicioDetalleSolicitud.listarOpciones());
+            model.addAttribute("opcionesLote", servicioLote.listarOpciones());
+            return "/DetalleEntrega/creardetalleentrega";
+        }
     }
 
     @GetMapping("/editar/{id}")

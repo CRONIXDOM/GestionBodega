@@ -96,6 +96,44 @@
 						class="bi bi-clipboard-data" aria-hidden="true"></i> Existencias</a></div>
 			</div>
 		</section>
+
+		<section class="panel mt-3">
+			<div class="panel-header">
+				<div>
+					<h2 class="h5 mb-1 section-title"><i class="bi bi-clock-history" aria-hidden="true"></i><span>Orden
+							de registro de productos</span></h2>
+					<p class="text-muted mb-0">Los últimos productos dados de alta, del más reciente al más antiguo.</p>
+				</div>
+				<a class="btn btn-light btn-sm" th:href="@{/producto}"><i class="bi bi-list-ul" aria-hidden="true"></i>
+					Ver todos</a>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Código</th>
+							<th scope="col">Producto</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="prod, iter : ${productosRecientes}">
+							<td class="fw-semibold" th:text="${iter.count}"></td>
+							<td th:text="${prod.codigoProducto}"></td>
+							<td th:text="${prod.nombreProducto}"></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/producto/editar/{id}(id=${prod.idProducto})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Ver</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(productosRecientes)}">
+							<td colspan="4" class="text-center text-muted py-4">Todavía no hay productos registrados.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
 	</div>
 </body>
 

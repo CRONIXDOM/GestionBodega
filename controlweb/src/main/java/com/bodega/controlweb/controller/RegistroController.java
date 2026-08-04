@@ -16,6 +16,7 @@ import com.bodega.controlweb.service.IRegistroService;
 import com.bodega.controlweb.service.ITipoService;
 import com.bodega.controlweb.service.IUbicacionService;
 import com.bodega.controlweb.service.IUsuarioRolService;
+import com.bodega.controlweb.util.MensajesError;
 
 @Controller
 @RequestMapping("/registro")
@@ -48,9 +49,16 @@ public class RegistroController {
     }
 
     @PostMapping("/guardar")
-    public String guardarRegistro(@ModelAttribute RegistroRequestDto registro) {
-        servicioAPI.guardarRegistro(registro);
-        return "redirect:/registro";
+    public String guardarRegistro(@ModelAttribute RegistroRequestDto registro, Model model) {
+        try {
+            servicioAPI.guardarRegistro(registro);
+            return "redirect:/registro";
+        } catch (Exception ex) {
+            model.addAttribute("registro", registro);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            agregarOpciones(model);
+            return "/Registro/crearregistro";
+        }
     }
 
     @GetMapping("/editar/{id}")

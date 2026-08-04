@@ -1,9 +1,15 @@
 package com.bodega.control.aplicacion.casosuso.impl;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IRegistroUseCase;
+import com.bodega.control.dominio.entidades.DetalleEntrega;
+import com.bodega.control.dominio.entidades.Lote;
 import com.bodega.control.dominio.entidades.Registro;
+import com.bodega.control.dominio.entidades.Tipo;
+import com.bodega.control.dominio.entidades.Ubicacion;
+import com.bodega.control.dominio.entidades.UsuarioRol;
 import com.bodega.control.dominio.repositorio.IRegistroRepositorio;
 
 public class RegistroUseCaseImpl implements IRegistroUseCase {
@@ -16,7 +22,30 @@ public class RegistroUseCaseImpl implements IRegistroUseCase {
 
 	@Override
 	public Registro guardar(Registro nuevoRegistro) {
+		// el mapper DTO->dominio crea un objeto "cascaron" (p.ej. new Tipo() con
+		// idTipo=null) para cada relacion opcional aunque no venga informada en el
+		// request; hay que normalizarlo a null real o Hibernate intenta guardar esas
+		// relaciones como entidades nuevas en vez de tratarlas como ausentes.
+		if (normalizarId(nuevoRegistro.getLote(), Lote::getIdLote) == null) {
+			nuevoRegistro.setLote(null);
+		}
+		if (normalizarId(nuevoRegistro.getTipo(), Tipo::getIdTipo) == null) {
+			nuevoRegistro.setTipo(null);
+		}
+		if (normalizarId(nuevoRegistro.getUbicacion(), Ubicacion::getIdUbicacion) == null) {
+			nuevoRegistro.setUbicacion(null);
+		}
+		if (normalizarId(nuevoRegistro.getDetalleEntrega(), DetalleEntrega::getIdDetalleEntrega) == null) {
+			nuevoRegistro.setDetalleEntrega(null);
+		}
+		if (normalizarId(nuevoRegistro.getUsuarioRol(), UsuarioRol::getIdUsuarioRol) == null) {
+			nuevoRegistro.setUsuarioRol(null);
+		}
 		return repositorio.guardar(nuevoRegistro);
+	}
+
+	private static <T> Integer normalizarId(T objeto, Function<T, Integer> getId) {
+		return objeto == null ? null : getId.apply(objeto);
 	}
 
 	@Override
@@ -35,9 +64,8 @@ public class RegistroUseCaseImpl implements IRegistroUseCase {
 	}
 
 	@Override
-	public Registro buscarPorid(int Registro) {
-		// TODO Auto-generated method stub
-		return null;
+	public Registro buscarPorid(int idRegistro) {
+		return repositorio.buscarPorid(idRegistro).orElseThrow(() -> new RuntimeException("Registro no encontrado"));
 	}
 
 }
