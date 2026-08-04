@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control Bodega</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link
+	href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+	rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script th:inline="javascript">
+	tailwind.config = {
+		theme: {
+			extend: {
+				fontFamily: { dm: ['DM Sans', 'sans-serif'] },
+				colors: {
+					lightPrimary: '#F4F7FE',
+					brand: {
+						50: '#E9E3FF', 100: '#C0B8FE', 200: '#A195FD', 300: '#8171FC',
+						400: '#7551FF', 500: '#422AFB', 600: '#3311DB', 700: '#2111A5',
+						800: '#190793', 900: '#11047A'
+					},
+					navy: {
+						50: '#d0dcfb', 100: '#aac0fe', 200: '#a3b9f8', 300: '#728fea',
+						400: '#3652ba', 500: '#1b3bbb', 600: '#24388a', 700: '#1B254B',
+						800: '#111c44', 900: '#0b1437'
+					},
+					shadow: { 500: 'rgba(112, 144, 176, 0.08)' }
+				},
+				boxShadow: {
+					'3xl': '14px 17px 40px 4px'
+				}
+			}
+		}
+	}
+</script>
+<style>
+body { font-family: 'DM Sans', sans-serif; }
+</style>
+</head>
+
+<body class="bg-lightPrimary">
+	<div class="flex h-full w-full">
+
+		<!-- Sidebar -->
+		<aside
+			class="fixed z-40 flex h-full min-h-full w-[290px] flex-col bg-white pb-10 shadow-2xl shadow-shadow-500">
+			<div class="mx-8 mt-8 flex items-center">
+				<span class="text-[22px] font-bold uppercase text-navy-700">Control
+					<span class="font-medium text-brand-500">Bodega</span>
+				</span>
+			</div>
+			<div class="mt-6 mb-6 h-px bg-gray-200"></div>
+
+			<nav class="mb-auto overflow-y-auto px-4">
+				<ul class="space-y-1">
+					<li><a th:href="@{/}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Dashboard</a>
+					</li>
+
+					<th:block
+						th:if="${session.rolesLogueado != null and #lists.contains(session.rolesLogueado, 'Administrador')}">
+					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Accesos</li>
+					<li><a th:href="@{/usuario}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Usuarios</a>
+					</li>
+					<li><a th:href="@{/rol}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Roles</a>
+					</li>
+					<li><a th:href="@{/usuariorol}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Usuario
+							Rol</a>
+					</li>
+					<li><a th:href="@{/credenciales}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Credenciales</a>
+					</li>
+					</th:block>
+
+					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Catálogo</li>
+					<li><a th:href="@{/producto}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Productos</a>
+					</li>
+					<li><a th:href="@{/tipo}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Tipos</a>
+					</li>
+					<li><a th:href="@{/zona}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Zonas</a>
+					</li>
+					<li><a th:href="@{/ubicacion}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Ubicaciones</a>
+					</li>
+
+					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Inventario</li>
+					<li><a th:href="@{/lote}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Lotes</a>
+					</li>
+					<li><a th:href="@{/registro}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Registros</a>
+					</li>
+
+					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Movimientos</li>
+					<li><a th:href="@{/solicitud}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Solicitudes</a>
+					</li>
+					<li><a th:href="@{/detallesolicitud}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Detalle
+							Solicitud</a>
+					</li>
+					<li><a th:href="@{/entrega}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Entregas</a>
+					</li>
+					<li><a th:href="@{/detalleentrega}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Detalle
+							Entrega</a>
+					</li>
+
+					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Reportes</li>
+					<li><a th:href="@{/reporte}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Reportes</a>
+					</li>
+				</ul>
+			</nav>
+		</aside>
+
+		<!-- Main -->
+		<div class="h-full w-full bg-lightPrimary pl-[290px]">
+			<main class="mx-3 h-full md:mx-6">
+
+				<nav
+					class="sticky top-4 z-30 mt-4 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/60 p-3 backdrop-blur-xl">
+					<div class="ml-2 text-lg font-bold capitalize text-navy-700">Panel
+						de Administración</div>
+
+					<div class="mr-2 flex items-center gap-4">
+						<span class="text-sm font-medium text-navy-700"> <span
+							th:text="${session.usuarioLogueado} ?: 'Invitado'">Usuario</span>
+						</span>
+						<a th:href="@{/logout}"
+							class="linear rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Cerrar
+							Sesión</a>
+					</div>
+				</nav>
+
+				<div class="mx-auto mt-5 mb-8 min-h-[70vh]">
+					<div layout:fragment="contenidopaginas"></div>
+				</div>
+
+				<footer class="p-3 text-center text-sm text-gray-500">Control
+					Bodega</footer>
+			</main>
+		</div>
+	</div>
+</body>
+</html>

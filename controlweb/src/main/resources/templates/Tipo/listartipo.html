@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="mb-6 flex items-center justify-between">
+			<h1 class="text-2xl font-bold text-navy-700">Listar Tipo</h1>
+			<a th:href="@{/tipo/nuevo}"
+				class="linear rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">+
+				Nuevo</a>
+		</div>
+		<div
+			class="relative flex flex-col rounded-[20px] bg-white p-4 shadow-3xl shadow-shadow-500">
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<tr class="border-b border-gray-200">
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Descripción</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Clase</th>
+							<th class="px-4 py-3"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listatipo}"
+							class="border-b border-gray-100 last:border-0 hover:bg-lightPrimary/50">
+							<td class="px-4 py-3 text-sm font-medium text-navy-700"
+								th:text="${indice.idTipo}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.descripcion}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.clase}"></td>
+							<td class="whitespace-nowrap px-4 py-3 text-right">
+								<a th:href="@{/tipo/editar/{id}(id=${indice.idTipo})}"
+								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>
+								<a th:href="@{/tipo/eliminar/{id}(id=${indice.idTipo})}"
+								onclick="return confirm('¿Seguro que deseas eliminar?')"
+								class="inline-flex items-center rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-500 hover:bg-red-500 hover:text-white">Eliminar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

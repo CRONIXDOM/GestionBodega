@@ -1,0 +1,50 @@
+package com.bodega.control.aplicacion.casosuso.impl;
+
+import java.util.List;
+
+import com.bodega.control.aplicacion.casosuso.entrada.IZonaUseCase;
+import com.bodega.control.dominio.entidades.Zona;
+import com.bodega.control.dominio.repositorio.IZonaRepositorio;
+
+public class ZonaUseCaseImpl implements IZonaUseCase {
+
+    private final IZonaRepositorio repositorio;
+
+    public ZonaUseCaseImpl(IZonaRepositorio repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    @Override
+    public Zona guardar(Zona nuevaZona) {
+        return repositorio.guardar(nuevaZona);
+    }
+
+    @Override
+    public Zona buscarPorId(int idZona) {
+        return repositorio.buscarPorid(idZona)
+                .orElseThrow(() -> new RuntimeException("Zona no encontrada"));
+    }
+
+    @Override
+    public List<Zona> listarTodos() {
+        return repositorio.listarTodos();
+    }
+
+    @Override
+    public void eliminar(int idZona) {
+        repositorio.eliminar(idZona);
+    }
+
+	@Override
+	public Zona buscarPorid(int Zona) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Zona> listarTodo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

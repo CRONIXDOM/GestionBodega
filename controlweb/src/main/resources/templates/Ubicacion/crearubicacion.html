@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Ubicación</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<h1 class="mb-6 text-2xl font-bold text-navy-700">Registro Ubicación</h1>
+		<div
+			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
+			<form th:action="@{/ubicacion/guardar}" th:object="${ubicacion}"
+				method="post">
+				<input type="hidden" th:field="*{idUbicacion}">
+				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Cantidad
+						de Ubicación</label>
+					<input type="text" th:field="*{cantidadUbicacion}"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+				</div>
+				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Fecha
+						de Ubicación</label>
+					<input type="date" th:field="*{fechaUbicacion}"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+				</div>
+				<button type="submit"
+					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
