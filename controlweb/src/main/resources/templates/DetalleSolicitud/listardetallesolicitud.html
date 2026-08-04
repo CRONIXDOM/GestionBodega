@@ -7,58 +7,62 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<div class="mb-6 flex items-center justify-between">
-			<h1 class="text-2xl font-bold text-navy-700">Listar Detalle Solicitud</h1>
-			<a th:href="@{/detallesolicitud/nuevo}"
-				class="linear rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">+
-				Nuevo</a>
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Movimientos</p>
+					<h1 class="h3 mb-1">Detalle Solicitud</h1>
+					<p class="text-muted mb-0">Detalle de las solicitudes registradas.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/detallesolicitud/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
 		</div>
-		<div
-			class="relative flex flex-col rounded-[20px] bg-white p-4 shadow-3xl shadow-shadow-500">
-			<div class="overflow-x-auto">
-				<table class="w-full">
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
 					<thead>
-						<tr class="border-b border-gray-200">
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Producto</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Cantidad Producto</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Lugar Recogida</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Solicitud</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Lotes Usados</th>
-							<th class="px-4 py-3"></th>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Id Producto</th>
+							<th scope="col">Cantidad Producto</th>
+							<th scope="col">Lugar Recogida</th>
+							<th scope="col">Id Solicitud</th>
+							<th scope="col">Lotes Usados</th>
+							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="indice:${listadetallesolicitud}"
-							class="border-b border-gray-100 last:border-0 hover:bg-lightPrimary/50">
-							<td class="px-4 py-3 text-sm font-medium text-navy-700"
-								th:text="${indice.idDetalleSolicitud}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.idProducto}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.cantidadProducto}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.lugarRecogida}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.idSolicitud}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700" th:if="${indice.lotesAsignados != null}">
-								<span th:each="la, iter : ${indice.lotesAsignados}">
-									<span th:text="${la.numeroLote} + ' (' + ${la.cantidad} + ')'"></span><span th:if="${!iter.last}">, </span>
-								</span>
+						<tr th:each="indice:${listadetallesolicitud}">
+							<td class="fw-semibold" th:text="${indice.idDetalleSolicitud}"></td>
+							<td th:text="${indice.idProducto}"></td>
+							<td th:text="${indice.cantidadProducto}"></td>
+							<td th:text="${indice.lugarRecogida}"></td>
+							<td th:text="${indice.idSolicitud}"></td>
+							<td th:if="${indice.lotesAsignados != null}">
+								<span class="badge text-bg-light me-1" th:each="la : ${indice.lotesAsignados}"
+									th:text="${la.numeroLote} + ' (' + ${la.cantidad} + ')'"></span>
 							</td>
-							<td class="px-4 py-3 text-sm text-navy-700" th:if="${indice.lotesAsignados == null}"></td>
-							<td class="whitespace-nowrap px-4 py-3 text-right">
-								<a th:href="@{/detallesolicitud/editar/{id}(id=${indice.idDetalleSolicitud})}"
-								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>
-								<a th:href="@{/detallesolicitud/eliminar/{id}(id=${indice.idDetalleSolicitud})}"
-								onclick="return confirm('¿Seguro que deseas eliminar?')"
-								class="inline-flex items-center rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-500 hover:bg-red-500 hover:text-white">Eliminar</a>
+							<td th:if="${indice.lotesAsignados == null}"></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/detallesolicitud/editar/{id}(id=${indice.idDetalleSolicitud})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/detallesolicitud/eliminar/{id}(id=${indice.idDetalleSolicitud})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
 							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(listadetallesolicitud)}">
+							<td colspan="7" class="text-center text-muted py-4">Todavía no hay detalles de solicitud registrados.</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</section>
 	</div>
 </body>
 </html>

@@ -8,59 +8,61 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<h1 class="mb-6 text-2xl font-bold text-navy-700">Detalle Solicitud</h1>
-		<div
-			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<form th:action="@{/detallesolicitud/guardar}"
-				th:object="${detalleSolicitud}" method="post">
-				<input type="hidden" th:field="*{idDetalleSolicitud}">
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						del Producto</label>
-					<select th:field="*{idProducto}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesProducto}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Movimientos</p>
+					<h1 class="h3 mb-1">Detalle Solicitud</h1>
+					<p class="text-muted mb-0">Completa los datos del detalle de solicitud.</p>
 				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Cantidad
-						del Producto</label>
-					<input type="number" th:field="*{cantidadProducto}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Lugar
-						de Recogida</label>
-					<input type="text" th:field="*{lugarRecogida}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Lote
-						específico (opcional)</label>
-					<select th:field="*{idLote}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesLote}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-					<p class="mt-1 text-xs text-gray-500">Si no eliges uno, se
-						usa automáticamente el lote más antiguo (FIFO).</p>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Solicitud</label>
-					<select th:field="*{idSolicitud}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesSolicitud}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<button type="submit"
-					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
-			</form>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<form class="panel" th:action="@{/detallesolicitud/guardar}" th:object="${detalleSolicitud}" method="post">
+					<input type="hidden" th:field="*{idDetalleSolicitud}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Id del Producto</label> <select class="form-select"
+								th:field="*{idProducto}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Cantidad del Producto</label> <input class="form-control"
+								type="number" th:field="*{cantidadProducto}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Lugar de Recogida</label> <input class="form-control"
+								th:field="*{lugarRecogida}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Lote específico (opcional)</label> <select class="form-select"
+								th:field="*{idLote}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesLote}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Si no eliges uno, se usa automáticamente el lote más antiguo (FIFO).</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Solicitud</label> <select class="form-select"
+								th:field="*{idSolicitud}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesSolicitud}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-4">
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </body>
 </html>

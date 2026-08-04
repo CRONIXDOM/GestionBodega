@@ -8,72 +8,70 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<h1 class="mb-6 text-2xl font-bold text-navy-700">Registro</h1>
-		<div
-			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<form th:action="@{/registro/guardar}" th:object="${registro}"
-				method="post">
-				<input type="hidden" th:field="*{idRegistro}">
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Fecha
-						de Registro</label>
-					<input type="date" th:field="*{fechaRegistro}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Inventario</p>
+					<h1 class="h3 mb-1">Registro</h1>
+					<p class="text-muted mb-0">Completa los datos del registro.</p>
 				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						de Lote</label>
-					<select th:field="*{idLote}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesLote}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						de Tipo</label>
-					<select th:field="*{idTipo}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesTipo}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						de Ubicación</label>
-					<select th:field="*{idUbicacion}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesUbicacion}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						de Detalle Entrega</label>
-					<select th:field="*{idDetalleEntrega}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesDetalleEntrega}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Id
-						de Usuario Rol</label>
-					<select th:field="*{idUsuarioRol}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesUsuarioRol}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<button type="submit"
-					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
-			</form>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<form class="panel" th:action="@{/registro/guardar}" th:object="${registro}" method="post">
+					<input type="hidden" th:field="*{idRegistro}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Fecha de Registro</label> <input class="form-control"
+								type="date" th:field="*{fechaRegistro}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Id de Lote</label> <select class="form-select"
+								th:field="*{idLote}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesLote}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Id de Tipo</label> <select class="form-select"
+								th:field="*{idTipo}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesTipo}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Id de Ubicación</label> <select class="form-select"
+								th:field="*{idUbicacion}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesUbicacion}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Id de Detalle Entrega</label> <select class="form-select"
+								th:field="*{idDetalleEntrega}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesDetalleEntrega}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Id de Usuario Rol</label> <select class="form-select"
+								th:field="*{idUsuarioRol}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesUsuarioRol}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-4">
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </body>
 </html>

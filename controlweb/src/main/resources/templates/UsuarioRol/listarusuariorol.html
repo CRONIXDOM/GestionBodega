@@ -7,48 +7,54 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<div class="mb-6 flex items-center justify-between">
-			<h1 class="text-2xl font-bold text-navy-700">Listar Usuario Rol</h1>
-			<a th:href="@{/usuariorol/nuevo}"
-				class="linear rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">+
-				Nuevo</a>
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Accesos</p>
+					<h1 class="h3 mb-1">Usuario Rol</h1>
+					<p class="text-muted mb-0">Asignaciones de rol a usuarios.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/usuariorol/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
 		</div>
-		<div
-			class="relative flex flex-col rounded-[20px] bg-white p-4 shadow-3xl shadow-shadow-500">
-			<div class="overflow-x-auto">
-				<table class="w-full">
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
 					<thead>
-						<tr class="border-b border-gray-200">
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Fecha Asignación</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Usuario</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Rol</th>
-							<th class="px-4 py-3"></th>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Fecha Asignación</th>
+							<th scope="col">Id Usuario</th>
+							<th scope="col">Id Rol</th>
+							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="indice:${listausuariorol}"
-							class="border-b border-gray-100 last:border-0 hover:bg-lightPrimary/50">
-							<td class="px-4 py-3 text-sm font-medium text-navy-700"
-								th:text="${indice.idUsuarioRol}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.fechaAsignacion}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.idUsuario}"></td>
-							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.idRol}"></td>
-							<td class="whitespace-nowrap px-4 py-3 text-right">
-								<a th:href="@{/usuariorol/editar/{id}(id=${indice.idUsuarioRol})}"
-								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>
-								<a th:href="@{/usuariorol/eliminar/{id}(id=${indice.idUsuarioRol})}"
-								onclick="return confirm('¿Seguro que deseas eliminar?')"
-								class="inline-flex items-center rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-500 hover:bg-red-500 hover:text-white">Eliminar</a>
+						<tr th:each="indice:${listausuariorol}">
+							<td class="fw-semibold" th:text="${indice.idUsuarioRol}"></td>
+							<td th:text="${indice.fechaAsignacion}"></td>
+							<td th:text="${indice.idUsuario}"></td>
+							<td th:text="${indice.idRol}"></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/usuariorol/editar/{id}(id=${indice.idUsuarioRol})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/usuariorol/eliminar/{id}(id=${indice.idUsuarioRol})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
 							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(listausuariorol)}">
+							<td colspan="5" class="text-center text-muted py-4">Todavía no hay asignaciones registradas.</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</section>
 	</div>
 </body>
 </html>

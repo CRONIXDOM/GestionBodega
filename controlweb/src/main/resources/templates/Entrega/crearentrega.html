@@ -8,28 +8,39 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<h1 class="mb-6 text-2xl font-bold text-navy-700">Registro Entrega</h1>
-		<div
-			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<form th:action="@{/entrega/guardar}" th:object="${entrega}"
-				method="post">
-				<input type="hidden" th:field="*{idEntrega}">
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Fecha
-						de Entrega</label>
-					<input type="date" th:field="*{fechaEntrega}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Movimientos</p>
+					<h1 class="h3 mb-1">Registro de Entrega</h1>
+					<p class="text-muted mb-0">Completa los datos de la entrega.</p>
 				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Responsable
-						de Entrega</label>
-					<input type="text" th:field="*{responsableEntrega}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<button type="submit"
-					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
-			</form>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<form class="panel" th:action="@{/entrega/guardar}" th:object="${entrega}" method="post">
+					<input type="hidden" th:field="*{idEntrega}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Fecha de Entrega</label> <input class="form-control"
+								type="date" th:field="*{fechaEntrega}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Responsable de Entrega</label> <input class="form-control"
+								th:field="*{responsableEntrega}">
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-4">
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </body>
 </html>

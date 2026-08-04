@@ -8,78 +8,75 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<h1 class="mb-6 text-2xl font-bold text-navy-700">Detalle de Entrega</h1>
-		<div
-			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<form th:action="@{/detalleentrega/guardar}"
-				th:object="${detalleEntrega}" method="post">
-				<input type="hidden" th:field="*{idDetalleEntrega}">
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Producto</label>
-					<select th:field="*{idProducto}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesProducto}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-clipboard-data-fill" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Movimientos</p>
+					<h1 class="h3 mb-1">Detalle de Entrega</h1>
+					<p class="text-muted mb-0">Completa los datos del detalle de entrega.</p>
 				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Cantidad
-						del Producto</label>
-					<input type="number" th:field="*{cantidadProducto}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Código
-						del Evento</label>
-					<input type="text" th:field="*{codigoEvento}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Nombre
-						del Evento</label>
-					<input type="text" th:field="*{nombreEvento}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Entrega</label>
-					<select th:field="*{idEntrega}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesEntrega}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Cumple
-						el pedido (opcional)</label>
-					<select th:field="*{idDetalleSolicitud}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesDetalleSolicitud}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-					<p class="mt-1 text-xs text-gray-500">Si eliges un pedido, se
-						descuenta exactamente lo que ya estaba reservado para él y se
-						ignoran Producto/Cantidad/Lote de abajo.</p>
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Lote
-						específico (opcional)</label>
-					<select th:field="*{idLote}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesLote}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-					<p class="mt-1 text-xs text-gray-500">Solo aplica si NO
-						elegiste un pedido arriba. Si lo dejas vacío, se usa FIFO
-						automático sobre el stock disponible.</p>
-				</div>
-				<button type="submit"
-					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
-			</form>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<form class="panel" th:action="@{/detalleentrega/guardar}" th:object="${detalleEntrega}" method="post">
+					<input type="hidden" th:field="*{idDetalleEntrega}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Producto</label> <select class="form-select"
+								th:field="*{idProducto}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Cantidad del Producto</label> <input class="form-control"
+								type="number" th:field="*{cantidadProducto}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Código del Evento</label> <input class="form-control"
+								th:field="*{codigoEvento}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Nombre del Evento</label> <input class="form-control"
+								th:field="*{nombreEvento}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Entrega</label> <select class="form-select"
+								th:field="*{idEntrega}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesEntrega}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Cumple el pedido (opcional)</label> <select class="form-select"
+								th:field="*{idDetalleSolicitud}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesDetalleSolicitud}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Si eliges un pedido, se descuenta exactamente lo que ya estaba reservado
+								para él y se ignoran Producto/Cantidad/Lote de abajo.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Lote específico (opcional)</label> <select class="form-select"
+								th:field="*{idLote}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesLote}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Solo aplica si NO elegiste un pedido arriba. Si lo dejas vacío, se usa
+								FIFO automático sobre el stock disponible.</div>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-4">
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </body>
 </html>

@@ -8,43 +8,50 @@
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
-		<h1 class="mb-6 text-2xl font-bold text-navy-700">Registro Ubicación</h1>
-		<div
-			class="relative max-w-xl rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<form th:action="@{/ubicacion/guardar}" th:object="${ubicacion}"
-				method="post">
-				<input type="hidden" th:field="*{idUbicacion}">
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Código
-						de Ubicación</label>
-					<input type="text" th:field="*{codigoUbicacion}" placeholder="A-01"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Catálogo</p>
+					<h1 class="h3 mb-1">Registro de Ubicación</h1>
+					<p class="text-muted mb-0">Completa los datos de la ubicación.</p>
 				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Cantidad
-						de Ubicación</label>
-					<input type="text" th:field="*{cantidadUbicacion}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Fecha
-						de Ubicación</label>
-					<input type="date" th:field="*{fechaUbicacion}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
-				</div>
-				<div class="mb-4">
-					<label class="ml-1 text-sm font-bold text-navy-700">Zona</label>
-					<select th:field="*{idZona}"
-						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
-						<option value="">Seleccione...</option>
-						<option th:each="op : ${opcionesZona}" th:value="${op.id}"
-							th:text="${op.etiqueta}"></option>
-					</select>
-				</div>
-				<button type="submit"
-					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
-			</form>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<form class="panel" th:action="@{/ubicacion/guardar}" th:object="${ubicacion}" method="post">
+					<input type="hidden" th:field="*{idUbicacion}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Código de Ubicación</label> <input class="form-control"
+								th:field="*{codigoUbicacion}" placeholder="A-01">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Cantidad de Ubicación</label> <input class="form-control"
+								th:field="*{cantidadUbicacion}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Fecha de Ubicación</label> <input class="form-control"
+								type="date" th:field="*{fechaUbicacion}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Zona</label> <select class="form-select"
+								th:field="*{idZona}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesZona}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-4">
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </body>
 </html>
