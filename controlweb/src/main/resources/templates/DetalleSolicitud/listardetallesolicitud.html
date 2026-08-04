@@ -23,8 +23,14 @@
 		</div>
 
 		<section class="panel mt-3">
+			<div class="p-3 pb-0">
+				<div class="input-group table-search" style="max-width: 340px;">
+					<span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" data-table-search="tablaDetallesolicitud" placeholder="Buscar...">
+				</div>
+			</div>
 			<div class="table-responsive">
-				<table class="table align-middle mb-0">
+				<table id="tablaDetallesolicitud" class="table align-middle mb-0" data-page-size="15">
 					<thead>
 						<tr>
 							<th scope="col">Id</th>
@@ -56,7 +62,7 @@
 									aria-hidden="true"></i> Eliminar</a>
 							</td>
 						</tr>
-						<tr th:if="${#lists.isEmpty(listadetallesolicitud)}">
+						<tr data-empty-row th:if="${#lists.isEmpty(listadetallesolicitud)}">
 							<td colspan="7" class="text-center text-muted py-4">Todavía no hay detalles de solicitud registrados.</td>
 						</tr>
 					</tbody>

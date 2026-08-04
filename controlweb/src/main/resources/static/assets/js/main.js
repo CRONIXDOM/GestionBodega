@@ -78,25 +78,125 @@
       });
     }
 
+    // Busqueda + paginacion 100% en el cliente: la tabla ya viene completa del
+    // servidor (esta app no es una SPA y no hay endpoints paginados todavia),
+    // asi que esto solo oculta filas segun el texto buscado y la pagina actual.
+    // El input de busqueda usa data-table-search="idDeLaTabla"; la tabla usa
+    // data-page-size="N" (opcional) para activar la paginacion.
     function initTableSearch() {
-      var searchInputs = document.querySelectorAll("[data-table-search]");
+      var tables = document.querySelectorAll("table[id]");
 
-      Array.prototype.forEach.call(searchInputs, function (input) {
-        var tableId = input.getAttribute("data-table-search");
-        var table = document.getElementById(tableId);
-
-        if (!table) {
+      Array.prototype.forEach.call(tables, function (table) {
+        var searchInput = document.querySelector('[data-table-search="' + table.id + '"]');
+        var pageSize = parseInt(table.getAttribute("data-page-size"), 10) || 0;
+        var tbody = table.querySelector("tbody");
+        if (!tbody || (!searchInput && !pageSize)) {
           return;
         }
 
-        input.addEventListener("input", function () {
-          var query = input.value.trim().toLowerCase();
-          var rows = table.querySelectorAll("tbody tr");
-
-          Array.prototype.forEach.call(rows, function (row) {
-            row.hidden = query !== "" && row.textContent.toLowerCase().indexOf(query) === -1;
-          });
+        var allRows = Array.prototype.slice.call(tbody.rows);
+        var dataRows = allRows.filter(function (row) {
+          return !row.hasAttribute("data-empty-row");
         });
+        var emptyRow = allRows.filter(function (row) {
+          return row.hasAttribute("data-empty-row");
+        })[0];
+
+        if (dataRows.length === 0) {
+          return;
+        }
+
+        var pagerNav = null;
+        if (pageSize > 0 && dataRows.length > pageSize) {
+          pagerNav = document.createElement("nav");
+          pagerNav.className = "d-flex justify-content-between align-items-center flex-wrap gap-2 px-3 py-3 border-top";
+          var wrapper = table.closest(".table-responsive") || table;
+          wrapper.insertAdjacentElement("afterend", pagerNav);
+        }
+
+        var currentPage = 1;
+
+        function render() {
+          var query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+          var matched = dataRows.filter(function (row) {
+            return query === "" || row.textContent.toLowerCase().indexOf(query) !== -1;
+          });
+
+          if (emptyRow) {
+            emptyRow.hidden = matched.length !== 0;
+          }
+
+          var effectivePageSize = pageSize > 0 ? pageSize : matched.length || 1;
+          var totalPages = Math.max(1, Math.ceil(matched.length / effectivePageSize));
+          if (currentPage > totalPages) {
+            currentPage = totalPages;
+          }
+
+          var start = (currentPage - 1) * effectivePageSize;
+          var end = start + effectivePageSize;
+
+          dataRows.forEach(function (row) {
+            row.hidden = true;
+          });
+          matched.slice(start, end).forEach(function (row) {
+            row.hidden = false;
+          });
+
+          if (pagerNav) {
+            renderPager(totalPages, matched.length);
+          }
+        }
+
+        function renderPager(totalPages, totalMatches) {
+          pagerNav.innerHTML = "";
+
+          if (totalPages <= 1) {
+            return;
+          }
+
+          var info = document.createElement("span");
+          info.className = "text-muted small";
+          info.textContent = "Página " + currentPage + " de " + totalPages + " (" + totalMatches + " resultados)";
+          pagerNav.appendChild(info);
+
+          var ul = document.createElement("ul");
+          ul.className = "pagination pagination-sm mb-0";
+
+          function addItem(label, page, disabled, active) {
+            var li = document.createElement("li");
+            li.className = "page-item" + (disabled ? " disabled" : "") + (active ? " active" : "");
+            var a = document.createElement("a");
+            a.className = "page-link";
+            a.href = "#";
+            a.textContent = label;
+            if (!disabled && !active) {
+              a.addEventListener("click", function (event) {
+                event.preventDefault();
+                currentPage = page;
+                render();
+              });
+            }
+            li.appendChild(a);
+            ul.appendChild(li);
+          }
+
+          addItem("Anterior", currentPage - 1, currentPage === 1, false);
+          for (var p = 1; p <= totalPages; p++) {
+            addItem(String(p), p, false, p === currentPage);
+          }
+          addItem("Siguiente", currentPage + 1, currentPage === totalPages, false);
+
+          pagerNav.appendChild(ul);
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener("input", function () {
+            currentPage = 1;
+            render();
+          });
+        }
+
+        render();
       });
     }
 
