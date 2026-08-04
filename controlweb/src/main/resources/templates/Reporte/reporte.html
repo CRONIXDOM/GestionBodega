@@ -1,0 +1,97 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+<title>Reportes</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Movimientos</p>
+					<h1 class="h3 mb-1">Reportes</h1>
+					<p class="text-muted mb-0">Movimientos de inventario filtrables por fecha, tipo y sede.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-light btn-sm"
+					th:href="@{/reporte/exportar(desde=${desde},hasta=${hasta},idTipo=${idTipo},idSede=${idSede})}"><i
+					class="bi bi-download" aria-hidden="true"></i> Exportar CSV</a>
+			</div>
+		</div>
+
+		<section class="panel mt-3">
+			<form class="row g-3" th:action="@{/reporte}" method="get">
+				<div class="col-6 col-md-3">
+					<label class="form-label">Desde</label> <input class="form-control" type="date" name="desde"
+						th:value="${desde}">
+				</div>
+				<div class="col-6 col-md-3">
+					<label class="form-label">Hasta</label> <input class="form-control" type="date" name="hasta"
+						th:value="${hasta}">
+				</div>
+				<div class="col-6 col-md-3">
+					<label class="form-label">Tipo</label> <select class="form-select" name="idTipo">
+						<option value="">Todos</option>
+						<option th:each="op : ${opcionesTipo}" th:value="${op.id}" th:text="${op.etiqueta}"
+							th:selected="${idTipo != null and idTipo == op.id}"></option>
+					</select>
+				</div>
+				<div class="col-6 col-md-3">
+					<label class="form-label">Sede</label> <select class="form-select" name="idSede">
+						<option value="">Todas</option>
+						<option th:each="op : ${opcionesSede}" th:value="${op.id}" th:text="${op.etiqueta}"
+							th:selected="${idSede != null and idSede == op.id}"></option>
+					</select>
+				</div>
+				<div class="col-12 d-flex justify-content-end gap-2">
+					<a class="btn btn-light" th:href="@{/reporte}">Limpiar</a>
+					<button class="btn btn-primary" type="submit">
+						<i class="bi bi-funnel" aria-hidden="true"></i> Filtrar
+					</button>
+				</div>
+			</form>
+		</section>
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">Fecha</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">Producto</th>
+							<th scope="col">Lote</th>
+							<th scope="col">Ubicación</th>
+							<th scope="col">Sede</th>
+							<th scope="col">Usuario</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="mov : ${movimientos}">
+							<td th:text="${mov.fechaRegistro}"></td>
+							<td>
+								<span th:if="${mov.tipoMovimiento != null}" class="badge text-bg-light"
+									th:text="${mov.tipoMovimiento}"></span>
+								<span th:if="${mov.tipoMovimiento == null}">—</span>
+							</td>
+							<td th:text="${mov.nombreProducto} ?: '—'"></td>
+							<td th:text="${mov.numeroLote} ?: '—'"></td>
+							<td th:text="${mov.codigoUbicacion} ?: '—'"></td>
+							<td th:text="${mov.nombreSede} ?: '—'"></td>
+							<td th:text="${mov.nombreUsuario} ?: '—'"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(movimientos)}">
+							<td colspan="7" class="text-center text-muted py-4">No hay movimientos con esos filtros.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

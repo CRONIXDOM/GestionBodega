@@ -30,6 +30,7 @@ public final class CatalogoModulos {
 			new ModuloOpcion("detalleentrega", "Detalle Entrega", "Movimientos"),
 			new ModuloOpcion("tipo", "Tipos de Movimiento", "Movimientos"),
 			new ModuloOpcion("registro", "Registros", "Movimientos"),
+			new ModuloOpcion("reporte", "Reportes", "Movimientos"),
 
 			new ModuloOpcion("usuario", "Usuarios", "Accesos"),
 			new ModuloOpcion("rol", "Roles", "Accesos"),

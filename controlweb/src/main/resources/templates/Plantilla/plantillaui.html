@@ -59,7 +59,7 @@
 				</a>
 				</th:block>
 
-				<th:block th:if="${mp != null and (mp.contains('solicitud') or mp.contains('detallesolicitud') or mp.contains('entrega') or mp.contains('detalleentrega') or mp.contains('tipo') or mp.contains('registro'))}">
+				<th:block th:if="${mp != null and (mp.contains('solicitud') or mp.contains('detallesolicitud') or mp.contains('entrega') or mp.contains('detalleentrega') or mp.contains('tipo') or mp.contains('registro') or mp.contains('reporte'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Movimientos</span>
 				<a class="nav-link" th:if="${mp.contains('solicitud')}" th:href="@{/solicitud}">
 					<span class="nav-icon"><i class="bi bi-clipboard-check" aria-hidden="true"></i></span>
@@ -84,6 +84,10 @@
 				<a class="nav-link" th:if="${mp.contains('registro')}" th:href="@{/registro}">
 					<span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
 					<span class="nav-text">Registros</span>
+				</a>
+				<a class="nav-link" th:if="${mp.contains('reporte')}" th:href="@{/reporte}">
+					<span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
+					<span class="nav-text">Reportes</span>
 				</a>
 				</th:block>
 
