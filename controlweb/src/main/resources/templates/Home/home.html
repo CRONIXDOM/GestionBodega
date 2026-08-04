@@ -9,16 +9,94 @@
 
 <body>
 	<div layout:fragment="contenidopaginas">
-		<div th:if="${session.mensajeError}"
-			class="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-500"
+		<div th:if="${session.mensajeError}" class="alert alert-danger" role="alert"
 			th:text="${session.mensajeError}"></div>
-		<div
-			class="relative flex flex-col rounded-[20px] bg-white p-6 shadow-3xl shadow-shadow-500">
-			<h1 class="text-2xl font-bold text-navy-700">Bienvenido, <span
-				th:text="${session.usuarioLogueado}">Usuario</span></h1>
-			<p class="mt-2 text-base text-gray-600">Panel de control del
-				sistema de bodega.</p>
+
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Panel de control</p>
+					<h1 class="h3 mb-1">Bienvenido, <span th:text="${session.usuarioLogueado}">Usuario</span></h1>
+					<p class="text-muted mb-0">Sistema de gestión de bodega.</p>
+				</div>
+			</div>
 		</div>
+
+		<section class="row g-3 mt-1" aria-label="Indicadores de bodega">
+			<div class="col-12 col-sm-6 col-xl-3">
+				<article class="metric-card metric-primary">
+					<div class="metric-top">
+						<span class="metric-label">Productos</span> <span class="metric-icon"><i
+							class="bi bi-box" aria-hidden="true"></i></span>
+					</div>
+					<div class="metric-value" th:text="${productosDistintos}">0</div>
+					<div class="metric-meta">
+						<span>productos con existencias registradas</span>
+					</div>
+				</article>
+			</div>
+
+			<div class="col-12 col-sm-6 col-xl-3">
+				<article class="metric-card metric-success">
+					<div class="metric-top">
+						<span class="metric-label">Unidades disponibles</span> <span class="metric-icon"><i
+							class="bi bi-boxes" aria-hidden="true"></i></span>
+					</div>
+					<div class="metric-value" th:text="${unidadesDisponibles}">0</div>
+					<div class="metric-meta">
+						<span>listas para despacho (no reservadas)</span>
+					</div>
+				</article>
+			</div>
+
+			<div class="col-12 col-sm-6 col-xl-3">
+				<article class="metric-card metric-warning">
+					<div class="metric-top">
+						<span class="metric-label">Lotes activos</span> <span class="metric-icon"><i
+							class="bi bi-clipboard-data" aria-hidden="true"></i></span>
+					</div>
+					<div class="metric-value" th:text="${lotesActivos}">0</div>
+					<div class="metric-meta">
+						<span>lotes registrados en bodega</span>
+					</div>
+				</article>
+			</div>
+
+			<div class="col-12 col-sm-6 col-xl-3">
+				<article class="metric-card metric-danger">
+					<div class="metric-top">
+						<span class="metric-label">Solicitudes</span> <span class="metric-icon"><i
+							class="bi bi-clipboard-check" aria-hidden="true"></i></span>
+					</div>
+					<div class="metric-value" th:text="${solicitudesRegistradas}">0</div>
+					<div class="metric-meta">
+						<span>solicitudes registradas</span>
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<section class="panel mt-3">
+			<div class="panel-header">
+				<div>
+					<h2 class="h5 mb-1 section-title"><i class="bi bi-signpost-split" aria-hidden="true"></i><span>Accesos
+							rápidos</span></h2>
+					<p class="text-muted mb-0">Ir directo a las secciones más usadas.</p>
+				</div>
+			</div>
+			<div class="row g-2 p-3">
+				<div class="col-6 col-md-3"><a class="btn btn-outline-secondary w-100" th:href="@{/producto/nuevo}"><i
+						class="bi bi-plus-circle" aria-hidden="true"></i> Producto</a></div>
+				<div class="col-6 col-md-3"><a class="btn btn-outline-secondary w-100" th:href="@{/lote/nuevo}"><i
+						class="bi bi-plus-circle" aria-hidden="true"></i> Lote</a></div>
+				<div class="col-6 col-md-3"><a class="btn btn-outline-secondary w-100" th:href="@{/detallesolicitud/nuevo}"><i
+						class="bi bi-plus-circle" aria-hidden="true"></i> Solicitud</a></div>
+				<div class="col-6 col-md-3"><a class="btn btn-outline-secondary w-100" th:href="@{/inventario}"><i
+						class="bi bi-clipboard-data" aria-hidden="true"></i> Existencias</a></div>
+			</div>
+		</section>
 	</div>
 </body>
+
 </html>

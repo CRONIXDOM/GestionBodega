@@ -6,148 +6,156 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Control Bodega</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link
-	href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-	rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script th:inline="javascript">
-	tailwind.config = {
-		theme: {
-			extend: {
-				fontFamily: { dm: ['DM Sans', 'sans-serif'] },
-				colors: {
-					lightPrimary: '#F4F7FE',
-					brand: {
-						50: '#E9E3FF', 100: '#C0B8FE', 200: '#A195FD', 300: '#8171FC',
-						400: '#7551FF', 500: '#422AFB', 600: '#3311DB', 700: '#2111A5',
-						800: '#190793', 900: '#11047A'
-					},
-					navy: {
-						50: '#d0dcfb', 100: '#aac0fe', 200: '#a3b9f8', 300: '#728fea',
-						400: '#3652ba', 500: '#1b3bbb', 600: '#24388a', 700: '#1B254B',
-						800: '#111c44', 900: '#0b1437'
-					},
-					shadow: { 500: 'rgba(112, 144, 176, 0.08)' }
-				},
-				boxShadow: {
-					'3xl': '14px 17px 40px 4px'
-				}
-			}
-		}
-	}
-</script>
-<style>
-body { font-family: 'DM Sans', sans-serif; }
-</style>
+<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
 </head>
 
-<body class="bg-lightPrimary">
-	<div class="flex h-full w-full">
+<body>
+	<div class="admin-shell">
+		<div class="sidebar-backdrop" data-sidebar-close></div>
 
-		<!-- Sidebar -->
-		<aside
-			class="fixed z-40 flex h-full min-h-full w-[290px] flex-col bg-white pb-10 shadow-2xl shadow-shadow-500">
-			<div class="mx-8 mt-8 flex items-center">
-				<span class="text-[22px] font-bold uppercase text-navy-700">Control
-					<span class="font-medium text-brand-500">Bodega</span>
-				</span>
+		<aside class="admin-sidebar" id="adminSidebar" aria-label="Navegación principal">
+			<div class="sidebar-header">
+				<a class="brand-mark" th:href="@{/}" aria-label="Control Bodega">
+					<span class="brand-icon"><i class="bi bi-box-seam-fill" aria-hidden="true"></i></span>
+					<span class="brand-copy">
+						<span class="brand-title">Control</span>
+						<span class="brand-subtitle">Bodega</span>
+					</span>
+				</a>
 			</div>
-			<div class="mt-6 mb-6 h-px bg-gray-200"></div>
 
-			<nav class="mb-auto overflow-y-auto px-4">
-				<ul class="space-y-1">
+			<nav class="sidebar-nav">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
+				<a class="nav-link" th:href="@{/producto}">
+					<span class="nav-icon"><i class="bi bi-box" aria-hidden="true"></i></span>
+					<span class="nav-text">Productos</span>
+				</a>
+				<a class="nav-link" th:href="@{/tipo}">
+					<span class="nav-icon"><i class="bi bi-tags" aria-hidden="true"></i></span>
+					<span class="nav-text">Tipos</span>
+				</a>
+				<a class="nav-link" th:href="@{/zona}">
+					<span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+					<span class="nav-text">Zonas</span>
+				</a>
+				<a class="nav-link" th:href="@{/ubicacion}">
+					<span class="nav-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
+					<span class="nav-text">Ubicaciones</span>
+				</a>
 
-					<th:block
-						th:if="${session.rolesLogueado != null and #lists.contains(session.rolesLogueado, 'Administrador')}">
-					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Accesos</li>
-					<li><a th:href="@{/usuario}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Usuarios</a>
-					</li>
-					<li><a th:href="@{/rol}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Roles</a>
-					</li>
-					<li><a th:href="@{/usuariorol}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Usuario
-							Rol</a>
-					</li>
-					<li><a th:href="@{/credenciales}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Credenciales</a>
-					</li>
-					</th:block>
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Inventario</span>
+				<a class="nav-link" th:href="@{/lote}">
+					<span class="nav-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
+					<span class="nav-text">Lotes</span>
+				</a>
+				<a class="nav-link" th:href="@{/registro}">
+					<span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
+					<span class="nav-text">Registros</span>
+				</a>
+				<a class="nav-link" th:href="@{/inventario}">
+					<span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
+					<span class="nav-text">Existencias</span>
+				</a>
 
-					<li><a th:href="@{/producto}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Productos</a>
-					</li>
-					<li><a th:href="@{/tipo}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Tipos</a>
-					</li>
-					<li><a th:href="@{/zona}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Zonas</a>
-					</li>
-					<li><a th:href="@{/ubicacion}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Ubicaciones</a>
-					</li>
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Movimientos</span>
+				<a class="nav-link" th:href="@{/solicitud}">
+					<span class="nav-icon"><i class="bi bi-clipboard-check" aria-hidden="true"></i></span>
+					<span class="nav-text">Solicitudes</span>
+				</a>
+				<a class="nav-link" th:href="@{/detallesolicitud}">
+					<span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+					<span class="nav-text">Detalle Solicitud</span>
+				</a>
+				<a class="nav-link" th:href="@{/entrega}">
+					<span class="nav-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+					<span class="nav-text">Entregas</span>
+				</a>
+				<a class="nav-link" th:href="@{/detalleentrega}">
+					<span class="nav-icon"><i class="bi bi-clipboard-data-fill" aria-hidden="true"></i></span>
+					<span class="nav-text">Detalle Entrega</span>
+				</a>
 
-					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Inventario</li>
-					<li><a th:href="@{/lote}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Lotes</a>
-					</li>
-					<li><a th:href="@{/registro}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Registros</a>
-					</li>
-					<li><a th:href="@{/inventario}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Existencias</a>
-					</li>
-
-					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Movimientos</li>
-					<li><a th:href="@{/solicitud}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Solicitudes</a>
-					</li>
-					<li><a th:href="@{/detallesolicitud}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Detalle
-							Solicitud</a>
-					</li>
-					<li><a th:href="@{/entrega}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Entregas</a>
-					</li>
-					<li><a th:href="@{/detalleentrega}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Detalle
-							Entrega</a>
-					</li>
-
-				</ul>
+				<th:block
+					th:if="${session.rolesLogueado != null and #lists.contains(session.rolesLogueado, 'Administrador')}">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Accesos</span>
+				<a class="nav-link" th:href="@{/usuario}">
+					<span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+					<span class="nav-text">Usuarios</span>
+				</a>
+				<a class="nav-link" th:href="@{/rol}">
+					<span class="nav-icon"><i class="bi bi-shield-lock" aria-hidden="true"></i></span>
+					<span class="nav-text">Roles</span>
+				</a>
+				<a class="nav-link" th:href="@{/usuariorol}">
+					<span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+					<span class="nav-text">Usuario Rol</span>
+				</a>
+				<a class="nav-link" th:href="@{/credenciales}">
+					<span class="nav-icon"><i class="bi bi-key" aria-hidden="true"></i></span>
+					<span class="nav-text">Credenciales</span>
+				</a>
+				</th:block>
 			</nav>
+
+			<div class="sidebar-user">
+				<span class="avatar-img avatar-md sidebar-user-avatar d-flex align-items-center justify-content-center bg-primary-subtle text-primary">
+					<i class="bi bi-person-fill" aria-hidden="true"></i>
+				</span>
+				<strong th:text="${session.usuarioLogueado} ?: 'Invitado'">Usuario</strong>
+				<small>Bodega Central</small>
+			</div>
+
+			<div class="sidebar-footer">
+				<span class="status-dot"></span>
+				<span class="sidebar-footer-text">Sistema operativo</span>
+			</div>
 		</aside>
 
-		<!-- Main -->
-		<div class="h-full w-full bg-lightPrimary pl-[290px]">
-			<main class="mx-3 h-full md:mx-6">
+		<div class="admin-main">
+			<nav class="navbar admin-navbar navbar-expand bg-white">
+				<div class="container-fluid px-3 px-lg-4">
+					<button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
+						aria-expanded="true" aria-label="Mostrar/ocultar menú">
+						<span></span> <span></span> <span></span>
+					</button>
 
-				<nav
-					class="sticky top-4 z-30 mt-4 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/60 p-3 backdrop-blur-xl">
-					<div class="ml-2 text-lg font-bold capitalize text-navy-700">Panel
-						de Administración</div>
-
-					<div class="mr-2 flex items-center gap-4">
-						<span class="text-sm font-medium text-navy-700"> <span
-							th:text="${session.usuarioLogueado} ?: 'Invitado'">Usuario</span>
-						</span>
-						<a th:href="@{/logout}"
-							class="linear rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Cerrar
-							Sesión</a>
+					<div class="ms-3 flex-grow-1">
+						<span class="fw-bold text-body">Panel de Administración</span>
 					</div>
-				</nav>
 
-				<div class="mx-auto mt-5 mb-8 min-h-[70vh]">
+					<div class="navbar-actions ms-auto">
+						<span class="text-sm fw-medium text-body-secondary d-none d-sm-inline"
+							th:text="${session.usuarioLogueado} ?: 'Invitado'">Usuario</span>
+						<a class="btn btn-primary btn-sm" th:href="@{/logout}">
+							<i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar Sesión
+						</a>
+					</div>
+				</div>
+			</nav>
+
+			<main class="dashboard-content">
+				<div class="container-fluid px-3 px-lg-4 py-4">
 					<div layout:fragment="contenidopaginas"></div>
 				</div>
-
-				<footer class="p-3 text-center text-sm text-gray-500">Control
-					Bodega</footer>
 			</main>
+
+			<footer class="admin-footer">
+				<div class="container-fluid px-3 px-lg-4">
+					<span>Control Bodega — Sistema de gestión de inventario.</span>
+				</div>
+			</footer>
 		</div>
 	</div>
+
+	<script th:inline="javascript">
+		window.adminHMDUser = {
+			name: /*[[${session.usuarioLogueado} ?: 'Invitado']]*/ 'Invitado',
+			workspace: 'Bodega Central'
+		};
+	</script>
+	<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>
