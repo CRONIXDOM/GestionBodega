@@ -16,11 +16,14 @@ public class UbicacionUseCaseImpl implements IUbicacionUseCase {
 
 	@Override
 	public Ubicacion guardar(Ubicacion nuevaUbicacion) {
-		// el mapper crea un objeto Zona "cascaron" (idZona=null) cuando el formulario
-		// no elige zona; hay que normalizarlo a null real o Hibernate intenta
-		// guardarlo como una zona nueva en vez de tratarlo como ausente.
+		// el mapper crea un objeto Zona/Sede "cascaron" (id=null) cuando el formulario
+		// no elige una opcion; hay que normalizarlo a null real o Hibernate intenta
+		// guardarlo como una entidad nueva en vez de tratarlo como ausente.
 		if (nuevaUbicacion.getZona() != null && nuevaUbicacion.getZona().getIdZona() == null) {
 			nuevaUbicacion.setZona(null);
+		}
+		if (nuevaUbicacion.getSede() != null && nuevaUbicacion.getSede().getIdSede() == null) {
+			nuevaUbicacion.setSede(null);
 		}
 		return repositorio.guardar(nuevaUbicacion);
 	}
@@ -41,9 +44,8 @@ public class UbicacionUseCaseImpl implements IUbicacionUseCase {
 	}
 
 	@Override
-	public Ubicacion buscarPorid(int Ubicacion) {
-		// TODO Auto-generated method stub
-		return null;
+	public Ubicacion buscarPorid(int idUbicacion) {
+		return repositorio.buscarPorid(idUbicacion).orElseThrow(() -> new RuntimeException("Ubicación no encontrada"));
 	}
 
 }

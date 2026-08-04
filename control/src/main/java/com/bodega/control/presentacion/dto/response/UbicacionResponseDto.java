@@ -10,5 +10,6 @@ public class UbicacionResponseDto {
 	private String cantidadUbicacion;
 	private LocalDate fechaUbicacion;
 	private Integer idZona;
+	private Integer idSede;
 
 }

@@ -43,6 +43,13 @@
 								<option th:each="op : ${opcionesZona}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>
 						</div>
+						<div class="col-md-6">
+							<label class="form-label">Sede</label> <select class="form-select"
+								th:field="*{idSede}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesSede}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
 					</div>
 					<div class="d-flex justify-content-end gap-2 mt-4">
 						<button class="btn btn-light" type="button" onclick="history.back()">

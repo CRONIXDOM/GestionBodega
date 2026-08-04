@@ -9,6 +9,7 @@ public class Ubicacion {
 	private String cantidadUbicacion;
 	private LocalDate fechaUbicacion;
 	private Zona zona;
+	private Sede sede;
 
 	public Ubicacion() {
 		super();
@@ -62,6 +63,14 @@ public class Ubicacion {
 
 	public void setZona(Zona zona) {
 		this.zona = zona;
+	}
+
+	public Sede getSede() {
+		return sede;
+	}
+
+	public void setSede(Sede sede) {
+		this.sede = sede;
 	}
 
 }

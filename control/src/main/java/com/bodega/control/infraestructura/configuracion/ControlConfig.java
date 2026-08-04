@@ -17,6 +17,7 @@ import com.bodega.control.aplicacion.casosuso.entrada.ITipoUseCase;
 import com.bodega.control.aplicacion.casosuso.entrada.IUbicacionUseCase;
 import com.bodega.control.aplicacion.casosuso.entrada.IUsuarioRolUseCase;
 import com.bodega.control.aplicacion.casosuso.entrada.IUsuarioUseCase;
+import com.bodega.control.aplicacion.casosuso.entrada.ISedeUseCase;
 import com.bodega.control.aplicacion.casosuso.entrada.IZonaUseCase;
 import com.bodega.control.aplicacion.casosuso.impl.CredencialesUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.DetalleEntregaUseCaseImpl;
@@ -32,6 +33,7 @@ import com.bodega.control.aplicacion.casosuso.impl.TipoUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.UbicacionUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.UsuarioRolUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.UsuarioUseCaseImpl;
+import com.bodega.control.aplicacion.casosuso.impl.SedeUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.ZonaUseCaseImpl;
 import com.bodega.control.dominio.repositorio.ICredencialesRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleEntregaRepositorio;
@@ -48,6 +50,7 @@ import com.bodega.control.dominio.repositorio.ITipoRepositorio;
 import com.bodega.control.dominio.repositorio.IUbicacionRepositorio;
 import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 import com.bodega.control.dominio.repositorio.IUsuarioRolRepositorio;
+import com.bodega.control.dominio.repositorio.ISedeRepositorio;
 import com.bodega.control.dominio.repositorio.IZonaRepositorio;
 import com.bodega.control.infraestructura.persistencia.adaptadores.CredencialesRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.DetalleEntregaRepositorioImpl;
@@ -64,6 +67,7 @@ import com.bodega.control.infraestructura.persistencia.adaptadores.TipoRepositor
 import com.bodega.control.infraestructura.persistencia.adaptadores.UbicacionRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.UsuarioRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.UsuarioRolRepositorioImpl;
+import com.bodega.control.infraestructura.persistencia.adaptadores.SedeRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.ZonaRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.mapeadores.ICredencialesJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IDetalleEntregaJpaMapper;
@@ -80,6 +84,7 @@ import com.bodega.control.infraestructura.persistencia.mapeadores.ITipoJpaMapper
 import com.bodega.control.infraestructura.persistencia.mapeadores.IUbicacionJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IUsuarioJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IUsuarioRolJpaMapper;
+import com.bodega.control.infraestructura.persistencia.mapeadores.ISedeJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IZonaJpaMapper;
 import com.bodega.control.infraestructura.repositorio.ICredencialesJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IDetalleEntregaJpaRepositorio;
@@ -96,6 +101,7 @@ import com.bodega.control.infraestructura.repositorio.ITipoJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IUbicacionJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IUsuarioJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IUsuarioRolJpaRepositorio;
+import com.bodega.control.infraestructura.repositorio.ISedeJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IZonaJpaRepositorio;
 
 @Configuration
@@ -278,5 +284,16 @@ public class ControlConfig {
 	@Bean
 	IZonaUseCase zonaUseCase(IZonaRepositorio repositorio) {
 		return new ZonaUseCaseImpl(repositorio);
+	}
+
+	// sede ****
+	@Bean
+	ISedeRepositorio sedeRepositorio(ISedeJpaRepositorio jpaRepositorio, ISedeJpaMapper mapper) {
+		return new SedeRepositorioImpl(jpaRepositorio, mapper);
+	}
+
+	@Bean
+	ISedeUseCase sedeUseCase(ISedeRepositorio repositorio) {
+		return new SedeUseCaseImpl(repositorio);
 	}
 }

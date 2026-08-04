@@ -16,6 +16,7 @@ public final class CatalogoModulos {
 	}
 
 	private static final List<ModuloOpcion> MODULOS = List.of(
+			new ModuloOpcion("sede", "Sedes", "Catálogo"),
 			new ModuloOpcion("zona", "Zonas", "Catálogo"),
 			new ModuloOpcion("ubicacion", "Ubicaciones", "Catálogo"),
 

@@ -11,4 +11,5 @@ public class UbicacionRequestDto {
     private String cantidadUbicacion;
     private LocalDate fechaUbicacion;
     private Integer idZona;
+    private Integer idSede;
 }

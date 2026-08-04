@@ -32,6 +32,7 @@
 							<th scope="col">Cantidad</th>
 							<th scope="col">Fecha</th>
 							<th scope="col">Zona</th>
+							<th scope="col">Sede</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -41,7 +42,8 @@
 							<td th:text="${indice.codigoUbicacion}"></td>
 							<td th:text="${indice.cantidadUbicacion}"></td>
 							<td th:text="${indice.fechaUbicacion}"></td>
-							<td th:text="${indice.idZona}"></td>
+							<td th:text="${nombresZona.get(indice.idZona)} ?: '—'"></td>
+							<td th:text="${nombresSede.get(indice.idSede)} ?: '—'"></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/ubicacion/editar/{id}(id=${indice.idUbicacion})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
@@ -51,7 +53,7 @@
 							</td>
 						</tr>
 						<tr th:if="${#lists.isEmpty(listaubicacion)}">
-							<td colspan="6" class="text-center text-muted py-4">Todavía no hay ubicaciones registradas.</td>
+							<td colspan="7" class="text-center text-muted py-4">Todavía no hay ubicaciones registradas.</td>
 						</tr>
 					</tbody>
 				</table>

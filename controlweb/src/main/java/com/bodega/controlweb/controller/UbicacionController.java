@@ -1,5 +1,9 @@
 package com.bodega.controlweb.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.UbicacionRequestDto;
+import com.bodega.controlweb.model.dto.response.SedeResponseDto;
+import com.bodega.controlweb.model.dto.response.UbicacionResponseDto;
+import com.bodega.controlweb.model.dto.response.ZonaResponseDto;
+import com.bodega.controlweb.service.ISedeService;
 import com.bodega.controlweb.service.IUbicacionService;
 import com.bodega.controlweb.service.IZonaService;
 
@@ -21,10 +29,20 @@ public class UbicacionController {
     private IUbicacionService servicioAPI;
     @Autowired
     private IZonaService servicioZona;
+    @Autowired
+    private ISedeService servicioSede;
 
     @GetMapping
     public String leerPagina(Model model) {
-        model.addAttribute("listaubicacion", servicioAPI.listarUbicacion());
+        List<UbicacionResponseDto> ubicaciones = servicioAPI.listarUbicacion();
+        Map<Integer, String> nombresZona = servicioZona.listarZona().stream()
+                .collect(Collectors.toMap(ZonaResponseDto::getIdZona, ZonaResponseDto::getNombreZona));
+        Map<Integer, String> nombresSede = servicioSede.listarSede().stream()
+                .collect(Collectors.toMap(SedeResponseDto::getIdSede, SedeResponseDto::getNombreSede));
+
+        model.addAttribute("listaubicacion", ubicaciones);
+        model.addAttribute("nombresZona", nombresZona);
+        model.addAttribute("nombresSede", nombresSede);
         return "/Ubicacion/listarubicacion";
     }
 
@@ -32,6 +50,7 @@ public class UbicacionController {
     public String crearUbicacion(Model model) {
         model.addAttribute("ubicacion", new UbicacionRequestDto());
         model.addAttribute("opcionesZona", servicioZona.listarOpciones());
+        model.addAttribute("opcionesSede", servicioSede.listarOpciones());
         return "/Ubicacion/crearubicacion";
     }
 
@@ -45,6 +64,7 @@ public class UbicacionController {
     public String editarUbicacion(@PathVariable Integer id, Model model) {
         model.addAttribute("ubicacion", servicioAPI.buscarUbicacionId(id));
         model.addAttribute("opcionesZona", servicioZona.listarOpciones());
+        model.addAttribute("opcionesSede", servicioSede.listarOpciones());
         return "/Ubicacion/crearubicacion";
     }
 

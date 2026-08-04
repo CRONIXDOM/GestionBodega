@@ -34,4 +34,8 @@ public class UbicacionEntity {
     @JoinColumn(name = "ZONA_idZONA")
     private ZonaEntity zona;
 
+    @ManyToOne
+    @JoinColumn(name = "SEDE_idSEDE")
+    private SedeEntity sede;
+
 }

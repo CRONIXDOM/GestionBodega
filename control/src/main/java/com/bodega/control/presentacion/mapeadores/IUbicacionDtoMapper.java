@@ -12,9 +12,11 @@ import com.bodega.control.presentacion.dto.response.UbicacionResponseDto;
 public interface IUbicacionDtoMapper {
 
 	@Mapping(target = "zona.idZona", source = "idZona")
+	@Mapping(target = "sede.idSede", source = "idSede")
 	Ubicacion toDomain (UbicacionRequestDto dto);
 
 	@Mapping(target = "idZona", source = "zona.idZona")
+	@Mapping(target = "idSede", source = "sede.idSede")
 	UbicacionResponseDto toResponseDto (Ubicacion UbicacionPojo);
 
 }
