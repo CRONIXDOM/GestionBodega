@@ -8,4 +8,5 @@ public class RolRequestDto {
     private Integer idRol;
     private String nombreRol;
     private String descripcionRol;
+    private String modulos;
 }

@@ -26,73 +26,78 @@
 				</a>
 			</div>
 
-			<nav class="sidebar-nav">
+			<nav class="sidebar-nav" th:with="mp=${session.modulosPermitidos}">
+				<th:block th:if="${mp != null and (mp.contains('producto') or mp.contains('zona') or mp.contains('ubicacion'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
-				<a class="nav-link" th:href="@{/producto}">
+				<a class="nav-link" th:if="${mp.contains('producto')}" th:href="@{/producto}">
 					<span class="nav-icon"><i class="bi bi-box" aria-hidden="true"></i></span>
 					<span class="nav-text">Productos</span>
 				</a>
-				<a class="nav-link" th:href="@{/zona}">
+				<a class="nav-link" th:if="${mp.contains('zona')}" th:href="@{/zona}">
 					<span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
 					<span class="nav-text">Zonas</span>
 				</a>
-				<a class="nav-link" th:href="@{/ubicacion}">
+				<a class="nav-link" th:if="${mp.contains('ubicacion')}" th:href="@{/ubicacion}">
 					<span class="nav-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
 					<span class="nav-text">Ubicaciones</span>
 				</a>
+				</th:block>
 
+				<th:block th:if="${mp != null and (mp.contains('lote') or mp.contains('inventario'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Inventario</span>
-				<a class="nav-link" th:href="@{/lote}">
+				<a class="nav-link" th:if="${mp.contains('lote')}" th:href="@{/lote}">
 					<span class="nav-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
 					<span class="nav-text">Lotes</span>
 				</a>
-				<a class="nav-link" th:href="@{/inventario}">
+				<a class="nav-link" th:if="${mp.contains('inventario')}" th:href="@{/inventario}">
 					<span class="nav-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></span>
 					<span class="nav-text">Existencias</span>
 				</a>
+				</th:block>
 
+				<th:block th:if="${mp != null and (mp.contains('solicitud') or mp.contains('detallesolicitud') or mp.contains('entrega') or mp.contains('detalleentrega') or mp.contains('tipo') or mp.contains('registro'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Movimientos</span>
-				<a class="nav-link" th:href="@{/solicitud}">
+				<a class="nav-link" th:if="${mp.contains('solicitud')}" th:href="@{/solicitud}">
 					<span class="nav-icon"><i class="bi bi-clipboard-check" aria-hidden="true"></i></span>
 					<span class="nav-text">Solicitudes</span>
 				</a>
-				<a class="nav-link" th:href="@{/detallesolicitud}">
+				<a class="nav-link" th:if="${mp.contains('detallesolicitud')}" th:href="@{/detallesolicitud}">
 					<span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
 					<span class="nav-text">Detalle Solicitud</span>
 				</a>
-				<a class="nav-link" th:href="@{/entrega}">
+				<a class="nav-link" th:if="${mp.contains('entrega')}" th:href="@{/entrega}">
 					<span class="nav-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
 					<span class="nav-text">Entregas</span>
 				</a>
-				<a class="nav-link" th:href="@{/detalleentrega}">
+				<a class="nav-link" th:if="${mp.contains('detalleentrega')}" th:href="@{/detalleentrega}">
 					<span class="nav-icon"><i class="bi bi-clipboard-data-fill" aria-hidden="true"></i></span>
 					<span class="nav-text">Detalle Entrega</span>
 				</a>
-				<a class="nav-link" th:href="@{/tipo}">
+				<a class="nav-link" th:if="${mp.contains('tipo')}" th:href="@{/tipo}">
 					<span class="nav-icon"><i class="bi bi-tags" aria-hidden="true"></i></span>
 					<span class="nav-text">Tipos de Movimiento</span>
 				</a>
-				<a class="nav-link" th:href="@{/registro}">
+				<a class="nav-link" th:if="${mp.contains('registro')}" th:href="@{/registro}">
 					<span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
 					<span class="nav-text">Registros</span>
 				</a>
+				</th:block>
 
-				<th:block
-					th:if="${session.rolesLogueado != null and #lists.contains(session.rolesLogueado, 'Administrador')}">
+				<th:block th:if="${mp != null and (mp.contains('usuario') or mp.contains('rol') or mp.contains('usuariorol') or mp.contains('credenciales'))}">
 				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Accesos</span>
-				<a class="nav-link" th:href="@{/usuario}">
+				<a class="nav-link" th:if="${mp.contains('usuario')}" th:href="@{/usuario}">
 					<span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
 					<span class="nav-text">Usuarios</span>
 				</a>
-				<a class="nav-link" th:href="@{/rol}">
+				<a class="nav-link" th:if="${mp.contains('rol')}" th:href="@{/rol}">
 					<span class="nav-icon"><i class="bi bi-shield-lock" aria-hidden="true"></i></span>
 					<span class="nav-text">Roles</span>
 				</a>
-				<a class="nav-link" th:href="@{/usuariorol}">
+				<a class="nav-link" th:if="${mp.contains('usuariorol')}" th:href="@{/usuariorol}">
 					<span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
 					<span class="nav-text">Usuario Rol</span>
 				</a>
-				<a class="nav-link" th:href="@{/credenciales}">
+				<a class="nav-link" th:if="${mp.contains('credenciales')}" th:href="@{/credenciales}">
 					<span class="nav-icon"><i class="bi bi-key" aria-hidden="true"></i></span>
 					<span class="nav-text">Credenciales</span>
 				</a>

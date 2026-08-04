@@ -4,6 +4,7 @@ public class Rol {
 	private Integer idRol;
 	private String nombreRol;
 	private String descripcionRol;
+	private String modulos;
 
 	public Rol() {
 	}
@@ -12,6 +13,13 @@ public class Rol {
 		this.idRol = idRol;
 		this.nombreRol = nombreRol;
 		this.descripcionRol = descripcionRol;
+	}
+
+	public Rol(Integer idRol, String nombreRol, String descripcionRol, String modulos) {
+		this.idRol = idRol;
+		this.nombreRol = nombreRol;
+		this.descripcionRol = descripcionRol;
+		this.modulos = modulos;
 	}
 
 	public Integer getIdRol() {
@@ -36,6 +44,14 @@ public class Rol {
 
 	public void setDescripcionRol(String descripcionRol) {
 		this.descripcionRol = descripcionRol;
+	}
+
+	public String getModulos() {
+		return modulos;
+	}
+
+	public void setModulos(String modulos) {
+		this.modulos = modulos;
 	}
 
 }

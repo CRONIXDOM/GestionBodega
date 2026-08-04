@@ -23,4 +23,7 @@ public class RolEntity {
     @Column(name = "descripcion_rol", length = 200)
     private String descripcionRol;
 
+    @Column(name = "modulos", length = 1000)
+    private String modulos;
+
 }

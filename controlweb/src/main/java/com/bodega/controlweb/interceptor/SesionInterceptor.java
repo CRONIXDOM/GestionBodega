@@ -1,6 +1,5 @@
 package com.bodega.controlweb.interceptor;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.bodega.controlweb.service.IUsuarioRolService;
+import com.bodega.controlweb.util.CatalogoModulos;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,13 +15,11 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  * Centraliza la protección de todas las rutas del front: exige sesión iniciada
- * y restringe las rutas administrativas (Usuario, Rol, UsuarioRol, Credenciales)
- * a usuarios con el rol "Administrador".
+ * y restringe cada sección (Productos, Lotes, Usuarios, etc.) a los roles que
+ * la tengan habilitada en su checklist de módulos.
  */
 @Component
 public class SesionInterceptor implements HandlerInterceptor {
-
-	private static final Set<String> RUTAS_ADMIN = Set.of("/usuario", "/rol", "/usuariorol", "/credenciales");
 
 	@Autowired
 	private IUsuarioRolService servicioUsuarioRol;
@@ -35,29 +33,41 @@ public class SesionInterceptor implements HandlerInterceptor {
 		}
 
 		String path = request.getRequestURI().substring(request.getContextPath().length());
-		boolean esRutaAdmin = RUTAS_ADMIN.stream().anyMatch(path::startsWith);
-		if (esRutaAdmin) {
-			@SuppressWarnings("unchecked")
-			List<String> roles = (List<String>) session.getAttribute("rolesLogueado");
-			boolean esAdmin = roles != null && roles.stream().anyMatch(r -> r.equalsIgnoreCase("Administrador"));
+		String modulo = extraerModulo(path);
+		if (modulo == null || !CatalogoModulos.todasLasClaves().contains(modulo)) {
+			// no corresponde a ningun modulo controlado (p.ej. la propia raiz "/"): siempre se permite
+			return true;
+		}
 
-			boolean sinRolesAsignadosAun;
-			try {
-				sinRolesAsignadosAun = servicioUsuarioRol.listarUsuarioRol().isEmpty();
-			} catch (Exception ex) {
-				// si el backend no responde, no bloqueamos por este chequeo de bootstrap
-				sinRolesAsignadosAun = false;
-			}
-			// Bootstrap: si todavía no existe NINGÚN UsuarioRol en el sistema, se permite el acceso
-			// (así el único usuario inicial puede crear usuarios/roles y asignarse el primero sin quedar bloqueado).
-			// En cuanto exista al menos un UsuarioRol, solo entra quien tenga rol "Administrador".
-			if (!esAdmin && !sinRolesAsignadosAun) {
-				session.setAttribute("mensajeError", "No tienes permisos para acceder a esa sección.");
-				response.sendRedirect(request.getContextPath() + "/");
-				return false;
-			}
+		@SuppressWarnings("unchecked")
+		Set<String> modulosPermitidos = (Set<String>) session.getAttribute("modulosPermitidos");
+		boolean tieneAcceso = modulosPermitidos != null && modulosPermitidos.contains(modulo);
+
+		boolean sinRolesAsignadosAun;
+		try {
+			sinRolesAsignadosAun = servicioUsuarioRol.listarUsuarioRol().isEmpty();
+		} catch (Exception ex) {
+			// si el backend no responde, no bloqueamos por este chequeo de bootstrap
+			sinRolesAsignadosAun = false;
+		}
+		// Bootstrap: si todavía no existe NINGÚN UsuarioRol en el sistema, se permite el acceso
+		// (así el único usuario inicial puede crear usuarios/roles y asignarse el primero sin quedar bloqueado).
+		if (!tieneAcceso && !sinRolesAsignadosAun) {
+			session.setAttribute("mensajeError", "No tienes permisos para acceder a esa sección.");
+			response.sendRedirect(request.getContextPath() + "/");
+			return false;
 		}
 		return true;
+	}
+
+	private String extraerModulo(String path) {
+		if (path == null || path.isBlank() || "/".equals(path)) {
+			return null;
+		}
+		String sinBarraInicial = path.startsWith("/") ? path.substring(1) : path;
+		int siguienteBarra = sinBarraInicial.indexOf('/');
+		String primerSegmento = siguienteBarra >= 0 ? sinBarraInicial.substring(0, siguienteBarra) : sinBarraInicial;
+		return primerSegmento.toLowerCase();
 	}
 
 	@Override
