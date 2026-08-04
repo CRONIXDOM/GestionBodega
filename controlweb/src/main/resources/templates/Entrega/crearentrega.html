@@ -21,6 +21,7 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/entrega/guardar}" th:object="${entrega}" method="post">
 					<input type="hidden" th:field="*{idEntrega}">
 					<div class="row g-3">
@@ -31,6 +32,17 @@
 						<div class="col-md-6">
 							<label class="form-label">Responsable de Entrega</label> <input class="form-control"
 								th:field="*{responsableEntrega}">
+						</div>
+						<div class="col-12" th:if="${entrega.idEntrega == null}">
+							<label class="form-label">Solicitud a entregar/recoger (opcional)</label>
+							<select class="form-select" name="idSolicitud">
+								<option value="">Ninguna — entrega sin pedido asociado</option>
+								<option th:each="op : ${opcionesSolicitud}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">
+								Si seleccionas una solicitud, se despachará automáticamente lo reservado en ella y quedará
+								registrado el movimiento en Registros.
+							</div>
 						</div>
 					</div>
 					<div class="d-flex justify-content-end gap-2 mt-4">

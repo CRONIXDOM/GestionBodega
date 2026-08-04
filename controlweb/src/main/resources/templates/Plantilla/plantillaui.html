@@ -28,7 +28,7 @@
 
 			<nav class="sidebar-nav" th:with="mp=${session.modulosPermitidos}">
 				<th:block th:if="${mp != null and (mp.contains('sede') or mp.contains('zona') or mp.contains('ubicacion'))}">
-				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Sedes y Ubicaciones</span>
 				<a class="nav-link" th:if="${mp.contains('sede')}" th:href="@{/sede}">
 					<span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
 					<span class="nav-text">Sedes</span>

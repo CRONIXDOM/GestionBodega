@@ -26,8 +26,9 @@ public class EntregaServiceImpl implements IEntregaService {
     }
 
     @Override
-    public void guardarEntrega(EntregaRequestDto nuevo) {
-        webCliente.post().uri("/entrega").bodyValue(nuevo).retrieve().toBodilessEntity().block();
+    public EntregaResponseDto guardarEntrega(EntregaRequestDto nuevo) {
+        return webCliente.post().uri("/entrega").bodyValue(nuevo).retrieve()
+                .bodyToMono(EntregaResponseDto.class).block();
     }
 
     @Override

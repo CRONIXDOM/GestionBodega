@@ -10,7 +10,7 @@ public interface IDetalleEntregaService {
 
     List<DetalleEntregaResponseDto> listarDetalleEntrega();
 
-    void guardarDetalleEntrega(DetalleEntregaRequestDto nuevo);
+    DetalleEntregaResponseDto guardarDetalleEntrega(DetalleEntregaRequestDto nuevo);
 
     DetalleEntregaResponseDto buscarDetalleEntregaId(Integer id);
 

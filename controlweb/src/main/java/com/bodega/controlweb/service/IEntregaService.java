@@ -10,7 +10,7 @@ public interface IEntregaService {
 
     List<EntregaResponseDto> listarEntrega();
 
-    void guardarEntrega(EntregaRequestDto nuevo);
+    EntregaResponseDto guardarEntrega(EntregaRequestDto nuevo);
 
     EntregaResponseDto buscarEntregaId(Integer id);
 

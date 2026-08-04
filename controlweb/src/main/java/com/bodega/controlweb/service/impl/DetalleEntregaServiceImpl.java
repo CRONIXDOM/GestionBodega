@@ -26,8 +26,9 @@ public class DetalleEntregaServiceImpl implements IDetalleEntregaService {
     }
 
     @Override
-    public void guardarDetalleEntrega(DetalleEntregaRequestDto nuevo) {
-        webCliente.post().uri("/detalleEntrega").bodyValue(nuevo).retrieve().toBodilessEntity().block();
+    public DetalleEntregaResponseDto guardarDetalleEntrega(DetalleEntregaRequestDto nuevo) {
+        return webCliente.post().uri("/detalleEntrega").bodyValue(nuevo).retrieve()
+                .bodyToMono(DetalleEntregaResponseDto.class).block();
     }
 
     @Override
