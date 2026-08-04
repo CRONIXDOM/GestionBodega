@@ -77,6 +77,46 @@
 			</div>
 		</section>
 
+		<section class="row g-3 mt-1" th:if="${not #lists.isEmpty(productosStockBajo)} or ${not #lists.isEmpty(lotesPorVencer)}">
+			<div class="col-12 col-xl-6" th:if="${not #lists.isEmpty(productosStockBajo)}">
+				<div class="panel h-100">
+					<div class="panel-header">
+						<div>
+							<h2 class="h6 mb-1 section-title"><i class="bi bi-exclamation-triangle text-warning"
+									aria-hidden="true"></i><span>Stock bajo</span></h2>
+							<p class="text-muted small mb-0" th:text="'Productos con menos de ' + ${umbralStockBajo} + ' unidades disponibles.'"></p>
+						</div>
+					</div>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item d-flex justify-content-between align-items-center bg-transparent"
+							th:each="prod : ${productosStockBajo}">
+							<span th:text="${prod.nombreProducto}"></span>
+							<span class="badge text-bg-warning" th:text="${prod.cantidadDisponible} + ' disp.'"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-12 col-xl-6" th:if="${not #lists.isEmpty(lotesPorVencer)}">
+				<div class="panel h-100">
+					<div class="panel-header">
+						<div>
+							<h2 class="h6 mb-1 section-title"><i class="bi bi-clock-history text-danger"
+									aria-hidden="true"></i><span>Lotes por vencer</span></h2>
+							<p class="text-muted small mb-0">Vencidos o que vencen dentro de 30 días.</p>
+						</div>
+					</div>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item d-flex justify-content-between align-items-center bg-transparent"
+							th:each="lote : ${lotesPorVencer}">
+							<span th:text="${lote.numeroLote}"></span>
+							<span th:class="${lote.fechaVencimiento.isBefore(hoy)} ? 'badge text-bg-danger' : 'badge text-bg-warning'"
+								th:text="${lote.fechaVencimiento}"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
 		<section class="panel mt-3">
 			<div class="panel-header">
 				<div>

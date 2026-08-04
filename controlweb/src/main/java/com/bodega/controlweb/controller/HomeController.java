@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
 import com.bodega.controlweb.model.dto.response.InventarioResponseDto;
+import com.bodega.controlweb.model.dto.response.LoteResponseDto;
 import com.bodega.controlweb.model.dto.response.ProductoResponseDto;
 import com.bodega.controlweb.service.IInventarioService;
 import com.bodega.controlweb.service.ILoteService;
@@ -21,6 +23,8 @@ import jakarta.servlet.http.HttpSession;
 public class HomeController {
 
 	private static final int MAX_PRODUCTOS_RECIENTES = 6;
+	private static final int UMBRAL_STOCK_BAJO = 10;
+	private static final int DIAS_ALERTA_VENCIMIENTO = 30;
 
 	@Autowired
 	private IInventarioService servicioInventario;
@@ -40,7 +44,8 @@ public class HomeController {
 		List<InventarioResponseDto> inventario = servicioInventario.listarInventario();
 		int productosDistintos = inventario.size();
 		int unidadesDisponibles = inventario.stream().mapToInt(i -> i.getCantidadDisponible() == null ? 0 : i.getCantidadDisponible()).sum();
-		int lotesActivos = servicioLote.listarLote().size();
+		List<LoteResponseDto> lotes = servicioLote.listarLote();
+		int lotesActivos = lotes.size();
 		int solicitudesRegistradas = servicioSolicitud.listarSolicitud().size();
 
 		model.addAttribute("productosDistintos", productosDistintos);
@@ -55,6 +60,21 @@ public class HomeController {
 				.limit(MAX_PRODUCTOS_RECIENTES)
 				.toList();
 		model.addAttribute("productosRecientes", productosRecientes);
+
+		List<InventarioResponseDto> productosStockBajo = inventario.stream()
+				.filter(i -> i.getCantidadDisponible() != null && i.getCantidadDisponible() < UMBRAL_STOCK_BAJO)
+				.sorted(Comparator.comparing(InventarioResponseDto::getCantidadDisponible))
+				.toList();
+		model.addAttribute("productosStockBajo", productosStockBajo);
+		model.addAttribute("umbralStockBajo", UMBRAL_STOCK_BAJO);
+
+		LocalDate limiteVencimiento = LocalDate.now().plusDays(DIAS_ALERTA_VENCIMIENTO);
+		List<LoteResponseDto> lotesPorVencer = lotes.stream()
+				.filter(l -> l.getFechaVencimiento() != null && !l.getFechaVencimiento().isAfter(limiteVencimiento))
+				.sorted(Comparator.comparing(LoteResponseDto::getFechaVencimiento))
+				.toList();
+		model.addAttribute("lotesPorVencer", lotesPorVencer);
+		model.addAttribute("hoy", LocalDate.now());
 
 		return "/Home/home";
 	}

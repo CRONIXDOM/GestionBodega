@@ -44,7 +44,15 @@
 							<td class="fw-semibold" th:text="${indice.idLote}"></td>
 							<td th:text="${indice.numeroLote}"></td>
 							<td th:text="${indice.fechaIngreso}"></td>
-							<td th:text="${indice.fechaVencimiento}"></td>
+							<td>
+								<span th:text="${indice.fechaVencimiento}"></span>
+								<span
+									th:if="${indice.fechaVencimiento != null and indice.fechaVencimiento.isBefore(T(java.time.LocalDate).now())}"
+									class="badge text-bg-danger ms-1">Vencido</span>
+								<span
+									th:if="${indice.fechaVencimiento != null and !indice.fechaVencimiento.isBefore(T(java.time.LocalDate).now()) and indice.fechaVencimiento.isBefore(T(java.time.LocalDate).now().plusDays(30))}"
+									class="badge text-bg-warning ms-1">Por vencer</span>
+							</td>
 							<td th:text="${indice.cantidadLote}"></td>
 							<td><span class="badge text-bg-warning" th:text="${indice.cantidadReservada}"></span></td>
 							<td><span class="badge text-bg-success" th:text="${indice.cantidadDisponible}"></span></td>

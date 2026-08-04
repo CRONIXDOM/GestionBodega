@@ -40,7 +40,11 @@
 							<td th:text="${indice.numeroLotes}"></td>
 							<td th:text="${indice.cantidadTotal}"></td>
 							<td th:text="${indice.cantidadReservada}"></td>
-							<td th:text="${indice.cantidadDisponible}"></td>
+							<td>
+								<span th:text="${indice.cantidadDisponible}"></span>
+								<span th:if="${indice.cantidadDisponible != null and indice.cantidadDisponible < 10}"
+									class="badge text-bg-warning ms-1">Stock bajo</span>
+							</td>
 							<td class="text-end">
 								<a class="btn btn-warning btn-sm"
 									th:href="@{/detallesolicitud/nuevo(idProducto=${indice.idProducto})}"><i
