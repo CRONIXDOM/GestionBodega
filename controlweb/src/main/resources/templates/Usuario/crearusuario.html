@@ -52,13 +52,15 @@
 								<label class="form-label">Correo</label> <input class="form-control"
 									type="email" th:field="*{correo}">
 							</div>
-							<div class="col-md-6">
-								<label class="form-label">Rol</label> <select class="form-select"
-									th:field="*{idRol}">
-									<option value="">Seleccione...</option>
-									<option th:each="op : ${opcionesRol}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
-								</select>
-							</div>
+						</div>
+					</div>
+					<div class="row g-3 mt-0">
+						<div class="col-md-6">
+							<label class="form-label">Rol</label> <select class="form-select"
+								th:field="*{idRol}">
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesRol}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
 						</div>
 					</div>
 					<div class="d-flex justify-content-end gap-2 mt-4">

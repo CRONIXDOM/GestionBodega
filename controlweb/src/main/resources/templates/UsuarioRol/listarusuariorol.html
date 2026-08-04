@@ -29,8 +29,8 @@
 						<tr>
 							<th scope="col">Id</th>
 							<th scope="col">Fecha Asignación</th>
-							<th scope="col">Id Usuario</th>
-							<th scope="col">Id Rol</th>
+							<th scope="col">Usuario</th>
+							<th scope="col">Rol</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -38,8 +38,8 @@
 						<tr th:each="indice:${listausuariorol}">
 							<td class="fw-semibold" th:text="${indice.idUsuarioRol}"></td>
 							<td th:text="${indice.fechaAsignacion}"></td>
-							<td th:text="${indice.idUsuario}"></td>
-							<td th:text="${indice.idRol}"></td>
+							<td th:text="${nombresUsuario.get(indice.idUsuario)} ?: ('#' + indice.idUsuario)"></td>
+							<td th:text="${nombresRol.get(indice.idRol)} ?: ('#' + indice.idRol)"></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/usuariorol/editar/{id}(id=${indice.idUsuarioRol})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>

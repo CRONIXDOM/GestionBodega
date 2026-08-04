@@ -1,5 +1,8 @@
 package com.bodega.controlweb.controller;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.UsuarioRolRequestDto;
+import com.bodega.controlweb.model.dto.response.RolResponseDto;
+import com.bodega.controlweb.model.dto.response.UsuarioResponseDto;
 import com.bodega.controlweb.service.IRolService;
 import com.bodega.controlweb.service.IUsuarioRolService;
 import com.bodega.controlweb.service.IUsuarioService;
@@ -28,6 +33,16 @@ public class UsuarioRolController {
     @GetMapping
     public String leerPagina(Model model) {
         model.addAttribute("listausuariorol", servicioAPI.listarUsuarioRol());
+
+        Map<Integer, String> nombresUsuario = servicioUsuario.listarUsuario().stream()
+                .collect(Collectors.toMap(UsuarioResponseDto::getIdUsuario,
+                        u -> (u.getNombreUsuario() == null ? "" : u.getNombreUsuario()) + " "
+                                + (u.getApellidoUsuario() == null ? "" : u.getApellidoUsuario())));
+        Map<Integer, String> nombresRol = servicioRol.listarRol().stream()
+                .collect(Collectors.toMap(RolResponseDto::getIdRol, RolResponseDto::getNombreRol));
+        model.addAttribute("nombresUsuario", nombresUsuario);
+        model.addAttribute("nombresRol", nombresRol);
+
         return "/UsuarioRol/listarusuariorol";
     }
 
