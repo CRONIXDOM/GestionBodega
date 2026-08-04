@@ -15,4 +15,6 @@ public interface ILoteRepositorio {
 	
 	void eliminar (int Lote);
 
+	List<Lote> buscarPorProductoOrdenadoFifo(int idProducto);
+
 }

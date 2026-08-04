@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -19,10 +21,17 @@ public class UbicacionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUbicacion;
 
+    @Column(name = "codigo_ubicacion", length = 50)
+    private String codigoUbicacion;
+
     @Column(name = "cantidad_ubicacion", length = 100)
     private String cantidadUbicacion;
 
     @Column(name = "fecha_ubicacion")
     private LocalDate fechaUbicacion;
+
+    @ManyToOne
+    @JoinColumn(name = "ZONA_idZONA")
+    private ZonaEntity zona;
 
 }

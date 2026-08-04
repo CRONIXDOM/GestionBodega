@@ -6,8 +6,9 @@ import lombok.Data;
 @Data
 public class UbicacionResponseDto {
 	private Integer idUbicacion;
+	private String codigoUbicacion;
 	private String cantidadUbicacion;
 	private LocalDate fechaUbicacion;
-
+	private Integer idZona;
 
 }

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.bodega.control.aplicacion.casosuso.entrada.IDetalleSolicitudUseCase;
+import com.bodega.control.dominio.entidades.DetalleSolicitudLote;
 import com.bodega.control.presentacion.dto.request.DetalleSolicitudRequestDto;
 import com.bodega.control.presentacion.dto.response.DetalleSolicitudResponseDto;
+import com.bodega.control.presentacion.dto.response.LoteAsignadoResponseDto;
 import com.bodega.control.presentacion.mapeadores.IDetalleSolicitudDtoMapper;
 
 import jakarta.validation.Valid;
@@ -37,13 +39,16 @@ public class DetalleSolicitudController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public DetalleSolicitudResponseDto guardar(@Valid @RequestBody DetalleSolicitudRequestDto request) {
 
-		return mapper.toResponseDto(detalleSolicitudUseCase.guardar(mapper.toDomain(request)));
+		DetalleSolicitudResponseDto guardado = mapper
+				.toResponseDto(detalleSolicitudUseCase.guardar(mapper.toDomain(request), request.getIdLote()));
+		return conAsignaciones(guardado);
 	}
 
 	@GetMapping
 	public List<DetalleSolicitudResponseDto> listarTodo() {
 
-		return detalleSolicitudUseCase.listarTodos().stream().map(mapper::toResponseDto).toList();
+		return detalleSolicitudUseCase.listarTodos().stream().map(mapper::toResponseDto)
+				.map(this::conAsignaciones).toList();
 	}
 
 	@DeleteMapping("/{idDetalleSolicitud}")
@@ -57,7 +62,17 @@ public class DetalleSolicitudController {
 	@GetMapping("/buscarId/{idDetalleSolicitud}")
 	public DetalleSolicitudResponseDto buscarPorId(@PathVariable int idDetalleSolicitud) {
 
-		return mapper.toResponseDto(detalleSolicitudUseCase.buscarPorId(idDetalleSolicitud));
+		return conAsignaciones(mapper.toResponseDto(detalleSolicitudUseCase.buscarPorId(idDetalleSolicitud)));
+	}
+
+	private DetalleSolicitudResponseDto conAsignaciones(DetalleSolicitudResponseDto dto) {
+		List<DetalleSolicitudLote> asignaciones = detalleSolicitudUseCase
+				.obtenerAsignaciones(dto.getIdDetalleSolicitud());
+		dto.setLotesAsignados(asignaciones.stream()
+				.map(a -> new LoteAsignadoResponseDto(a.getLote().getIdLote(), a.getLote().getNumeroLote(),
+						a.getCantidad()))
+				.toList());
+		return dto;
 	}
 
 }

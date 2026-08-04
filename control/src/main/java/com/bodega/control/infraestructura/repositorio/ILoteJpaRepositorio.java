@@ -21,4 +21,7 @@ public interface ILoteJpaRepositorio extends JpaRepository<LoteEntity, Integer> 
     @Query("Select lot from LoteEntity lot where lot.fechaVencimiento=?1")
     List<LoteEntity> buscarLoteFechaVencimiento(LocalDate fechaVencimiento);
 
+    @Query("Select lot from LoteEntity lot where lot.producto.idProducto=?1 order by lot.fechaIngreso asc, lot.idLote asc")
+    List<LoteEntity> buscarPorProductoOrdenadoFifo(int idProducto);
+
 }

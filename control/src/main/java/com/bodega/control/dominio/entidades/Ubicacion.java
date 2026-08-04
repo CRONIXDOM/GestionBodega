@@ -5,18 +5,23 @@ import java.time.LocalDate;
 public class Ubicacion {
 
 	private Integer idUbicacion;
+	private String codigoUbicacion;
 	private String cantidadUbicacion;
 	private LocalDate fechaUbicacion;
+	private Zona zona;
 
 	public Ubicacion() {
 		super();
 	}
 
-	public Ubicacion(Integer idUbicacion, String cantidadUbicacion, LocalDate fechaUbicacion) {
+	public Ubicacion(Integer idUbicacion, String codigoUbicacion, String cantidadUbicacion, LocalDate fechaUbicacion,
+			Zona zona) {
 		super();
 		this.idUbicacion = idUbicacion;
+		this.codigoUbicacion = codigoUbicacion;
 		this.cantidadUbicacion = cantidadUbicacion;
 		this.fechaUbicacion = fechaUbicacion;
+		this.zona = zona;
 	}
 
 	public Integer getIdUbicacion() {
@@ -25,6 +30,14 @@ public class Ubicacion {
 
 	public void setIdUbicacion(Integer idUbicacion) {
 		this.idUbicacion = idUbicacion;
+	}
+
+	public String getCodigoUbicacion() {
+		return codigoUbicacion;
+	}
+
+	public void setCodigoUbicacion(String codigoUbicacion) {
+		this.codigoUbicacion = codigoUbicacion;
 	}
 
 	public String getCantidadUbicacion() {
@@ -41,6 +54,14 @@ public class Ubicacion {
 
 	public void setFechaUbicacion(LocalDate fechaUbicacion) {
 		this.fechaUbicacion = fechaUbicacion;
+	}
+
+	public Zona getZona() {
+		return zona;
+	}
+
+	public void setZona(Zona zona) {
+		this.zona = zona;
 	}
 
 }

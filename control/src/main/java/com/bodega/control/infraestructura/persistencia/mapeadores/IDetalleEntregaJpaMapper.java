@@ -6,11 +6,12 @@ import com.bodega.control.dominio.entidades.DetalleEntrega;
 
 import com.bodega.control.infraestructura.persistencia.jpa.DetalleEntregaEntity;
 
-@Mapper (componentModel = "spring", uses = { IEntregaJpaMapper.class })
+@Mapper (componentModel = "spring", uses = { IEntregaJpaMapper.class, IProductoJpaMapper.class,
+		IDetalleSolicitudJpaMapper.class, ILoteJpaMapper.class })
 public interface IDetalleEntregaJpaMapper {
-	
+
 	DetalleEntrega toDominio (DetalleEntregaEntity entity);
-	
+
 	DetalleEntregaEntity toEntity (DetalleEntrega detalleEntrega);
 
 

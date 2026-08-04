@@ -1,5 +1,7 @@
 package com.bodega.control.presentacion.dto.response;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -9,5 +11,6 @@ public class DetalleSolicitudResponseDto {
 	private String lugarRecogida;
 	private Integer idProducto;
 	private Integer idSolicitud;
+	private List<LoteAsignadoResponseDto> lotesAsignados;
 
 }

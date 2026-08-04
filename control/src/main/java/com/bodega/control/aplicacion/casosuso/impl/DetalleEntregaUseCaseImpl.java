@@ -1,22 +1,122 @@
 package com.bodega.control.aplicacion.casosuso.impl;
 
 import java.util.List;
+import java.util.function.Function;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IDetalleEntregaUseCase;
 import com.bodega.control.dominio.entidades.DetalleEntrega;
+import com.bodega.control.dominio.entidades.DetalleSolicitud;
+import com.bodega.control.dominio.entidades.DetalleSolicitudLote;
+import com.bodega.control.dominio.entidades.Entrega;
+import com.bodega.control.dominio.entidades.Lote;
+import com.bodega.control.dominio.entidades.Producto;
 import com.bodega.control.dominio.repositorio.IDetalleEntregaRepositorio;
+import com.bodega.control.dominio.repositorio.IDetalleSolicitudLoteRepositorio;
+import com.bodega.control.dominio.repositorio.ILoteRepositorio;
 
 public class DetalleEntregaUseCaseImpl implements IDetalleEntregaUseCase {
 
     private final IDetalleEntregaRepositorio repositorio;
+    private final ILoteRepositorio loteRepositorio;
+    private final IDetalleSolicitudLoteRepositorio asignacionRepositorio;
 
-    public DetalleEntregaUseCaseImpl(IDetalleEntregaRepositorio repositorio) {
+    public DetalleEntregaUseCaseImpl(IDetalleEntregaRepositorio repositorio, ILoteRepositorio loteRepositorio,
+            IDetalleSolicitudLoteRepositorio asignacionRepositorio) {
         this.repositorio = repositorio;
+        this.loteRepositorio = loteRepositorio;
+        this.asignacionRepositorio = asignacionRepositorio;
     }
 
+    /**
+     * Aqui es donde el stock realmente sale de bodega:
+     * - Si la entrega cumple un Detalle Solicitud existente, se descuenta exactamente
+     *   lo que ya se habia reservado para ese pedido (mismos lotes, misma cantidad),
+     *   liberando la reserva al mismo tiempo.
+     * - Si es una salida directa (sin pedido previo), se aplica FIFO sobre el stock
+     *   disponible (o se descuenta del lote puntual indicado), tal como en la reserva.
+     */
+    // atomico a proposito: si no alcanza el stock a mitad del reparto FIFO, ningun
+    // descuento parcial ya guardado en el bucle debe quedar en firme.
     @Override
+    @Transactional
     public DetalleEntrega guardar(DetalleEntrega nuevoDetalleEntrega) {
+        // el mapper DTO->dominio crea un objeto "cascaron" (p.ej. new Lote() con
+        // idLote=null) para cada relacion opcional aunque no venga informada en el
+        // request; hay que normalizarlo a null real o Hibernate intenta guardar esas
+        // relaciones como entidades nuevas en vez de tratarlas como ausentes.
+        Integer idLoteManual = normalizarId(nuevoDetalleEntrega.getLote(), Lote::getIdLote);
+        if (idLoteManual == null) {
+            nuevoDetalleEntrega.setLote(null);
+        }
+        Integer idDetalleSolicitud = normalizarId(nuevoDetalleEntrega.getDetalleSolicitud(),
+                DetalleSolicitud::getIdDetalleSolicitud);
+        if (idDetalleSolicitud == null) {
+            nuevoDetalleEntrega.setDetalleSolicitud(null);
+        }
+        if (normalizarId(nuevoDetalleEntrega.getProducto(), Producto::getIdProducto) == null) {
+            nuevoDetalleEntrega.setProducto(null);
+        }
+        if (normalizarId(nuevoDetalleEntrega.getEntrega(), Entrega::getIdEntrega) == null) {
+            nuevoDetalleEntrega.setEntrega(null);
+        }
+
+        if (idDetalleSolicitud != null) {
+            despacharDesdeReserva(idDetalleSolicitud);
+        } else if (nuevoDetalleEntrega.getProducto() != null && nuevoDetalleEntrega.getCantidadProducto() != null) {
+            despacharFifo(nuevoDetalleEntrega.getProducto().getIdProducto(), nuevoDetalleEntrega.getCantidadProducto(),
+                    idLoteManual);
+        }
         return repositorio.guardar(nuevoDetalleEntrega);
+    }
+
+    private static <T> Integer normalizarId(T objeto, Function<T, Integer> getId) {
+        return objeto == null ? null : getId.apply(objeto);
+    }
+
+    private void despacharDesdeReserva(int idDetalleSolicitud) {
+        List<DetalleSolicitudLote> asignaciones = asignacionRepositorio.buscarPorDetalleSolicitud(idDetalleSolicitud);
+        if (asignaciones.isEmpty()) {
+            throw new RuntimeException("El Detalle Solicitud indicado no tiene stock reservado");
+        }
+        for (DetalleSolicitudLote asignacion : asignaciones) {
+            Lote lote = loteRepositorio.buscarPorid(asignacion.getLote().getIdLote())
+                    .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+            lote.setCantidadLote(lote.getCantidadLote() - asignacion.getCantidad());
+            lote.setCantidadReservada(lote.getCantidadReservada() - asignacion.getCantidad());
+            loteRepositorio.guardar(lote);
+        }
+    }
+
+    private void despacharFifo(int idProducto, int cantidadPedida, Integer idLoteManual) {
+        List<Lote> candidatos;
+        if (idLoteManual != null) {
+            candidatos = List.of(loteRepositorio.buscarPorid(idLoteManual)
+                    .orElseThrow(() -> new RuntimeException("Lote no encontrado")));
+        } else {
+            candidatos = loteRepositorio.buscarPorProductoOrdenadoFifo(idProducto);
+        }
+
+        int cantidadRestante = cantidadPedida;
+        for (Lote lote : candidatos) {
+            if (cantidadRestante <= 0) {
+                break;
+            }
+            int disponible = lote.getCantidadDisponible();
+            if (disponible <= 0) {
+                continue;
+            }
+            int aTomar = Math.min(disponible, cantidadRestante);
+            lote.setCantidadLote(lote.getCantidadLote() - aTomar);
+            loteRepositorio.guardar(lote);
+            cantidadRestante -= aTomar;
+        }
+
+        if (cantidadRestante > 0) {
+            throw new RuntimeException("Stock insuficiente: solo hay " + (cantidadPedida - cantidadRestante)
+                    + " unidades disponibles del producto solicitado");
+        }
     }
 
     @Override

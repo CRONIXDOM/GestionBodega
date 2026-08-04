@@ -42,4 +42,9 @@ public class LoteRepositorioImpl implements ILoteRepositorio {
 		jpaRepositorio.deleteById(idLote);
 	}
 
+	@Override
+	public List<Lote> buscarPorProductoOrdenadoFifo(int idProducto) {
+		return jpaRepositorio.buscarPorProductoOrdenadoFifo(idProducto).stream().map(entityMapper::toDominio).toList();
+	}
+
 }

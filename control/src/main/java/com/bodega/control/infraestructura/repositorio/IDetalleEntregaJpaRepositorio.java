@@ -9,8 +9,6 @@ import com.bodega.control.infraestructura.persistencia.jpa.DetalleEntregaEntity;
 
 public interface IDetalleEntregaJpaRepositorio extends JpaRepository<DetalleEntregaEntity, Integer> {
 
-    List<DetalleEntregaEntity> findByNombreProducto(String nombreProducto);
-
     @Query("Select det from DetalleEntregaEntity det")
     List<DetalleEntregaEntity> listarDetalleEntrega();
 

@@ -8,22 +8,26 @@ public class Lote {
 	private String numeroLote;
 	private LocalDate fechaIngreso;
 	private LocalDate fechaVencimiento;
-	private String cantidadLote;
+	private Integer cantidadLote;
+	private Integer cantidadReservada;
 	private Producto producto;
+	private Ubicacion ubicacion;
 
 	public Lote() {
 		super();
 	}
 
 	public Lote(Integer idLote, String numeroLote, LocalDate fechaIngreso, LocalDate fechaVencimiento,
-			String cantidadLote, Producto producto) {
+			Integer cantidadLote, Integer cantidadReservada, Producto producto, Ubicacion ubicacion) {
 		super();
 		this.idLote = idLote;
 		this.numeroLote = numeroLote;
 		this.fechaIngreso = fechaIngreso;
 		this.fechaVencimiento = fechaVencimiento;
 		this.cantidadLote = cantidadLote;
+		this.cantidadReservada = cantidadReservada;
 		this.producto = producto;
+		this.ubicacion = ubicacion;
 	}
 
 	public Integer getIdLote() {
@@ -58,12 +62,20 @@ public class Lote {
 		this.fechaVencimiento = fechaVencimiento;
 	}
 
-	public String getCantidadLote() {
+	public Integer getCantidadLote() {
 		return cantidadLote;
 	}
 
-	public void setCantidadLote(String cantidadLote) {
+	public void setCantidadLote(Integer cantidadLote) {
 		this.cantidadLote = cantidadLote;
+	}
+
+	public Integer getCantidadReservada() {
+		return cantidadReservada;
+	}
+
+	public void setCantidadReservada(Integer cantidadReservada) {
+		this.cantidadReservada = cantidadReservada;
 	}
 
 	public Producto getProducto() {
@@ -72,6 +84,20 @@ public class Lote {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+
+	public Ubicacion getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(Ubicacion ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public int getCantidadDisponible() {
+		int reservada = cantidadReservada == null ? 0 : cantidadReservada;
+		int total = cantidadLote == null ? 0 : cantidadLote;
+		return total - reservada;
 	}
 
 }

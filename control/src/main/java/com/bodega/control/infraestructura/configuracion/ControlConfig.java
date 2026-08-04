@@ -35,6 +35,7 @@ import com.bodega.control.aplicacion.casosuso.impl.UsuarioUseCaseImpl;
 import com.bodega.control.aplicacion.casosuso.impl.ZonaUseCaseImpl;
 import com.bodega.control.dominio.repositorio.ICredencialesRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleEntregaRepositorio;
+import com.bodega.control.dominio.repositorio.IDetalleSolicitudLoteRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleSolicitudRepositorio;
 import com.bodega.control.dominio.repositorio.IEntregaRepositorio;
 import com.bodega.control.dominio.repositorio.ILoteRepositorio;
@@ -50,6 +51,7 @@ import com.bodega.control.dominio.repositorio.IUsuarioRolRepositorio;
 import com.bodega.control.dominio.repositorio.IZonaRepositorio;
 import com.bodega.control.infraestructura.persistencia.adaptadores.CredencialesRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.DetalleEntregaRepositorioImpl;
+import com.bodega.control.infraestructura.persistencia.adaptadores.DetalleSolicitudLoteRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.DetalleSolicitudRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.EntregaRepositorioImpl;
 import com.bodega.control.infraestructura.persistencia.adaptadores.LoteRepositorioImpl;
@@ -66,6 +68,7 @@ import com.bodega.control.infraestructura.persistencia.adaptadores.ZonaRepositor
 import com.bodega.control.infraestructura.persistencia.mapeadores.ICredencialesJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IDetalleEntregaJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IDetalleSolicitudJpaMapper;
+import com.bodega.control.infraestructura.persistencia.mapeadores.IDetalleSolicitudLoteJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IEntregaJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.ILoteJpaMapper;
 import com.bodega.control.infraestructura.persistencia.mapeadores.IProductoJpaMapper;
@@ -81,6 +84,7 @@ import com.bodega.control.infraestructura.persistencia.mapeadores.IZonaJpaMapper
 import com.bodega.control.infraestructura.repositorio.ICredencialesJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IDetalleEntregaJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IDetalleSolicitudJpaRepositorio;
+import com.bodega.control.infraestructura.repositorio.IDetalleSolicitudLoteJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IEntregaJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.ILoteJpaRepositorio;
 import com.bodega.control.infraestructura.repositorio.IProductoJpaRepositorio;
@@ -117,8 +121,9 @@ public class ControlConfig {
 	}
 
 	@Bean
-	IDetalleEntregaUseCase detalleEntregaUseCase(IDetalleEntregaRepositorio repositorio) {
-		return new DetalleEntregaUseCaseImpl(repositorio);
+	IDetalleEntregaUseCase detalleEntregaUseCase(IDetalleEntregaRepositorio repositorio, ILoteRepositorio loteRepositorio,
+			IDetalleSolicitudLoteRepositorio asignacionRepositorio) {
+		return new DetalleEntregaUseCaseImpl(repositorio, loteRepositorio, asignacionRepositorio);
 	}
 
 	// detalleSolicitud ****
@@ -129,8 +134,16 @@ public class ControlConfig {
 	}
 
 	@Bean
-	IDetalleSolicitudUseCase detalleSolicitudUseCase(IDetalleSolicitudRepositorio repositorio) {
-		return new DetalleSolicitudUseCaseImpl(repositorio);
+	IDetalleSolicitudUseCase detalleSolicitudUseCase(IDetalleSolicitudRepositorio repositorio,
+			ILoteRepositorio loteRepositorio, IDetalleSolicitudLoteRepositorio asignacionRepositorio) {
+		return new DetalleSolicitudUseCaseImpl(repositorio, loteRepositorio, asignacionRepositorio);
+	}
+
+	// detalleSolicitudLote (reserva de stock por FIFO) ****
+	@Bean
+	IDetalleSolicitudLoteRepositorio detalleSolicitudLoteRepositorio(IDetalleSolicitudLoteJpaRepositorio jpaRepositorio,
+			IDetalleSolicitudLoteJpaMapper mapper) {
+		return new DetalleSolicitudLoteRepositorioImpl(jpaRepositorio, mapper);
 	}
 
 	// entrega ****

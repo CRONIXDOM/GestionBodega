@@ -11,9 +11,12 @@ import com.bodega.control.presentacion.dto.response.LoteResponseDto;
 public interface ILoteDtoMapper {
 
 	@Mapping(target = "producto.idProducto", source = "idProducto")
+	@Mapping(target = "ubicacion.idUbicacion", source = "idUbicacion")
 	Lote toDomain (LoteRequestDto dto);
 
 	@Mapping(target = "idProducto", source = "producto.idProducto")
+	@Mapping(target = "idUbicacion", source = "ubicacion.idUbicacion")
+	@Mapping(target = "cantidadDisponible", expression = "java(lotePojo.getCantidadDisponible())")
 	LoteResponseDto toResponseDto (Lote lotePojo);
 
 }

@@ -32,12 +32,19 @@ public class LoteEntity {
     @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento;
 
-    @Column(name = "cantidad_lote", length = 50)
-    private String cantidadLote;
-    
+    @Column(name = "cantidad_lote")
+    private Integer cantidadLote;
+
+    @Column(name = "cantidad_reservada")
+    private Integer cantidadReservada = 0;
+
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_idPRODUCTO",nullable = false)
     private ProductoEntity producto;
+
+    @ManyToOne
+    @JoinColumn(name = "UBICACION_idUBICACION")
+    private UbicacionEntity ubicacion;
 
     @OneToMany(mappedBy = "lote")
     private List<RegistroEntity> registros;

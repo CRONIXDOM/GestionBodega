@@ -16,6 +16,21 @@ public class LoteUseCaseImpl implements ILoteUseCase {
 
     @Override
     public Lote guardar(Lote nuevoLote) {
+        if (nuevoLote.getIdLote() != null) {
+            // es una edicion: la cantidad reservada la administra el flujo de FIFO,
+            // no el formulario de edicion de lote, asi que se preserva la existente.
+            repositorio.buscarPorid(nuevoLote.getIdLote())
+                    .ifPresent(actual -> nuevoLote.setCantidadReservada(actual.getCantidadReservada()));
+        }
+        if (nuevoLote.getCantidadReservada() == null) {
+            nuevoLote.setCantidadReservada(0);
+        }
+        // el mapper crea un objeto Ubicacion "cascaron" (idUbicacion=null) cuando el
+        // formulario no elige ubicacion; hay que normalizarlo a null real o Hibernate
+        // intenta guardarlo como una ubicacion nueva en vez de tratarlo como ausente.
+        if (nuevoLote.getUbicacion() != null && nuevoLote.getUbicacion().getIdUbicacion() == null) {
+            nuevoLote.setUbicacion(null);
+        }
         return repositorio.guardar(nuevoLote);
     }
 

@@ -19,11 +19,12 @@ public class DetalleEntregaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDetalleEntrega;
 
-    @Column(name = "nombre_producto", length = 100)
-    private String nombreProducto;
+    @ManyToOne
+    @JoinColumn(name = "PRODUCTO_idPRODUCTO")
+    private ProductoEntity producto;
 
-    @Column(name = "cantidad_producto", length = 50)
-    private String cantidadProducto;
+    @Column(name = "cantidad_producto")
+    private Integer cantidadProducto;
 
     @Column(name = "codigo_evento", length = 50)
     private String codigoEvento;
@@ -34,5 +35,13 @@ public class DetalleEntregaEntity {
     @ManyToOne
     @JoinColumn(name = "ENTREGA_idENTREGA")
     private EntregaEntity entrega;
+
+    @ManyToOne
+    @JoinColumn(name = "DETALLESOLICITUD_idDETALLESOLICITUD")
+    private DetalleSolicitudEntity detalleSolicitud;
+
+    @ManyToOne
+    @JoinColumn(name = "LOTE_idLOTE")
+    private LoteEntity lote;
 
 }

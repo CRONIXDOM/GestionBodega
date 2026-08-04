@@ -9,7 +9,8 @@ public class LoteRequestDto {
 	private String numeroLote;
 	private LocalDate fechaIngreso;
 	private LocalDate fechaVencimiento;
-	private String cantidadLote;
+	private Integer cantidadLote;
 	private Integer idProducto;
+	private Integer idUbicacion;
 
 }
