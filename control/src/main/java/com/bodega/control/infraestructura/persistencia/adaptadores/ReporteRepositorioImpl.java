@@ -31,7 +31,7 @@ public class ReporteRepositorioImpl implements IReporteRepositorio {
 
     @Override
     public Optional<Reporte> buscarPorid(int idReporte) {
-        return Optional.empty();
+        return jpaRepositorio.findById(idReporte).map(entityMapper::toDominio);
     }
 
     @Override

@@ -9,4 +9,5 @@ public class DetalleSolicitudRequestDto {
     private Integer cantidadProducto;
     private String lugarRecogida;
     private Integer idProducto;
+    private Integer idSolicitud;
 }

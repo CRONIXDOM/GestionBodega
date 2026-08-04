@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.bodega.controlweb.model.dto.request.EntregaRequestDto;
 import com.bodega.controlweb.model.dto.response.EntregaResponseDto;
+import com.bodega.controlweb.model.dto.response.OpcionSelectDto;
 import com.bodega.controlweb.service.IEntregaService;
 
 @Service
@@ -39,5 +40,13 @@ public class EntregaServiceImpl implements IEntregaService {
     public void eliminarEntrega(Integer id) {
         webCliente.delete().uri(ub -> ub.path("/entrega/{id}").build(id))
                 .retrieve().toBodilessEntity().block();
+    }
+
+    @Override
+    public List<OpcionSelectDto> listarOpciones() {
+        return listarEntrega().stream()
+                .map(e -> new OpcionSelectDto(e.getIdEntrega(),
+                        "Entrega " + e.getFechaEntrega() + " — " + e.getResponsableEntrega()))
+                .toList();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.DetalleEntregaRequestDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
+import com.bodega.controlweb.service.IEntregaService;
 
 @Controller
 @RequestMapping("/detalleentrega")
@@ -18,6 +19,8 @@ public class DetalleEntregaController {
 
     @Autowired
     private IDetalleEntregaService servicioAPI;
+    @Autowired
+    private IEntregaService servicioEntrega;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -28,6 +31,7 @@ public class DetalleEntregaController {
     @GetMapping("/nuevo")
     public String crearDetalleEntrega(Model model) {
         model.addAttribute("detalleEntrega", new DetalleEntregaRequestDto());
+        model.addAttribute("opcionesEntrega", servicioEntrega.listarOpciones());
         return "/DetalleEntrega/creardetalleentrega";
     }
 
@@ -40,6 +44,7 @@ public class DetalleEntregaController {
     @GetMapping("/editar/{id}")
     public String editarDetalleEntrega(@PathVariable Integer id, Model model) {
         model.addAttribute("detalleEntrega", servicioAPI.buscarDetalleEntregaId(id));
+        model.addAttribute("opcionesEntrega", servicioEntrega.listarOpciones());
         return "/DetalleEntrega/creardetalleentrega";
     }
 

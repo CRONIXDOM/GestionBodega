@@ -7,19 +7,21 @@ public class DetalleEntrega {
 	private String cantidadProducto;
 	private String codigoEvento;
 	private String nombreEvento;
+	private Entrega entrega;
 
 	public DetalleEntrega() {
 		super();
 	}
 
 	public DetalleEntrega(Integer idDetalleEntrega, String nombreProducto, String cantidadProducto, String codigoEvento,
-			String nombreEvento) {
+			String nombreEvento, Entrega entrega) {
 		super();
 		this.idDetalleEntrega = idDetalleEntrega;
 		this.nombreProducto = nombreProducto;
 		this.cantidadProducto = cantidadProducto;
 		this.codigoEvento = codigoEvento;
 		this.nombreEvento = nombreEvento;
+		this.entrega = entrega;
 	}
 
 	public Integer getIdDetalleEntrega() {
@@ -60,6 +62,14 @@ public class DetalleEntrega {
 
 	public void setNombreEvento(String nombreEvento) {
 		this.nombreEvento = nombreEvento;
+	}
+
+	public Entrega getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(Entrega entrega) {
+		this.entrega = entrega;
 	}
 
 }

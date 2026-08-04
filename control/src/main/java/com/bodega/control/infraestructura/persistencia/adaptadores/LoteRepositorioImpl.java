@@ -28,21 +28,18 @@ public class LoteRepositorioImpl implements ILoteRepositorio {
 	}
 
 	@Override
-	public Optional<Lote> buscarPorid(int Lote) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public Optional<Lote> buscarPorid(int idLote) {
+		return jpaRepositorio.findById(idLote).map(entityMapper::toDominio);
 	}
 
 	@Override
 	public List<Lote> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return jpaRepositorio.findAll().stream().map(entityMapper::toDominio).toList();
 	}
 
 	@Override
-	public void eliminar(int Lote) {
-		// TODO Auto-generated method stub
-		
+	public void eliminar(int idLote) {
+		jpaRepositorio.deleteById(idLote);
 	}
 
 }

@@ -11,9 +11,11 @@ import com.bodega.control.presentacion.dto.response.DetalleSolicitudResponseDto;
 public interface IDetalleSolicitudDtoMapper {
 
 	@Mapping(target = "producto.idProducto", source = "idProducto")
+	@Mapping(target = "solicitud.idSolicitud", source = "idSolicitud")
 	DetalleSolicitud toDomain (DetalleSolicitudRequestDto dto);
 
 	@Mapping(target = "idProducto", source = "producto.idProducto")
+	@Mapping(target = "idSolicitud", source = "solicitud.idSolicitud")
 	DetalleSolicitudResponseDto toResponseDto (DetalleSolicitud detalleSolicitudPojo);
 
 

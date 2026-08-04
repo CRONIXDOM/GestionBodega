@@ -23,6 +23,7 @@
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Producto</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Cantidad Producto</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Lugar Recogida</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Solicitud</th>
 							<th class="px-4 py-3"></th>
 						</tr>
 					</thead>
@@ -37,6 +38,8 @@
 								th:text="${indice.cantidadProducto}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
 								th:text="${indice.lugarRecogida}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.idSolicitud}"></td>
 							<td class="whitespace-nowrap px-4 py-3 text-right">
 								<a th:href="@{/detallesolicitud/editar/{id}(id=${indice.idDetalleSolicitud})}"
 								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>

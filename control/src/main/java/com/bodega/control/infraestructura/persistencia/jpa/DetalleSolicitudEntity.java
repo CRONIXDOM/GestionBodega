@@ -28,4 +28,8 @@ public class DetalleSolicitudEntity {
 	@ManyToOne
 	@JoinColumn(name = "PRODUCTO_idPRODUCTO", nullable = false)
 	private ProductoEntity producto;
+
+	@ManyToOne
+	@JoinColumn(name = "SOLICITUD_idSOLICITUD")
+	private SolicitudEntity solicitud;
 }

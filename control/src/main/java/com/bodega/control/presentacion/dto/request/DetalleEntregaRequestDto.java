@@ -10,5 +10,6 @@ public class DetalleEntregaRequestDto {
 	private String cantidadProducto;
 	private String codigoEvento;
 	private String nombreEvento;
+	private Integer idEntrega;
 
 }

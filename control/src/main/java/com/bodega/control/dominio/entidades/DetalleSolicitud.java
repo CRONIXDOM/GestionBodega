@@ -7,17 +7,19 @@ public class DetalleSolicitud {
 	private Integer cantidadProducto;
 	private String lugarRecogida;
 	private Producto producto;
+	private Solicitud solicitud;
 
 	public DetalleSolicitud() {
 		super();
 	}
 	public DetalleSolicitud(Integer idDetalleSolicitud, Integer cantidadProducto,
-			String lugarRecogida, Producto producto) {
+			String lugarRecogida, Producto producto, Solicitud solicitud) {
 		super();
 		this.idDetalleSolicitud = idDetalleSolicitud;
 		this.cantidadProducto = cantidadProducto;
 		this.lugarRecogida = lugarRecogida;
 		this.producto = producto;
+		this.solicitud = solicitud;
 	}
 	public Integer getIdDetalleSolicitud() {
 		return idDetalleSolicitud;
@@ -42,6 +44,12 @@ public class DetalleSolicitud {
 	}
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+	public Solicitud getSolicitud() {
+		return solicitud;
+	}
+	public void setSolicitud(Solicitud solicitud) {
+		this.solicitud = solicitud;
 	}
 
 }
