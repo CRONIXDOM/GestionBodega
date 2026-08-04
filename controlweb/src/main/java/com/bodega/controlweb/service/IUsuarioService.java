@@ -10,7 +10,7 @@ public interface IUsuarioService {
 
     List<UsuarioResponseDto> listarUsuario();
 
-    void guardarUsuario(UsuarioRequestDto nuevo);
+    UsuarioResponseDto guardarUsuario(UsuarioRequestDto nuevo);
 
     UsuarioResponseDto buscarUsuarioId(Integer id);
 

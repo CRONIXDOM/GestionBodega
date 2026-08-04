@@ -47,6 +47,15 @@
 							th:text="${op.etiqueta}"></option>
 					</select>
 				</div>
+				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Ubicación</label>
+					<select th:field="*{idUbicacion}"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
+						<option value="">Seleccione...</option>
+						<option th:each="op : ${opcionesUbicacion}" th:value="${op.id}"
+							th:text="${op.etiqueta}"></option>
+					</select>
+				</div>
 				<button type="submit"
 					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
 			</form>

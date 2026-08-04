@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.UbicacionRequestDto;
 import com.bodega.controlweb.service.IUbicacionService;
+import com.bodega.controlweb.service.IZonaService;
 
 @Controller
 @RequestMapping("/ubicacion")
@@ -18,6 +19,8 @@ public class UbicacionController {
 
     @Autowired
     private IUbicacionService servicioAPI;
+    @Autowired
+    private IZonaService servicioZona;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -28,6 +31,7 @@ public class UbicacionController {
     @GetMapping("/nuevo")
     public String crearUbicacion(Model model) {
         model.addAttribute("ubicacion", new UbicacionRequestDto());
+        model.addAttribute("opcionesZona", servicioZona.listarOpciones());
         return "/Ubicacion/crearubicacion";
     }
 
@@ -40,6 +44,7 @@ public class UbicacionController {
     @GetMapping("/editar/{id}")
     public String editarUbicacion(@PathVariable Integer id, Model model) {
         model.addAttribute("ubicacion", servicioAPI.buscarUbicacionId(id));
+        model.addAttribute("opcionesZona", servicioZona.listarOpciones());
         return "/Ubicacion/crearubicacion";
     }
 

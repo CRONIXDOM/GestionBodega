@@ -20,11 +20,13 @@
 					<thead>
 						<tr class="border-b border-gray-200">
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id</th>
-							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Nombre Producto</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Producto</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Cantidad Producto</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Código Evento</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Nombre Evento</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id Entrega</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Detalle Solicitud</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Lote</th>
 							<th class="px-4 py-3"></th>
 						</tr>
 					</thead>
@@ -34,7 +36,7 @@
 							<td class="px-4 py-3 text-sm font-medium text-navy-700"
 								th:text="${indice.idDetalleEntrega}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
-								th:text="${indice.nombreProducto}"></td>
+								th:text="${indice.idProducto}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
 								th:text="${indice.cantidadProducto}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
@@ -43,6 +45,10 @@
 								th:text="${indice.nombreEvento}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
 								th:text="${indice.idEntrega}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.idDetalleSolicitud}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.idLote}"></td>
 							<td class="whitespace-nowrap px-4 py-3 text-right">
 								<a th:href="@{/detalleentrega/editar/{id}(id=${indice.idDetalleEntrega})}"
 								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>

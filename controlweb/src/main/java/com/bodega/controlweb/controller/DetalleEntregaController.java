@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.DetalleEntregaRequestDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
+import com.bodega.controlweb.service.IDetalleSolicitudService;
 import com.bodega.controlweb.service.IEntregaService;
+import com.bodega.controlweb.service.ILoteService;
+import com.bodega.controlweb.service.IProductoService;
 
 @Controller
 @RequestMapping("/detalleentrega")
@@ -21,6 +24,12 @@ public class DetalleEntregaController {
     private IDetalleEntregaService servicioAPI;
     @Autowired
     private IEntregaService servicioEntrega;
+    @Autowired
+    private IProductoService servicioProducto;
+    @Autowired
+    private IDetalleSolicitudService servicioDetalleSolicitud;
+    @Autowired
+    private ILoteService servicioLote;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -32,6 +41,9 @@ public class DetalleEntregaController {
     public String crearDetalleEntrega(Model model) {
         model.addAttribute("detalleEntrega", new DetalleEntregaRequestDto());
         model.addAttribute("opcionesEntrega", servicioEntrega.listarOpciones());
+        model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+        model.addAttribute("opcionesDetalleSolicitud", servicioDetalleSolicitud.listarOpciones());
+        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
         return "/DetalleEntrega/creardetalleentrega";
     }
 
@@ -45,6 +57,9 @@ public class DetalleEntregaController {
     public String editarDetalleEntrega(@PathVariable Integer id, Model model) {
         model.addAttribute("detalleEntrega", servicioAPI.buscarDetalleEntregaId(id));
         model.addAttribute("opcionesEntrega", servicioEntrega.listarOpciones());
+        model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+        model.addAttribute("opcionesDetalleSolicitud", servicioDetalleSolicitud.listarOpciones());
+        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
         return "/DetalleEntrega/creardetalleentrega";
     }
 

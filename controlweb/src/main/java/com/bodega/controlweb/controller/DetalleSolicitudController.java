@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.DetalleSolicitudRequestDto;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
+import com.bodega.controlweb.service.ILoteService;
 import com.bodega.controlweb.service.IProductoService;
 import com.bodega.controlweb.service.ISolicitudService;
 
@@ -24,6 +25,8 @@ public class DetalleSolicitudController {
     private IProductoService servicioProducto;
     @Autowired
     private ISolicitudService servicioSolicitud;
+    @Autowired
+    private ILoteService servicioLote;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -36,6 +39,7 @@ public class DetalleSolicitudController {
         model.addAttribute("detalleSolicitud", new DetalleSolicitudRequestDto());
         model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
         model.addAttribute("opcionesSolicitud", servicioSolicitud.listarOpciones());
+        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
         return "/DetalleSolicitud/creardetallesolicitud";
     }
 
@@ -50,6 +54,7 @@ public class DetalleSolicitudController {
         model.addAttribute("detalleSolicitud", servicioAPI.buscarDetalleSolicitudId(id));
         model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
         model.addAttribute("opcionesSolicitud", servicioSolicitud.listarOpciones());
+        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
         return "/DetalleSolicitud/creardetallesolicitud";
     }
 

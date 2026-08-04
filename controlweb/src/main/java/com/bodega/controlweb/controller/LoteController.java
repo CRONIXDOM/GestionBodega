@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.bodega.controlweb.model.dto.request.LoteRequestDto;
 import com.bodega.controlweb.service.ILoteService;
 import com.bodega.controlweb.service.IProductoService;
+import com.bodega.controlweb.service.IUbicacionService;
 
 @Controller
 @RequestMapping("/lote")
@@ -21,6 +22,8 @@ public class LoteController {
     private ILoteService servicioAPI;
     @Autowired
     private IProductoService servicioProducto;
+    @Autowired
+    private IUbicacionService servicioUbicacion;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -32,6 +35,7 @@ public class LoteController {
     public String crearLote(Model model) {
         model.addAttribute("lote", new LoteRequestDto());
         model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+        model.addAttribute("opcionesUbicacion", servicioUbicacion.listarOpciones());
         return "/Lote/crearlote";
     }
 
@@ -45,6 +49,7 @@ public class LoteController {
     public String editarLote(@PathVariable Integer id, Model model) {
         model.addAttribute("lote", servicioAPI.buscarLoteId(id));
         model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+        model.addAttribute("opcionesUbicacion", servicioUbicacion.listarOpciones());
         return "/Lote/crearlote";
     }
 

@@ -20,8 +20,10 @@
 					<thead>
 						<tr class="border-b border-gray-200">
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Id</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Código</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Cantidad</th>
 							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Fecha</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Zona</th>
 							<th class="px-4 py-3"></th>
 						</tr>
 					</thead>
@@ -31,9 +33,13 @@
 							<td class="px-4 py-3 text-sm font-medium text-navy-700"
 								th:text="${indice.idUbicacion}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.codigoUbicacion}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
 								th:text="${indice.cantidadUbicacion}"></td>
 							<td class="px-4 py-3 text-sm text-navy-700"
 								th:text="${indice.fechaUbicacion}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.idZona}"></td>
 							<td class="whitespace-nowrap px-4 py-3 text-right">
 								<a th:href="@{/ubicacion/editar/{id}(id=${indice.idUbicacion})}"
 								class="mr-2 inline-flex items-center rounded-lg bg-lightPrimary px-3 py-1.5 text-xs font-bold text-brand-500 hover:bg-brand-500 hover:text-white">Editar</a>

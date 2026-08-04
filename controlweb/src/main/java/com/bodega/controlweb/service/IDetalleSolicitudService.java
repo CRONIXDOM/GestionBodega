@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bodega.controlweb.model.dto.request.DetalleSolicitudRequestDto;
 import com.bodega.controlweb.model.dto.response.DetalleSolicitudResponseDto;
+import com.bodega.controlweb.model.dto.response.OpcionSelectDto;
 
 public interface IDetalleSolicitudService {
 
@@ -14,4 +15,6 @@ public interface IDetalleSolicitudService {
     DetalleSolicitudResponseDto buscarDetalleSolicitudId(Integer id);
 
     void eliminarDetalleSolicitud(Integer id);
+
+    List<OpcionSelectDto> listarOpciones();
 }

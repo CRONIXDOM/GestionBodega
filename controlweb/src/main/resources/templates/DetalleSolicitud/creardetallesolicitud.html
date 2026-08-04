@@ -37,6 +37,18 @@
 						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
 				</div>
 				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Lote
+						específico (opcional)</label>
+					<select th:field="*{idLote}"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
+						<option value="">Seleccione...</option>
+						<option th:each="op : ${opcionesLote}" th:value="${op.id}"
+							th:text="${op.etiqueta}"></option>
+					</select>
+					<p class="mt-1 text-xs text-gray-500">Si no eliges uno, se
+						usa automáticamente el lote más antiguo (FIFO).</p>
+				</div>
+				<div class="mb-4">
 					<label class="ml-1 text-sm font-bold text-navy-700">Solicitud</label>
 					<select th:field="*{idSolicitud}"
 						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">

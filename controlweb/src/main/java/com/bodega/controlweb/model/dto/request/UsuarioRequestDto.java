@@ -9,4 +9,7 @@ public class UsuarioRequestDto {
     private String nombreUsuario;
     private String apellidoUsuario;
     private String estado;
+    private String contrasena;
+    private String correo;
+    private Integer idRol;
 }

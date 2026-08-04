@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.bodega.controlweb.model.dto.request.ZonaRequestDto;
 import com.bodega.controlweb.model.dto.response.ZonaResponseDto;
 import com.bodega.controlweb.service.IZonaService;
+import com.bodega.controlweb.model.dto.response.OpcionSelectDto;
 
 @Service
 public class ZonaServiceImpl implements IZonaService {
@@ -39,5 +40,12 @@ public class ZonaServiceImpl implements IZonaService {
     public void eliminarZona(Integer id) {
         webCliente.delete().uri(ub -> ub.path("/zona/{id}").build(id))
                 .retrieve().toBodilessEntity().block();
+    }
+
+    @Override
+    public List<OpcionSelectDto> listarOpciones() {
+        return listarZona().stream()
+                .map(op -> new OpcionSelectDto(op.getIdZona(), op.getNombreZona()))
+                .toList();
     }
 }

@@ -15,6 +15,12 @@
 				method="post">
 				<input type="hidden" th:field="*{idUbicacion}">
 				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Código
+						de Ubicación</label>
+					<input type="text" th:field="*{codigoUbicacion}" placeholder="A-01"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+				</div>
+				<div class="mb-4">
 					<label class="ml-1 text-sm font-bold text-navy-700">Cantidad
 						de Ubicación</label>
 					<input type="text" th:field="*{cantidadUbicacion}"
@@ -25,6 +31,15 @@
 						de Ubicación</label>
 					<input type="date" th:field="*{fechaUbicacion}"
 						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+				</div>
+				<div class="mb-4">
+					<label class="ml-1 text-sm font-bold text-navy-700">Zona</label>
+					<select th:field="*{idZona}"
+						class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
+						<option value="">Seleccione...</option>
+						<option th:each="op : ${opcionesZona}" th:value="${op.id}"
+							th:text="${op.etiqueta}"></option>
+					</select>
 				</div>
 				<button type="submit"
 					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>

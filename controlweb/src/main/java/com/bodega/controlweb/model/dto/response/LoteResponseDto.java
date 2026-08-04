@@ -10,6 +10,9 @@ public class LoteResponseDto {
     private String numeroLote;
     private LocalDate fechaIngreso;
     private LocalDate fechaVencimiento;
-    private String cantidadLote;
+    private Integer cantidadLote;
     private Integer idProducto;
+    private Integer idUbicacion;
+    private Integer cantidadReservada;
+    private Integer cantidadDisponible;
 }

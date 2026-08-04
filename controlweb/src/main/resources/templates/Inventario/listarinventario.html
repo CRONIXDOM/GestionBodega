@@ -1,0 +1,50 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+<title>Existencias</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="mb-6 flex items-center justify-between">
+			<h1 class="text-2xl font-bold text-navy-700">Existencias</h1>
+		</div>
+		<div
+			class="relative flex flex-col rounded-[20px] bg-white p-4 shadow-3xl shadow-shadow-500">
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<tr class="border-b border-gray-200">
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Producto</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Código</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">N° Lotes</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Cantidad Total</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Reservada</th>
+							<th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500">Disponible</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listainventario}"
+							class="border-b border-gray-100 last:border-0 hover:bg-lightPrimary/50">
+							<td class="px-4 py-3 text-sm font-medium text-navy-700"
+								th:text="${indice.nombreProducto}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.codigoProducto}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.numeroLotes}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.cantidadTotal}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.cantidadReservada}"></td>
+							<td class="px-4 py-3 text-sm text-navy-700"
+								th:text="${indice.cantidadDisponible}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

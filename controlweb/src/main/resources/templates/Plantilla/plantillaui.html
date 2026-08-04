@@ -58,9 +58,6 @@ body { font-family: 'DM Sans', sans-serif; }
 
 			<nav class="mb-auto overflow-y-auto px-4">
 				<ul class="space-y-1">
-					<li><a th:href="@{/}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Dashboard</a>
-					</li>
 
 					<th:block
 						th:if="${session.rolesLogueado != null and #lists.contains(session.rolesLogueado, 'Administrador')}">
@@ -80,7 +77,6 @@ body { font-family: 'DM Sans', sans-serif; }
 					</li>
 					</th:block>
 
-					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Catálogo</li>
 					<li><a th:href="@{/producto}"
 						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Productos</a>
 					</li>
@@ -101,6 +97,9 @@ body { font-family: 'DM Sans', sans-serif; }
 					<li><a th:href="@{/registro}"
 						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Registros</a>
 					</li>
+					<li><a th:href="@{/inventario}"
+						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Existencias</a>
+					</li>
 
 					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Movimientos</li>
 					<li><a th:href="@{/solicitud}"
@@ -118,10 +117,6 @@ body { font-family: 'DM Sans', sans-serif; }
 							Entrega</a>
 					</li>
 
-					<li class="pt-4 pb-1 pl-4 text-xs font-bold uppercase tracking-wide text-gray-400">Reportes</li>
-					<li><a th:href="@{/reporte}"
-						class="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-lightPrimary hover:text-brand-500">Reportes</a>
-					</li>
 				</ul>
 			</nav>
 		</aside>

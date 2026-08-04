@@ -45,7 +45,7 @@ public class DetalleEntregaServiceImpl implements IDetalleEntregaService {
     @Override
     public List<OpcionSelectDto> listarOpciones() {
         return listarDetalleEntrega().stream()
-                .map(op -> new OpcionSelectDto(op.getIdDetalleEntrega(), op.getNombreProducto() + " — evento " + op.getNombreEvento()))
+                .map(op -> new OpcionSelectDto(op.getIdDetalleEntrega(), "Producto #" + op.getIdProducto() + " — evento " + op.getNombreEvento()))
                 .toList();
     }
 }

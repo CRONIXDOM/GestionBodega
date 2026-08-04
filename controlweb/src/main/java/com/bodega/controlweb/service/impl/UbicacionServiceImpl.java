@@ -45,7 +45,7 @@ public class UbicacionServiceImpl implements IUbicacionService {
     @Override
     public List<OpcionSelectDto> listarOpciones() {
         return listarUbicacion().stream()
-                .map(op -> new OpcionSelectDto(op.getIdUbicacion(), "Ubicación #" + op.getIdUbicacion() + " — cant. " + op.getCantidadUbicacion()))
+                .map(op -> new OpcionSelectDto(op.getIdUbicacion(), op.getCodigoUbicacion() + " (Zona " + op.getIdZona() + ")"))
                 .toList();
     }
 }

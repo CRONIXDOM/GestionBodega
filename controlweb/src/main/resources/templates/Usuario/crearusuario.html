@@ -35,6 +35,29 @@
 						<option value="Inactivo">Inactivo</option>
 					</select>
 				</div>
+				<div th:if="${usuario.idUsuario == null}">
+					<p class="mb-2 text-xs text-gray-500">Estos datos crean
+						también el acceso de inicio de sesión del usuario.</p>
+					<div class="mb-4">
+						<label class="ml-1 text-sm font-bold text-navy-700">Contraseña</label>
+						<input type="password" th:field="*{contrasena}"
+							class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+					</div>
+					<div class="mb-4">
+						<label class="ml-1 text-sm font-bold text-navy-700">Correo</label>
+						<input type="email" th:field="*{correo}"
+							class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white/0 p-3 text-sm outline-none focus:border-brand-500">
+					</div>
+					<div class="mb-4">
+						<label class="ml-1 text-sm font-bold text-navy-700">Rol</label>
+						<select th:field="*{idRol}"
+							class="mt-2 flex h-12 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-brand-500">
+							<option value="">Seleccione...</option>
+							<option th:each="op : ${opcionesRol}" th:value="${op.id}"
+								th:text="${op.etiqueta}"></option>
+						</select>
+					</div>
+				</div>
 				<button type="submit"
 					class="linear mt-2 w-full rounded-xl bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">Guardar</button>
 			</form>

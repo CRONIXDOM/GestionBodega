@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.bodega.controlweb.model.dto.request.DetalleSolicitudRequestDto;
 import com.bodega.controlweb.model.dto.response.DetalleSolicitudResponseDto;
+import com.bodega.controlweb.model.dto.response.OpcionSelectDto;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
 
 @Service
@@ -39,5 +40,14 @@ public class DetalleSolicitudServiceImpl implements IDetalleSolicitudService {
     public void eliminarDetalleSolicitud(Integer id) {
         webCliente.delete().uri(ub -> ub.path("/detalleSolicitud/{id}").build(id))
                 .retrieve().toBodilessEntity().block();
+    }
+
+    @Override
+    public List<OpcionSelectDto> listarOpciones() {
+        return listarDetalleSolicitud().stream()
+                .map(op -> new OpcionSelectDto(op.getIdDetalleSolicitud(),
+                        "Pedido #" + op.getIdDetalleSolicitud() + " — " + op.getCantidadProducto()
+                                + " uds (Solicitud #" + op.getIdSolicitud() + ")"))
+                .toList();
     }
 }
