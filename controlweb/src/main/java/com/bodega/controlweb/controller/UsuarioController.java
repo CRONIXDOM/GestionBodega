@@ -22,6 +22,7 @@ import com.bodega.controlweb.service.ICredencialesService;
 import com.bodega.controlweb.service.IRolService;
 import com.bodega.controlweb.service.IUsuarioRolService;
 import com.bodega.controlweb.service.IUsuarioService;
+import com.bodega.controlweb.util.MensajesError;
 
 @Controller
 @RequestMapping("/usuario")
@@ -50,7 +51,20 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardarUsuario(@ModelAttribute UsuarioRequestDto usuario) {
+    public String guardarUsuario(@ModelAttribute UsuarioRequestDto usuario, Model model) {
+        try {
+            return intentarGuardar(usuario);
+        } catch (Exception ex) {
+            // se devuelve el formulario con lo que el usuario ya habia escrito, en vez
+            // de mandarlo a la pagina de error generica de Spring.
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            model.addAttribute("opcionesRol", servicioRol.listarOpciones());
+            return "/Usuario/crearusuario";
+        }
+    }
+
+    private String intentarGuardar(UsuarioRequestDto usuario) {
         boolean esNuevo = usuario.getIdUsuario() == null;
         UsuarioResponseDto guardado = servicioAPI.guardarUsuario(usuario);
 

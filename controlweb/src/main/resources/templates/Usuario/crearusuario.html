@@ -21,16 +21,25 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
-				<form class="panel" th:action="@{/usuario/guardar}" th:object="${usuario}" method="post">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+				<form class="panel needs-validation" th:action="@{/usuario/guardar}" th:object="${usuario}"
+					method="post" novalidate>
 					<input type="hidden" th:field="*{idUsuario}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Nombre del Usuario</label> <input class="form-control"
-								th:field="*{nombreUsuario}">
+							<label class="form-label">Nombre del Usuario <span class="text-danger">*</span></label>
+							<input class="form-control" th:field="*{nombreUsuario}" required
+								pattern="[\p{L} '\-]+"
+								title="Solo letras, sin números">
+							<div class="invalid-feedback">El nombre es obligatorio y solo puede contener letras.</div>
+							<div class="form-text">No puede repetirse con el de otro usuario.</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Apellido del Usuario</label> <input class="form-control"
-								th:field="*{apellidoUsuario}">
+							<label class="form-label">Apellido del Usuario</label>
+							<input class="form-control" th:field="*{apellidoUsuario}"
+								pattern="[\p{L} '\-]+"
+								title="Solo letras, sin números">
+							<div class="invalid-feedback">El apellido solo puede contener letras.</div>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Estado</label> <select class="form-select"

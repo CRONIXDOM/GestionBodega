@@ -1,12 +1,18 @@
 package com.bodega.control.aplicacion.casosuso.impl;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IUsuarioUseCase;
 import com.bodega.control.dominio.entidades.Usuario;
 import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 
 public class UsuarioUseCaseImpl implements IUsuarioUseCase {
+
+	// \p{L} = cualquier letra de cualquier idioma (incluye tildes y ñ); se permiten
+	// ademas espacios, apostrofes y guiones para nombres como "Ana Maria",
+	// "O'Brien" o "Garcia-Lopez". Los digitos quedan fuera a proposito.
+	private static final Pattern SOLO_LETRAS = Pattern.compile("^[\\p{L} '\\-]+$");
 
 	private final IUsuarioRepositorio repositorio;
 
@@ -16,7 +22,43 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 
 	@Override
 	public Usuario guardar(Usuario nuevoUsuario) {
+		if (nuevoUsuario.getNombreUsuario() == null || nuevoUsuario.getNombreUsuario().isBlank()) {
+			throw new RuntimeException("El nombre del usuario es obligatorio");
+		}
+		// se recorta antes de comparar para que " Ana " y "Ana" no se consideren
+		// usuarios distintos al validar que el nombre no este repetido.
+		nuevoUsuario.setNombreUsuario(nuevoUsuario.getNombreUsuario().trim());
+		if (nuevoUsuario.getApellidoUsuario() != null) {
+			nuevoUsuario.setApellidoUsuario(nuevoUsuario.getApellidoUsuario().trim());
+		}
+
+		validarSinNumeros(nuevoUsuario.getNombreUsuario(), "nombre");
+		if (nuevoUsuario.getApellidoUsuario() != null && !nuevoUsuario.getApellidoUsuario().isBlank()) {
+			validarSinNumeros(nuevoUsuario.getApellidoUsuario(), "apellido");
+		}
+		validarNombreNoRepetido(nuevoUsuario);
+
 		return repositorio.guardar(nuevoUsuario);
+	}
+
+	private static void validarSinNumeros(String valor, String campo) {
+		if (!SOLO_LETRAS.matcher(valor).matches()) {
+			throw new RuntimeException(
+					"El " + campo + " solo puede contener letras: \"" + valor + "\" no es valido");
+		}
+	}
+
+	/**
+	 * Al editar hay que excluir al propio usuario de la comparacion, o guardarlo
+	 * sin cambiarle el nombre chocaria consigo mismo.
+	 */
+	private void validarNombreNoRepetido(Usuario usuario) {
+		boolean repetido = repositorio.listarTodos().stream()
+				.filter(otro -> usuario.getIdUsuario() == null || !usuario.getIdUsuario().equals(otro.getIdUsuario()))
+				.anyMatch(otro -> usuario.getNombreUsuario().equalsIgnoreCase(otro.getNombreUsuario()));
+		if (repetido) {
+			throw new RuntimeException("Ya existe un usuario con el nombre \"" + usuario.getNombreUsuario() + "\"");
+		}
 	}
 
 	@Override
