@@ -26,6 +26,14 @@ public class SesionInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		// Sin esto, al cerrar sesión y pulsar "atrás" el navegador vuelve a mostrar la
+		// página desde su propia caché sin llegar a preguntarle al servidor, dejando ver
+		// datos privados de la sesión ya cerrada. Con "no-store" se obliga a pedirla de
+		// nuevo, y entonces sí pasa por el control de sesión de abajo.
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+
 		HttpSession session = request.getSession();
 		if (session.getAttribute("usuarioLogueado") == null) {
 			response.sendRedirect(request.getContextPath() + "/login");

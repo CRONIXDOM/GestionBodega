@@ -14,6 +14,17 @@
     callback();
   }
 
+  // Algunos navegadores (Safari sobre todo) guardan la pagina viva en el
+  // "back-forward cache" y al pulsar atras la restauran desde memoria sin hacer
+  // ninguna peticion, asi que las cabeceras no-store del servidor no alcanzan.
+  // event.persisted avisa justo de ese caso: se fuerza una recarga real para que
+  // el interceptor de sesion vuelva a decidir si el usuario sigue logueado.
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+
   function isDesktop() {
     return window.matchMedia(desktopMedia).matches;
   }
