@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambiar contraseña | Control Bodega</title>
+
+<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+
+<body class="auth-body">
+	<main class="auth-page">
+		<section class="auth-card">
+			<a class="auth-brand" th:href="@{/login}"><span class="brand-icon"><i
+					class="bi bi-box-seam-fill" aria-hidden="true"></i></span> <span><strong>Control
+						Bodega</strong><small>Sistema de gestión de inventario.</small></span>
+			</a>
+
+			<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+			<form th:action="@{/cambiar-contrasena}" method="post">
+				<div class="mb-4">
+					<p class="eyebrow mb-1">Primer ingreso</p>
+					<h1 class="h3 mb-1">Define tu contraseña</h1>
+					<p class="text-muted mb-0">
+						Hola <strong th:text="${usuario}">usuario</strong>, entraste con una contraseña temporal
+						asignada por el administrador. Para continuar debes definir una propia.
+					</p>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="nuevaContrasena">Nueva contraseña</label>
+					<input class="form-control" id="nuevaContrasena" name="nuevaContrasena" type="password"
+						minlength="6" required autofocus>
+					<div class="form-text">Mínimo 6 caracteres y distinta de la temporal.</div>
+				</div>
+				<div class="mb-4">
+					<label class="form-label" for="confirmarContrasena">Confirmar contraseña</label>
+					<input class="form-control" id="confirmarContrasena" name="confirmarContrasena" type="password"
+						minlength="6" required>
+				</div>
+				<button class="btn btn-primary w-100" type="submit">
+					<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar y continuar
+				</button>
+			</form>
+
+			<div class="text-center mt-3">
+				<a th:href="@{/logout}" class="text-muted"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+					Cerrar sesión</a>
+			</div>
+		</section>
+	</main>
+
+	<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

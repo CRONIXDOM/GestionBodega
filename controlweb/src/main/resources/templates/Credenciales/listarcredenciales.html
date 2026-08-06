@@ -37,6 +37,7 @@
 							<th scope="col">Usuario</th>
 							<th scope="col">Correo</th>
 							<th scope="col">Contraseña</th>
+							<th scope="col">Estado</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -46,6 +47,12 @@
 							<td th:text="${indice.usuario}"></td>
 							<td th:text="${indice.correo}"></td>
 							<td th:text="${indice.contrasena}"></td>
+							<td>
+								<span th:if="${indice.contrasenaTemporal}" class="badge bg-warning text-dark">
+									<i class="bi bi-hourglass-split" aria-hidden="true"></i> Temporal</span>
+								<span th:unless="${indice.contrasenaTemporal}" class="badge bg-success-subtle text-success">
+									<i class="bi bi-check2" aria-hidden="true"></i> Definitiva</span>
+							</td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/credenciales/editar/{id}(id=${indice.idCredenciales})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
@@ -55,7 +62,7 @@
 							</td>
 						</tr>
 						<tr data-empty-row th:if="${#lists.isEmpty(listacredenciales)}">
-							<td colspan="5" class="text-center text-muted py-4">Todavía no hay credenciales registradas.</td>
+							<td colspan="6" class="text-center text-muted py-4">Todavía no hay credenciales registradas.</td>
 						</tr>
 					</tbody>
 				</table>

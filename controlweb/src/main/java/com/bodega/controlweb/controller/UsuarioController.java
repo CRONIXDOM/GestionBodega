@@ -74,6 +74,9 @@ public class UsuarioController {
                 credenciales.setUsuario(usuario.getNombreUsuario());
                 credenciales.setCorreo(usuario.getCorreo());
                 credenciales.setContrasena(usuario.getContrasena());
+                // la clave que define el administrador es solo para el primer ingreso: el
+                // sistema obligara al usuario a cambiarla antes de dejarlo entrar al panel.
+                credenciales.setContrasenaTemporal(true);
                 servicioCredenciales.guardarCredenciales(credenciales);
             }
             if (usuario.getIdRol() != null) {

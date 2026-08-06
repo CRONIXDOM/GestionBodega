@@ -54,8 +54,10 @@
 						<div class="form-text mt-3 mb-2">Estos datos crean también el acceso de inicio de sesión del usuario.</div>
 						<div class="row g-3">
 							<div class="col-md-6">
-								<label class="form-label">Contraseña</label> <input class="form-control"
+								<label class="form-label">Contraseña temporal</label> <input class="form-control"
 									type="password" th:field="*{contrasena}">
+								<div class="form-text">Solo sirve para el primer ingreso: al entrar, el sistema le pedirá
+									definir su propia contraseña.</div>
 							</div>
 							<div class="col-md-6">
 								<label class="form-label">Correo</label> <input class="form-control"

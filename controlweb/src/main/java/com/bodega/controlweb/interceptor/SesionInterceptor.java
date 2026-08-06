@@ -41,6 +41,15 @@ public class SesionInterceptor implements HandlerInterceptor {
 		}
 
 		String path = request.getRequestURI().substring(request.getContextPath().length());
+
+		// con una contraseña temporal no se llega a ninguna otra pantalla: cualquier
+		// ruta devuelve al cambio obligatorio hasta que el usuario defina la suya.
+		if (Boolean.TRUE.equals(session.getAttribute("debeCambiarContrasena"))
+				&& !path.startsWith("/cambiar-contrasena")) {
+			response.sendRedirect(request.getContextPath() + "/cambiar-contrasena");
+			return false;
+		}
+
 		String modulo = extraerModulo(path);
 		if (modulo == null || !CatalogoModulos.todasLasClaves().contains(modulo)) {
 			// no corresponde a ningun modulo controlado (p.ej. la propia raiz "/"): siempre se permite

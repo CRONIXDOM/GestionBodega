@@ -65,6 +65,8 @@ public class RecuperacionController {
 		actualizar.setUsuario(actual.getUsuario());
 		actualizar.setCorreo(actual.getCorreo());
 		actualizar.setContrasena(nuevaContrasena);
+		// la eligio el propio usuario, asi que no vuelve a pedirsele que la cambie
+		actualizar.setContrasenaTemporal(false);
 		servicioCredenciales.guardarCredenciales(actualizar);
 
 		redirectAttributes.addFlashAttribute("exito",

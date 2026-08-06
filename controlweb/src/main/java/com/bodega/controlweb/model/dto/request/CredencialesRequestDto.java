@@ -9,4 +9,5 @@ public class CredencialesRequestDto {
     private String usuario;
     private String correo;
     private String contrasena;
+	private Boolean contrasenaTemporal;
 }

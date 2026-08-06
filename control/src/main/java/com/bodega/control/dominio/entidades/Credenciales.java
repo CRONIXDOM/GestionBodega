@@ -5,6 +5,7 @@ public class Credenciales {
 	private String usuario;
 	private String correo;
 	private String contrasena;
+	private Boolean contrasenaTemporal;
 
 	public Credenciales() {
 	}
@@ -14,6 +15,12 @@ public class Credenciales {
 		this.usuario = usuario;
 		this.correo = correo;
 		this.contrasena = contrasena;
+	}
+
+	public Credenciales(Integer idCredenciales, String usuario, String correo, String contrasena,
+			Boolean contrasenaTemporal) {
+		this(idCredenciales, usuario, correo, contrasena);
+		this.contrasenaTemporal = contrasenaTemporal;
 	}
 
 	public Integer getIdCredenciales() {
@@ -46,6 +53,14 @@ public class Credenciales {
 
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
+	}
+
+	public Boolean getContrasenaTemporal() {
+		return contrasenaTemporal;
+	}
+
+	public void setContrasenaTemporal(Boolean contrasenaTemporal) {
+		this.contrasenaTemporal = contrasenaTemporal;
 	}
 	
 	

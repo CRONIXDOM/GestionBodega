@@ -58,6 +58,15 @@ public class LoginController {
 
 		session.setAttribute("usuarioLogueado", credencial.get().getUsuario());
 		resolverPermisos(credencial.get().getUsuario(), session);
+
+		// si el administrador creo la cuenta con una clave temporal, no se entra al
+		// panel hasta definir una propia; el interceptor bloquea el resto de rutas
+		// mientras esta marca siga puesta.
+		if (Boolean.TRUE.equals(credencial.get().getContrasenaTemporal())) {
+			session.setAttribute("debeCambiarContrasena", true);
+			session.setAttribute("idCredencialesLogueado", credencial.get().getIdCredenciales());
+			return "redirect:/cambiar-contrasena";
+		}
 		return "redirect:/";
 	}
 

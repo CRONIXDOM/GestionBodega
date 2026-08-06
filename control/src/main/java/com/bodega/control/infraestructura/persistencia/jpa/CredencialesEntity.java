@@ -27,5 +27,8 @@ public class CredencialesEntity {
     @Column(name = "contrasena", length = 255)
     private String contrasena;
 
+    @Column(name = "contrasena_temporal")
+    private Boolean contrasenaTemporal;
+
     
 }
