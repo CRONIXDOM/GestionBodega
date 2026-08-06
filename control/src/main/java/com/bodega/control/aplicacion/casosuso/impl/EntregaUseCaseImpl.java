@@ -3,6 +3,7 @@ package com.bodega.control.aplicacion.casosuso.impl;
 import java.util.List;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IEntregaUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Entrega;
 import com.bodega.control.dominio.repositorio.IEntregaRepositorio;
 
@@ -16,6 +17,8 @@ public class EntregaUseCaseImpl implements IEntregaUseCase {
 
 	@Override
 	public Entrega guardar(Entrega nuevaEntrega) {
+		nuevaEntrega.setResponsableEntrega(Validaciones.normalizar(nuevaEntrega.getResponsableEntrega()));
+
 		return repositorio.guardar(nuevaEntrega);
 	}
 

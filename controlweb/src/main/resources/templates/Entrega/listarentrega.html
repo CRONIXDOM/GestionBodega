@@ -36,6 +36,8 @@
 							<th scope="col">Id</th>
 							<th scope="col">Fecha</th>
 							<th scope="col">Responsable</th>
+							<th scope="col">Solicitud</th>
+							<th scope="col">Pedido por</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -44,6 +46,13 @@
 							<td class="fw-semibold" th:text="${indice.idEntrega}"></td>
 							<td th:text="${indice.fechaEntrega}"></td>
 							<td th:text="${indice.responsableEntrega}"></td>
+							<td th:with="idSol=${solicitudPorEntrega.get(indice.idEntrega)}">
+								<span th:if="${idSol != null}" class="badge bg-primary-subtle text-primary"
+									th:text="'#' + ${idSol}"></span>
+								<span th:unless="${idSol != null}" class="text-muted">—</span>
+							</td>
+							<td th:with="idSol=${solicitudPorEntrega.get(indice.idEntrega)}"
+								th:text="${idSol != null} ? (${solicitantePorSolicitud.get(idSol)} ?: '—') : '—'"></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/entrega/editar/{id}(id=${indice.idEntrega})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
@@ -53,7 +62,7 @@
 							</td>
 						</tr>
 						<tr data-empty-row th:if="${#lists.isEmpty(listaentrega)}">
-							<td colspan="4" class="text-center text-muted py-4">Todavía no hay entregas registradas.</td>
+							<td colspan="6" class="text-center text-muted py-4">Todavía no hay entregas registradas.</td>
 						</tr>
 					</tbody>
 				</table>

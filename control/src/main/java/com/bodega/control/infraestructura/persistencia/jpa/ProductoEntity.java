@@ -29,6 +29,9 @@ public class ProductoEntity {
 
     @Column(name = "cantidad_producto")
     private String cantidadProducto;
+
+    @Column(name = "unidades_por_caja")
+    private Integer unidadesPorCaja;
     
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoteEntity> lotes = new ArrayList<>();

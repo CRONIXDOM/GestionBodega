@@ -1,0 +1,71 @@
+package com.bodega.control.aplicacion.util;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+
+/**
+ * Reglas de datos comunes a todos los casos de uso: dejar el texto siempre en
+ * mayúsculas antes de guardarlo, exigir los campos obligatorios y comprobar que
+ * un valor no esté ya usado por otro registro.
+ */
+public final class Validaciones {
+
+    private Validaciones() {
+    }
+
+    /**
+     * Todo el texto se guarda en mayúsculas sin importar cómo lo escriba el
+     * usuario. Se recorta primero para que " quito " y "QUITO" no se consideren
+     * valores distintos al comprobar duplicados.
+     */
+    public static String normalizar(String valor) {
+        if (valor == null) {
+            return null;
+        }
+        String recortado = valor.trim();
+        return recortado.isEmpty() ? null : recortado.toUpperCase();
+    }
+
+    public static void obligatorio(String valor, String campo) {
+        if (valor == null || valor.isBlank()) {
+            throw new RuntimeException("El campo " + campo + " es obligatorio");
+        }
+    }
+
+    public static void obligatorioPositivo(Integer valor, String campo) {
+        if (valor == null) {
+            throw new RuntimeException("El campo " + campo + " es obligatorio");
+        }
+        if (valor <= 0) {
+            throw new RuntimeException("El campo " + campo + " debe ser mayor que cero");
+        }
+    }
+
+    /**
+     * Rechaza el valor si ya lo usa OTRO registro. Al editar hay que excluir el
+     * propio registro de la comparación, o guardarlo sin cambiar nada chocaría
+     * consigo mismo.
+     */
+    public static <T> void noRepetido(List<T> existentes, Function<T, Integer> obtenerId,
+            Function<T, String> obtenerValor, Integer idActual, String valor, String descripcion) {
+        if (valor == null) {
+            return;
+        }
+        boolean repetido = existentes.stream()
+                .filter(otro -> idActual == null || !idActual.equals(obtenerId.apply(otro)))
+                .anyMatch(otro -> valor.equalsIgnoreCase(obtenerValor.apply(otro)));
+        if (repetido) {
+            throw new RuntimeException("Ya existe " + descripcion + " \"" + valor + "\"");
+        }
+    }
+
+    public static <T> void noRepetido(List<T> existentes, Function<T, Integer> obtenerId,
+            Function<T, String> obtenerValor, Integer idActual, String valor, String descripcion,
+            boolean ignorarNulos) {
+        if (ignorarNulos && Objects.isNull(valor)) {
+            return;
+        }
+        noRepetido(existentes, obtenerId, obtenerValor, idActual, valor, descripcion);
+    }
+}

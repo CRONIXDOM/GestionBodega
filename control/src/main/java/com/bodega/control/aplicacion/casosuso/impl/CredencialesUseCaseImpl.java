@@ -3,6 +3,7 @@ package com.bodega.control.aplicacion.casosuso.impl;
 import java.util.List;
 
 import com.bodega.control.aplicacion.casosuso.entrada.ICredencialesUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Credenciales;
 import com.bodega.control.dominio.repositorio.ICredencialesRepositorio;
 
@@ -17,6 +18,11 @@ public class CredencialesUseCaseImpl implements ICredencialesUseCase {
 
 	@Override
 	public Credenciales guardar(Credenciales nuevaCredenciales) {
+		// el usuario y el correo se guardan en mayusculas; la contrasena NO se toca,
+		// porque cambiarla romperia el inicio de sesion y la debilitaria.
+		nuevaCredenciales.setUsuario(Validaciones.normalizar(nuevaCredenciales.getUsuario()));
+		nuevaCredenciales.setCorreo(Validaciones.normalizar(nuevaCredenciales.getCorreo()));
+
 
 		return repositorio.guardar(nuevaCredenciales);
 	}

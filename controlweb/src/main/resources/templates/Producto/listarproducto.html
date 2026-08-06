@@ -36,7 +36,7 @@
 							<th scope="col">Id</th>
 							<th scope="col">Nombre</th>
 							<th scope="col">Código</th>
-							<th scope="col">Cantidad</th>
+							<th scope="col">Unidades por caja</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -45,7 +45,7 @@
 							<td class="fw-semibold" th:text="${indice.idProducto}"></td>
 							<td th:text="${indice.nombreProducto}"></td>
 							<td th:text="${indice.codigoProducto}"></td>
-							<td th:text="${indice.cantidadProducto}"></td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.unidadesPorCaja} ?: '—'">—</span></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/producto/editar/{id}(id=${indice.idProducto})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>

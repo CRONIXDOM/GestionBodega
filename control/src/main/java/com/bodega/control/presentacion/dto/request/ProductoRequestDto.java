@@ -7,6 +7,7 @@ public class ProductoRequestDto {
 	private Integer idProducto;
 	private String nombreProducto;
 	private String codigoProducto;
-	private String cantidadProducto;	
+	private String cantidadProducto;
+	private Integer unidadesPorCaja;	
 
 }

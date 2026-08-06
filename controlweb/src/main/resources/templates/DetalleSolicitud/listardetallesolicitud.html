@@ -34,8 +34,8 @@
 					<thead>
 						<tr>
 							<th scope="col">Id</th>
-							<th scope="col">Id Producto</th>
-							<th scope="col">Cantidad Producto</th>
+							<th scope="col">Producto</th>
+							<th scope="col">Cantidad</th>
 							<th scope="col">Lugar Recogida</th>
 							<th scope="col">Id Solicitud</th>
 							<th scope="col">Lotes Usados</th>
@@ -45,8 +45,21 @@
 					<tbody>
 						<tr th:each="indice:${listadetallesolicitud}">
 							<td class="fw-semibold" th:text="${indice.idDetalleSolicitud}"></td>
-							<td th:text="${indice.idProducto}"></td>
-							<td th:text="${indice.cantidadProducto}"></td>
+							<td th:with="p=${productos.get(indice.idProducto)}">
+								<span th:if="${p != null}" class="badge bg-secondary-subtle text-body font-monospace me-1"
+									th:text="${p.codigoProducto}"></span>
+								<span th:text="${p != null} ? ${p.nombreProducto} : ('Producto #' + ${indice.idProducto})"></span>
+							</td>
+							<td th:with="p=${productos.get(indice.idProducto)},cant=${indice.cantidadProducto}">
+								<span class="fw-semibold" th:text="${cant} + ' u.'">0 u.</span>
+								<div th:if="${p != null and p.unidadesPorCaja != null and p.unidadesPorCaja > 0}"
+									class="small text-muted"
+									th:with="cajas=${cant / p.unidadesPorCaja},extra=${cant % p.unidadesPorCaja}">
+									<span th:if="${cajas > 0}" th:text="${cajas} + ' caja(s) de ' + ${p.unidadesPorCaja}"></span>
+									<span th:if="${cajas > 0 and extra > 0}"> + </span>
+									<span th:if="${extra > 0}" th:text="${extra} + ' unidad(es) suelta(s)'"></span>
+								</div>
+							</td>
 							<td th:text="${indice.lugarRecogida}"></td>
 							<td th:text="${indice.idSolicitud}"></td>
 							<td th:if="${indice.lotesAsignados != null}">

@@ -3,6 +3,7 @@ package com.bodega.control.aplicacion.casosuso.impl;
 import java.util.List;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IZonaUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Zona;
 import com.bodega.control.dominio.repositorio.IZonaRepositorio;
 
@@ -16,6 +17,12 @@ public class ZonaUseCaseImpl implements IZonaUseCase {
 
     @Override
     public Zona guardar(Zona nuevaZona) {
+		nuevaZona.setNombreZona(Validaciones.normalizar(nuevaZona.getNombreZona()));
+		nuevaZona.setDescripcion(Validaciones.normalizar(nuevaZona.getDescripcion()));
+		Validaciones.obligatorio(nuevaZona.getNombreZona(), "nombre de la zona");
+		Validaciones.noRepetido(repositorio.listarTodos(), Zona::getIdZona, Zona::getNombreZona,
+				nuevaZona.getIdZona(), nuevaZona.getNombreZona(), "una zona con el nombre");
+
         return repositorio.guardar(nuevaZona);
     }
 

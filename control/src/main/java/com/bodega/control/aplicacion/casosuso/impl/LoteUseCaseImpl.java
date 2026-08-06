@@ -3,6 +3,7 @@ package com.bodega.control.aplicacion.casosuso.impl;
 import java.util.List;
 
 import com.bodega.control.aplicacion.casosuso.entrada.ILoteUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Lote;
 import com.bodega.control.dominio.repositorio.ILoteRepositorio;
 
@@ -16,6 +17,9 @@ public class LoteUseCaseImpl implements ILoteUseCase {
 
     @Override
     public Lote guardar(Lote nuevoLote) {
+		nuevoLote.setNumeroLote(Validaciones.normalizar(nuevoLote.getNumeroLote()));
+		Validaciones.obligatorio(nuevoLote.getNumeroLote(), "número de lote");
+
         if (nuevoLote.getIdLote() != null) {
             repositorio.buscarPorid(nuevoLote.getIdLote())
                     .ifPresent(actual -> nuevoLote.setCantidadReservada(actual.getCantidadReservada()));

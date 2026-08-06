@@ -33,8 +33,13 @@
 								th:field="*{codigoProducto}">
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Cantidad del Producto</label> <input class="form-control"
-								th:field="*{cantidadProducto}">
+							<label class="form-label">Unidades por caja <span class="text-danger">*</span></label>
+							<div class="input-group">
+								<input class="form-control" type="number" min="1" step="1"
+									th:field="*{unidadesPorCaja}" required placeholder="Ej. 12">
+								<span class="input-group-text">u. / caja</span>
+							</div>
+							<div class="form-text">Cuántas unidades del producto vienen en cada caja.</div>
 						</div>
 					</div>
 					<div class="d-flex justify-content-end gap-2 mt-4">

@@ -34,8 +34,8 @@
 					<thead>
 						<tr>
 							<th scope="col">Id</th>
-							<th scope="col">Id Producto</th>
-							<th scope="col">Cantidad Producto</th>
+							<th scope="col">Producto</th>
+							<th scope="col">Cantidad</th>
 							<th scope="col">Código Evento</th>
 							<th scope="col">Nombre Evento</th>
 							<th scope="col">Id Entrega</th>
@@ -47,7 +47,11 @@
 					<tbody>
 						<tr th:each="indice:${listadetalleentrega}">
 							<td class="fw-semibold" th:text="${indice.idDetalleEntrega}"></td>
-							<td th:text="${indice.idProducto}"></td>
+							<td th:with="p=${productos.get(indice.idProducto)}">
+								<span th:if="${p != null}" class="badge bg-secondary-subtle text-body font-monospace me-1"
+									th:text="${p.codigoProducto}"></span>
+								<span th:text="${p != null} ? ${p.nombreProducto} : (${indice.idProducto != null} ? ('Producto #' + ${indice.idProducto}) : '—')"></span>
+							</td>
 							<td th:text="${indice.cantidadProducto}"></td>
 							<td th:text="${indice.codigoEvento}"></td>
 							<td th:text="${indice.nombreEvento}"></td>

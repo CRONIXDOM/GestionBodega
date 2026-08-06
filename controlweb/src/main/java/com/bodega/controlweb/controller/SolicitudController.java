@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.SolicitudRequestDto;
 import com.bodega.controlweb.service.ISolicitudService;
+import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.IUsuarioRolService;
 
 @Controller
@@ -20,10 +21,13 @@ public class SolicitudController {
     @Autowired
     private ISolicitudService servicioAPI;
     @Autowired
+    private IEtiquetasService servicioEtiquetas;
+    @Autowired
     private IUsuarioRolService servicioUsuarioRol;
 
     @GetMapping
     public String leerPagina(Model model) {
+        model.addAttribute("usuarios", servicioEtiquetas.usuariosConRol());
         model.addAttribute("listasolicitud", servicioAPI.listarSolicitud());
         return "/Solicitud/listarsolicitud";
     }

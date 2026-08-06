@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IUsuarioUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Usuario;
 import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 
@@ -22,10 +23,9 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		if (nuevoUsuario.getNombreUsuario() == null || nuevoUsuario.getNombreUsuario().isBlank()) {
 			throw new RuntimeException("El nombre del usuario es obligatorio");
 		}
-		nuevoUsuario.setNombreUsuario(nuevoUsuario.getNombreUsuario().trim());
-		if (nuevoUsuario.getApellidoUsuario() != null) {
-			nuevoUsuario.setApellidoUsuario(nuevoUsuario.getApellidoUsuario().trim());
-		}
+		nuevoUsuario.setNombreUsuario(Validaciones.normalizar(nuevoUsuario.getNombreUsuario()));
+		nuevoUsuario.setApellidoUsuario(Validaciones.normalizar(nuevoUsuario.getApellidoUsuario()));
+		nuevoUsuario.setEstado(Validaciones.normalizar(nuevoUsuario.getEstado()));
 
 		validarSinNumeros(nuevoUsuario.getNombreUsuario(), "nombre");
 		if (nuevoUsuario.getApellidoUsuario() != null && !nuevoUsuario.getApellidoUsuario().isBlank()) {

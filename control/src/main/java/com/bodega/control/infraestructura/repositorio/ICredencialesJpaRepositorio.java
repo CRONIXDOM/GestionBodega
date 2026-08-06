@@ -14,7 +14,10 @@ public interface ICredencialesJpaRepositorio extends JpaRepository<CredencialesE
     @Query("Select cred from CredencialesEntity cred")
     List<CredencialesEntity> listarCredenciales();
 
-    @Query("Select cred from CredencialesEntity cred where cred.usuario=?1")
+    // sin distinguir mayusculas: el usuario se guarda en mayusculas, pero el
+    // formulario de acceso debe seguir funcionando se escriba como se escriba
+    // (y tambien con las cuentas creadas antes de esa regla).
+    @Query("Select cred from CredencialesEntity cred where upper(cred.usuario)=upper(?1)")
     List<CredencialesEntity> buscarCredencialesNombre(String usuario);
 
     @Query("Select cred from CredencialesEntity cred where cred.usuario=?1 and cred.correo=?2")

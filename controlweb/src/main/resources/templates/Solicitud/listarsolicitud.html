@@ -36,7 +36,7 @@
 							<th scope="col">Id</th>
 							<th scope="col">Fecha</th>
 							<th scope="col">Estado</th>
-							<th scope="col">Id Usuario Rol</th>
+							<th scope="col">Solicitado por</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -45,7 +45,7 @@
 							<td class="fw-semibold" th:text="${indice.idSolicitud}"></td>
 							<td th:text="${indice.fechaSolicitud}"></td>
 							<td th:text="${indice.estadoSolicitud}"></td>
-							<td th:text="${indice.idUsuarioRol}"></td>
+							<td th:text="${usuarios.get(indice.idUsuarioRol)} ?: '—'"></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/solicitud/editar/{id}(id=${indice.idSolicitud})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>

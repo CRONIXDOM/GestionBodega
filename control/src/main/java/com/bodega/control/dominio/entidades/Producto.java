@@ -6,6 +6,7 @@ public class Producto {
 	private String nombreProducto;
 	private String codigoProducto;
 	private String cantidadProducto;
+	private Integer unidadesPorCaja;
 
 	public Producto() {
 		super();
@@ -51,4 +52,13 @@ public class Producto {
 		this.cantidadProducto = cantidadProducto;
 	}
 	
+
+	public Integer getUnidadesPorCaja() {
+		return unidadesPorCaja;
+	}
+
+	public void setUnidadesPorCaja(Integer unidadesPorCaja) {
+		this.unidadesPorCaja = unidadesPorCaja;
+	}
+
 }

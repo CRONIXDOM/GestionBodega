@@ -9,4 +9,5 @@ public class ProductoResponseDto {
     private String nombreProducto;
     private String codigoProducto;
     private String cantidadProducto;
+    private Integer unidadesPorCaja;
 }

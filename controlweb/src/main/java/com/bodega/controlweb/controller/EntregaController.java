@@ -26,6 +26,7 @@ import com.bodega.controlweb.model.dto.response.LoteResponseDto;
 import com.bodega.controlweb.model.dto.response.TipoResponseDto;
 import com.bodega.controlweb.model.dto.response.UsuarioRolResponseDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
+import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
 import com.bodega.controlweb.service.IEntregaService;
 import com.bodega.controlweb.service.ILoteService;
@@ -46,6 +47,8 @@ public class EntregaController {
     @Autowired
     private IEntregaService servicioAPI;
     @Autowired
+    private IEtiquetasService servicioEtiquetas;
+    @Autowired
     private ISolicitudService servicioSolicitud;
     @Autowired
     private IDetalleSolicitudService servicioDetalleSolicitud;
@@ -62,6 +65,8 @@ public class EntregaController {
 
     @GetMapping
     public String leerPagina(Model model) {
+        model.addAttribute("solicitudPorEntrega", servicioEtiquetas.solicitudPorEntrega());
+        model.addAttribute("solicitantePorSolicitud", servicioEtiquetas.solicitantePorSolicitud());
         model.addAttribute("listaentrega", servicioAPI.listarEntrega());
         return "/Entrega/listarentrega";
     }

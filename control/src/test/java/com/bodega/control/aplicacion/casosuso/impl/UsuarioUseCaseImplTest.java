@@ -97,12 +97,12 @@ class UsuarioUseCaseImplTest {
     }
 
     @Test
-    void recortaLosEspaciosAlrededorAntesDeGuardar() {
+    void recortaEspaciosYGuardaEnMayusculas() {
         useCase.guardar(usuario(null, "  Ana  ", "  Lopez  "));
 
         ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
         verify(repositorio).guardar(captor.capture());
-        assertThat(captor.getValue().getNombreUsuario()).isEqualTo("Ana");
-        assertThat(captor.getValue().getApellidoUsuario()).isEqualTo("Lopez");
+        assertThat(captor.getValue().getNombreUsuario()).isEqualTo("ANA");
+        assertThat(captor.getValue().getApellidoUsuario()).isEqualTo("LOPEZ");
     }
 }

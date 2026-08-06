@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IDetalleEntregaUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.DetalleEntrega;
 import com.bodega.control.dominio.entidades.DetalleSolicitud;
 import com.bodega.control.dominio.entidades.DetalleSolicitudLote;
@@ -48,11 +49,22 @@ public class DetalleEntregaUseCaseImpl implements IDetalleEntregaUseCase {
             nuevoDetalleEntrega.setEntrega(null);
         }
 
+        nuevoDetalleEntrega.setCodigoEvento(Validaciones.normalizar(nuevoDetalleEntrega.getCodigoEvento()));
+        nuevoDetalleEntrega.setNombreEvento(Validaciones.normalizar(nuevoDetalleEntrega.getNombreEvento()));
+
         if (idDetalleSolicitud != null) {
             despacharDesdeReserva(idDetalleSolicitud);
-        } else if (nuevoDetalleEntrega.getProducto() != null && nuevoDetalleEntrega.getCantidadProducto() != null) {
-            despacharFifo(nuevoDetalleEntrega.getProducto().getIdProducto(), nuevoDetalleEntrega.getCantidadProducto(),
-                    idLoteManual);
+        } else if (nuevoDetalleEntrega.getProducto() != null) {
+            Integer cantidad = nuevoDetalleEntrega.getCantidadProducto();
+            if (cantidad == null || cantidad <= 0) {
+                throw new RuntimeException("La cantidad a despachar debe ser mayor que cero");
+            }
+            despacharFifo(nuevoDetalleEntrega.getProducto().getIdProducto(), cantidad, idLoteManual);
+        } else {
+            // sin pedido y sin producto no hay nada que descontar: guardarlo dejaria
+            // una entrega fantasma que no mueve stock.
+            throw new RuntimeException(
+                    "Indica el pedido que se está entregando, o bien el producto y la cantidad a despachar");
         }
         return repositorio.guardar(nuevoDetalleEntrega);
     }
@@ -65,6 +77,17 @@ public class DetalleEntregaUseCaseImpl implements IDetalleEntregaUseCase {
         List<DetalleSolicitudLote> asignaciones = asignacionRepositorio.buscarPorDetalleSolicitud(idDetalleSolicitud);
         if (asignaciones.isEmpty()) {
             throw new RuntimeException("El Detalle Solicitud indicado no tiene stock reservado");
+        }
+        // se comprueba primero que TODOS los lotes tengan la cantidad, antes de
+        // tocar ninguno: asi no queda un descuento a medias si uno de ellos falla.
+        for (DetalleSolicitudLote asignacion : asignaciones) {
+            Lote lote = loteRepositorio.buscarPorid(asignacion.getLote().getIdLote())
+                    .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+            int enBodega = lote.getCantidadLote() == null ? 0 : lote.getCantidadLote();
+            if (enBodega < asignacion.getCantidad()) {
+                throw new RuntimeException("No se puede despachar: el lote " + lote.getNumeroLote() + " tiene "
+                        + enBodega + " unidades y el pedido requiere " + asignacion.getCantidad());
+            }
         }
         for (DetalleSolicitudLote asignacion : asignaciones) {
             Lote lote = loteRepositorio.buscarPorid(asignacion.getLote().getIdLote())

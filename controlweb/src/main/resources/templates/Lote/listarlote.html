@@ -38,9 +38,10 @@
 							<th scope="col">Fecha Ingreso</th>
 							<th scope="col">Fecha Vencimiento</th>
 							<th scope="col">Cantidad</th>
+							<th scope="col">Equivale a</th>
 							<th scope="col">Reservada</th>
 							<th scope="col">Disponible</th>
-							<th scope="col">Id Producto</th>
+							<th scope="col">Producto</th>
 							<th scope="col">Ubicación</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
@@ -59,10 +60,27 @@
 									th:if="${indice.fechaVencimiento != null and !indice.fechaVencimiento.isBefore(T(java.time.LocalDate).now()) and indice.fechaVencimiento.isBefore(T(java.time.LocalDate).now().plusDays(30))}"
 									class="badge text-bg-warning ms-1">Por vencer</span>
 							</td>
-							<td th:text="${indice.cantidadLote}"></td>
+							<td><span class="fw-semibold" th:text="${indice.cantidadLote}"></span> <span class="text-muted small">u.</span></td>
+							<td th:with="p=${productos.get(indice.idProducto)}">
+								<span th:if="${p == null or p.unidadesPorCaja == null or p.unidadesPorCaja <= 0}"
+									class="text-muted small">—</span>
+								<div th:unless="${p == null or p.unidadesPorCaja == null or p.unidadesPorCaja <= 0}"
+									th:with="cant=${indice.cantidadLote} ?: 0,upc=${p.unidadesPorCaja}"
+									class="small">
+									<span class="badge bg-info-subtle text-info"
+										th:text="${cant / upc} + ' caja(s)'">0 caja(s)</span>
+									<span th:if="${cant % upc > 0}" class="text-muted"
+										th:text="'+ ' + ${cant % upc} + ' u.'"></span>
+									<div class="text-muted" th:text="'(' + ${upc} + ' u. por caja)'"></div>
+								</div>
+							</td>
 							<td><span class="badge text-bg-warning" th:text="${indice.cantidadReservada}"></span></td>
 							<td><span class="badge text-bg-success" th:text="${indice.cantidadDisponible}"></span></td>
-							<td th:text="${indice.idProducto}"></td>
+							<td th:with="p=${productos.get(indice.idProducto)}">
+								<span th:if="${p != null}" class="badge bg-secondary-subtle text-body font-monospace me-1"
+									th:text="${p.codigoProducto}"></span>
+								<span th:text="${p != null} ? ${p.nombreProducto} : ('#' + ${indice.idProducto})"></span>
+							</td>
 							<td th:text="${indice.idUbicacion}"></td>
 							<td class="text-end">
 								<a class="btn btn-warning btn-sm"
@@ -76,7 +94,7 @@
 							</td>
 						</tr>
 						<tr data-empty-row th:if="${#lists.isEmpty(listalote)}">
-							<td colspan="10" class="text-center text-muted py-4">Todavía no hay lotes registrados.</td>
+							<td colspan="11" class="text-center text-muted py-4">Todavía no hay lotes registrados.</td>
 						</tr>
 					</tbody>
 				</table>

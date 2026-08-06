@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.DetalleEntregaRequestDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
+import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
 import com.bodega.controlweb.service.IEntregaService;
 import com.bodega.controlweb.service.ILoteService;
@@ -24,6 +25,8 @@ public class DetalleEntregaController {
     @Autowired
     private IDetalleEntregaService servicioAPI;
     @Autowired
+    private IEtiquetasService servicioEtiquetas;
+    @Autowired
     private IEntregaService servicioEntrega;
     @Autowired
     private IProductoService servicioProducto;
@@ -34,6 +37,7 @@ public class DetalleEntregaController {
 
     @GetMapping
     public String leerPagina(Model model) {
+        model.addAttribute("productos", servicioEtiquetas.productosPorId());
         model.addAttribute("listadetalleentrega", servicioAPI.listarDetalleEntrega());
         return "/DetalleEntrega/listardetalleentrega";
     }

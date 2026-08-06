@@ -3,6 +3,7 @@ package com.bodega.control.aplicacion.casosuso.impl;
 import java.util.List;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IRolUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Rol;
 import com.bodega.control.dominio.repositorio.IRolRepositorio;
 
@@ -16,6 +17,9 @@ public class RolUseCaseImpl implements IRolUseCase {
 
     @Override
     public Rol guardar(Rol nuevoRol) {
+		nuevoRol.setNombreRol(Validaciones.normalizar(nuevoRol.getNombreRol()));
+		nuevoRol.setDescripcionRol(Validaciones.normalizar(nuevoRol.getDescripcionRol()));
+
         return repositorio.guardar(nuevoRol);
     }
 
