@@ -17,6 +17,8 @@
 				</div>
 			</div>
 			<div class="heading-actions">
+				<a class="btn btn-light btn-sm" th:href="@{/bodega/sede/nueva}"><i class="bi bi-building-add"
+					aria-hidden="true"></i> Nueva bodega</a>
 				<a class="btn btn-primary btn-sm" th:href="@{/bodega/nuevo}"><i class="bi bi-plus-circle"
 					aria-hidden="true"></i> Nueva ubicación</a>
 			</div>
@@ -72,9 +74,18 @@
 								th:text="'Libre al despachar: ' + ${cap - ocu + res}">0</span>
 						</div>
 					</div>
-					<a class="btn btn-light btn-sm mt-2" th:href="@{/bodega/detalle/{id}(id=${sede.idSede})}">
-						<i class="bi bi-eye" aria-hidden="true"></i> Ver detalle
-					</a>
+					<div class="mt-2 d-flex justify-content-end gap-1 flex-wrap">
+						<a class="btn btn-light btn-sm" th:href="@{/bodega/detalle/{id}(id=${sede.idSede})}">
+							<i class="bi bi-eye" aria-hidden="true"></i> Ver detalle
+						</a>
+						<a class="btn btn-light btn-sm" th:href="@{/bodega/sede/editar/{id}(id=${sede.idSede})}">
+							<i class="bi bi-pencil" aria-hidden="true"></i> Editar bodega
+						</a>
+						<a class="btn btn-outline-danger btn-sm" th:href="@{/bodega/sede/eliminar/{id}(id=${sede.idSede})}"
+							onclick="return confirm('¿Seguro que deseas eliminar esta bodega?')">
+							<i class="bi bi-trash" aria-hidden="true"></i> Eliminar bodega
+						</a>
+					</div>
 				</div>
 			</div>
 
@@ -138,6 +149,9 @@
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/bodega/editar/{id}(id=${u.idUbicacion})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Asignar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/bodega/eliminar/{id}(id=${u.idUbicacion})}"
+									onclick="return confirm('¿Seguro que deseas eliminar esta ubicación?')"><i
+									class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
 							</td>
 						</tr>
 					</tbody>

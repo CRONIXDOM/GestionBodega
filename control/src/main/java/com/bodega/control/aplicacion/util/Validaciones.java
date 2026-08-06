@@ -16,14 +16,15 @@ public final class Validaciones {
 
     /**
      * Todo el texto se guarda en mayúsculas sin importar cómo lo escriba el
-     * usuario. Se recorta primero para que " quito " y "QUITO" no se consideren
-     * valores distintos al comprobar duplicados.
+     * usuario. Además de recortar los extremos se juntan los espacios de en
+     * medio: "  bodega   norte  " y "Bodega Norte" son el mismo nombre, y sin
+     * esto se colaban como dos registros distintos que en pantalla se ven igual.
      */
     public static String normalizar(String valor) {
         if (valor == null) {
             return null;
         }
-        String recortado = valor.trim();
+        String recortado = valor.trim().replaceAll("\\s+", " ");
         return recortado.isEmpty() ? null : recortado.toUpperCase();
     }
 

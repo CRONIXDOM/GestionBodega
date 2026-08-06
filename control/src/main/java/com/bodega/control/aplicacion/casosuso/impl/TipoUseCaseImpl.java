@@ -20,6 +20,9 @@ public class TipoUseCaseImpl implements ITipoUseCase {
 		nuevoTipo.setDescripcion(Validaciones.normalizar(nuevoTipo.getDescripcion()));
 		nuevoTipo.setClase(Validaciones.normalizar(nuevoTipo.getClase()));
 		Validaciones.obligatorio(nuevoTipo.getDescripcion(), "descripción del tipo");
+		Validaciones.obligatorio(nuevoTipo.getClase(), "clase del tipo");
+		Validaciones.noRepetido(repositorio.listarTodos(), Tipo::getIdTipo, Tipo::getDescripcion,
+				nuevoTipo.getIdTipo(), nuevoTipo.getDescripcion(), "un tipo de movimiento llamado");
 
         return repositorio.guardar(nuevoTipo);
     }

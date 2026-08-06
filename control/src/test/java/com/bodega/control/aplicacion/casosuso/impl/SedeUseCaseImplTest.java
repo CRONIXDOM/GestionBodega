@@ -56,6 +56,26 @@ class SedeUseCaseImplTest {
     }
 
     @Test
+    void juntaLosEspaciosDeEnMedio() {
+        useCase.guardar(new Sede(null, "  bodega   del   sur ", "calle  nueve", "una  bodega", 50));
+
+        ArgumentCaptor<Sede> captor = ArgumentCaptor.forClass(Sede.class);
+        verify(repositorio).guardar(captor.capture());
+        assertThat(captor.getValue().getNombreSede()).isEqualTo("BODEGA DEL SUR");
+        assertThat(captor.getValue().getDireccion()).isEqualTo("CALLE NUEVE");
+    }
+
+    @Test
+    void rechazaNombreRepetidoConEspaciosDeMas() {
+        // en pantalla los dos se ven igual, asi que no pueden convivir
+        assertThatThrownBy(() -> useCase.guardar(sede(null, "  sede   norte  ", "OTRA DIRECCION")))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Ya existe una sede con el nombre");
+
+        verify(repositorio, never()).guardar(any());
+    }
+
+    @Test
     void rechazaNombreRepetidoAunqueSeEscribaEnMinusculas() {
         assertThatThrownBy(() -> useCase.guardar(sede(null, "sede norte", "OTRA DIRECCION")))
                 .isInstanceOf(RuntimeException.class)

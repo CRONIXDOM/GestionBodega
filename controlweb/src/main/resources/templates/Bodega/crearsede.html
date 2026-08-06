@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Bodega</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Bodegas</p>
+					<h1 class="h3 mb-1">Datos de la bodega</h1>
+					<p class="text-muted mb-0">Nombre, dirección y capacidad del local de almacenamiento.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+				<form class="panel" th:action="@{/bodega/sede/guardar}" th:object="${sede}" method="post">
+					<input type="hidden" th:field="*{idSede}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Nombre de la bodega <span class="text-danger">*</span></label>
+							<input class="form-control" th:field="*{nombreSede}" required placeholder="Ej. Bodega Norte">
+							<div class="form-text">No puede repetirse con otra bodega, aunque se escriba distinto.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Dirección <span class="text-danger">*</span></label>
+							<input class="form-control" th:field="*{direccion}" required placeholder="Ej. Av. Principal 123">
+							<div class="form-text">Tampoco puede repetirse.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Capacidad <span class="text-danger">*</span></label>
+							<div class="input-group">
+								<input class="form-control" type="number" min="1" step="1" th:field="*{capacidad}"
+									required placeholder="Ej. 5000">
+								<span class="input-group-text">unidades</span>
+							</div>
+							<div class="form-text">Cuántas unidades caben en total. Solo números enteros.</div>
+						</div>
+						<div class="col-12">
+							<label class="form-label">Descripción <span class="text-danger">*</span></label>
+							<textarea class="form-control" th:field="*{descripcion}" rows="2" required></textarea>
+						</div>
+					</div>
+
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/bodega}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

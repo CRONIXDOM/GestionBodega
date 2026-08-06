@@ -35,7 +35,7 @@
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Cantidad del Producto <span class="text-danger">*</span></label> <input class="form-control"
-								type="number" th:field="*{cantidadProducto}" required>
+								type="number" min="1" step="1" th:field="*{cantidadProducto}" required>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Lugar de Recogida</label> <input class="form-control"

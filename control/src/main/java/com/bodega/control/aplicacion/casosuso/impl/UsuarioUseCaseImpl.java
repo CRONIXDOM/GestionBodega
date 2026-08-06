@@ -22,11 +22,12 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		if (nuevoUsuario.getNombreUsuario() == null || nuevoUsuario.getNombreUsuario().isBlank()) {
 			throw new RuntimeException("El nombre del usuario es obligatorio");
 		}
-		// el nombre del usuario se conserva tal cual se escribe, porque es el que
-		// se usa para iniciar sesion junto a la contrasena.
-		nuevoUsuario.setNombreUsuario(nuevoUsuario.getNombreUsuario().trim());
+		// el nombre del usuario se conserva tal cual se escribe (sin pasarlo a
+		// mayusculas), porque es el que se usa para iniciar sesion junto a la
+		// contrasena. Solo se limpian los espacios sobrantes.
+		nuevoUsuario.setNombreUsuario(limpiarEspacios(nuevoUsuario.getNombreUsuario()));
 		if (nuevoUsuario.getApellidoUsuario() != null) {
-			nuevoUsuario.setApellidoUsuario(nuevoUsuario.getApellidoUsuario().trim());
+			nuevoUsuario.setApellidoUsuario(limpiarEspacios(nuevoUsuario.getApellidoUsuario()));
 		}
 
 		validarSinNumeros(nuevoUsuario.getNombreUsuario(), "nombre");
@@ -36,6 +37,11 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		validarNombreNoRepetido(nuevoUsuario);
 
 		return repositorio.guardar(nuevoUsuario);
+	}
+
+	/** Recorta los extremos y junta los espacios de en medio: "Ana   Lopez" -> "Ana Lopez". */
+	private static String limpiarEspacios(String valor) {
+		return valor.trim().replaceAll("\\s+", " ");
 	}
 
 	private static void validarSinNumeros(String valor, String campo) {

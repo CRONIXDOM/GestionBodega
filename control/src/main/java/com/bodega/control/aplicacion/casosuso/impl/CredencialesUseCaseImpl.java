@@ -21,7 +21,7 @@ public class CredencialesUseCaseImpl implements ICredencialesUseCase {
 		// las credenciales se guardan EXACTAMENTE como las escribe el usuario:
 		// tocar el usuario o la contrasena romperia el inicio de sesion.
 		if (nuevaCredenciales.getUsuario() != null) {
-			nuevaCredenciales.setUsuario(nuevaCredenciales.getUsuario().trim());
+			nuevaCredenciales.setUsuario(nuevaCredenciales.getUsuario().trim().replaceAll("\\s+", " "));
 		}
 		if (nuevaCredenciales.getCorreo() != null) {
 			nuevaCredenciales.setCorreo(nuevaCredenciales.getCorreo().trim());

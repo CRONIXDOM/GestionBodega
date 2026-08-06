@@ -31,7 +31,7 @@
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Cantidad del Lote <span class="text-danger">*</span></label> <input class="form-control"
-								type="number" th:field="*{cantidadLote}" required>
+								type="number" min="1" step="1" th:field="*{cantidadLote}" required>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Fecha de Ingreso <span class="text-danger">*</span></label> <input class="form-control" type="date"

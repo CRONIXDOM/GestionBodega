@@ -139,6 +139,62 @@ public class BodegaController {
     public String eliminar(@PathVariable Integer id, RedirectAttributes flash) {
         try {
             servicioUbicacion.eliminarUbicacion(id);
+            flash.addFlashAttribute("exito", "Ubicación eliminada.");
+        } catch (Exception ex) {
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
+        return "redirect:/bodega";
+    }
+
+    // ---------- la bodega en sí (la sede): crear, editar y eliminar ----------
+
+    @GetMapping("/sede/nueva")
+    public String crearSede(Model model) {
+        model.addAttribute("sede", new SedeRequestDto());
+        return "/Bodega/crearsede";
+    }
+
+    @GetMapping("/sede/editar/{id}")
+    public String editarSede(@PathVariable Integer id, Model model) {
+        SedeResponseDto encontrada = servicioSede.buscarSedeId(id);
+        SedeRequestDto sede = new SedeRequestDto();
+        sede.setIdSede(encontrada.getIdSede());
+        sede.setNombreSede(encontrada.getNombreSede());
+        sede.setDireccion(encontrada.getDireccion());
+        sede.setDescripcion(encontrada.getDescripcion());
+        sede.setCapacidad(encontrada.getCapacidad());
+
+        model.addAttribute("sede", sede);
+        return "/Bodega/crearsede";
+    }
+
+    @PostMapping("/sede/guardar")
+    public String guardarSede(@ModelAttribute SedeRequestDto sede, Model model, RedirectAttributes flash) {
+        try {
+            servicioSede.guardarSede(sede);
+            flash.addFlashAttribute("exito", "Bodega guardada correctamente.");
+            return "redirect:/bodega";
+        } catch (Exception ex) {
+            model.addAttribute("sede", sede);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            return "/Bodega/crearsede";
+        }
+    }
+
+    @GetMapping("/sede/eliminar/{id}")
+    public String eliminarSede(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            // borrar la sede dejaría sus ubicaciones (y la mercadería que guardan)
+            // colgando sin bodega, así que se avisa en vez de romper el inventario.
+            long ubicacionesDentro = servicioUbicacion.listarUbicacion().stream()
+                    .filter(u -> id.equals(u.getIdSede())).count();
+            if (ubicacionesDentro > 0) {
+                flash.addFlashAttribute("error", "No se puede eliminar esta bodega: todavía tiene "
+                        + ubicacionesDentro + " ubicación(es) dentro. Elimínalas primero.");
+                return "redirect:/bodega";
+            }
+            servicioSede.eliminarSede(id);
+            flash.addFlashAttribute("exito", "Bodega eliminada.");
         } catch (Exception ex) {
             flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
         }
@@ -191,7 +247,7 @@ public class BodegaController {
 
         model.addAttribute("sedes", sedes);
         model.addAttribute("ubicacionesPorSede", porSede);
-        model.addAttribute("sinSede", porSede.getOrDefault(null, List.of()));
+        model.addAttribute("sinSede", porSede.getOrDefault(null, new ArrayList<>()));
         model.addAttribute("nombresZona", nombresZona());
         model.addAttribute("contenido", servicioOcupacion.contenidoPorUbicacion());
         model.addAttribute("unidades", servicioOcupacion.unidadesPorUbicacion());
