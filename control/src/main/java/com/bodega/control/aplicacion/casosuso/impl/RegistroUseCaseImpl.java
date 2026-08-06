@@ -22,10 +22,6 @@ public class RegistroUseCaseImpl implements IRegistroUseCase {
 
 	@Override
 	public Registro guardar(Registro nuevoRegistro) {
-		// el mapper DTO->dominio crea un objeto "cascaron" (p.ej. new Tipo() con
-		// idTipo=null) para cada relacion opcional aunque no venga informada en el
-		// request; hay que normalizarlo a null real o Hibernate intenta guardar esas
-		// relaciones como entidades nuevas en vez de tratarlas como ausentes.
 		if (normalizarId(nuevoRegistro.getLote(), Lote::getIdLote) == null) {
 			nuevoRegistro.setLote(null);
 		}

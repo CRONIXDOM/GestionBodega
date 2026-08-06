@@ -11,11 +11,9 @@ import com.bodega.control.infraestructura.repositorio.ICredencialesJpaRepositori
 
 public class CredencialesRepositorioImpl implements ICredencialesRepositorio {
 
-	// Dependencias
 	private final ICredencialesJpaRepositorio jpaRepositorio;
 	private final ICredencialesJpaMapper entityMapper;
 
-	// Constructor
 	public CredencialesRepositorioImpl(ICredencialesJpaRepositorio jpaRepositorio,
 			ICredencialesJpaMapper entityMapper) {
 		this.jpaRepositorio = jpaRepositorio;

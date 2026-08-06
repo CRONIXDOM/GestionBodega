@@ -37,7 +37,6 @@ public class ReporteUseCaseImpl implements IReporteUseCase {
 
 	@Override
 	public Reporte buscarPorid(int Reporte) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

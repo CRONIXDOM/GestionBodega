@@ -37,7 +37,6 @@ public class ProductoUseCaseImpl implements IProductoUseCase {
 
 	@Override
 	public Producto buscarPorid(int Producto) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

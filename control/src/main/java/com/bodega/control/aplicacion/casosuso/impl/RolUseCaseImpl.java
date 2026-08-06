@@ -37,7 +37,6 @@ public class RolUseCaseImpl implements IRolUseCase {
 
 	@Override
 	public Rol buscarPorid(int Rol) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

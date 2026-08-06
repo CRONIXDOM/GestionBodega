@@ -31,13 +31,11 @@ public class EntregaUseCaseImpl implements IEntregaUseCase {
 
 	@Override
 	public Entrega buscarPorid(int Entrega) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Entrega buscarPorId(int idEntrega) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

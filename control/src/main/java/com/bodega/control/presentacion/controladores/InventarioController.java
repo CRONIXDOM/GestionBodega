@@ -15,11 +15,6 @@ import com.bodega.control.dominio.entidades.Lote;
 import com.bodega.control.dominio.entidades.Producto;
 import com.bodega.control.presentacion.dto.response.InventarioResponseDto;
 
-/**
- * Vista de solo lectura: cuanto stock hay de cada producto (sumando todos sus
- * lotes) y en cuantos lotes esta repartido. No es una entidad propia, es un
- * agregado calculado sobre Producto + Lote.
- */
 @RestController
 @RequestMapping("/inventario")
 public class InventarioController {

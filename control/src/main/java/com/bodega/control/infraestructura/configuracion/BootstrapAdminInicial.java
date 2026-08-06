@@ -15,11 +15,6 @@ import com.bodega.control.dominio.entidades.Rol;
 import com.bodega.control.dominio.entidades.Usuario;
 import com.bodega.control.dominio.entidades.UsuarioRol;
 
-/**
- * Si la base de datos está completamente vacía de usuarios, crea automáticamente
- * un usuario "admin" con rol Administrador al arrancar la aplicación, para que
- * siempre exista una forma de entrar al panel sin tener que crearlo a mano por API.
- */
 @Component
 public class BootstrapAdminInicial implements CommandLineRunner {
 

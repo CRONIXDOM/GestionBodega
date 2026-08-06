@@ -18,14 +18,6 @@ import com.bodega.control.dominio.entidades.Tipo;
 import com.bodega.control.dominio.entidades.Ubicacion;
 import com.bodega.control.dominio.repositorio.IRegistroRepositorio;
 
-/**
- * Prueba de regresion del bug real encontrado en produccion: el mapper
- * DTO->dominio arma un objeto "cascaron" (p.ej. new Tipo() con idTipo=null)
- * para cada relacion que el formulario deja vacia, y si eso se guarda tal
- * cual, Hibernate revienta con TransientPropertyValueException porque trata
- * de insertar una entidad nueva en vez de tratar la relacion como ausente.
- * guardar() debe normalizar esos cascarones a null antes de persistir.
- */
 @ExtendWith(MockitoExtension.class)
 class RegistroUseCaseImplTest {
 
@@ -42,9 +34,9 @@ class RegistroUseCaseImplTest {
     @Test
     void normalizaRelacionesConIdNulo_antesDeGuardar() {
         Registro registro = new Registro();
-        registro.setLote(new Lote()); // cascaron: idLote == null
-        registro.setTipo(new Tipo()); // cascaron: idTipo == null
-        registro.setUbicacion(new Ubicacion()); // cascaron: idUbicacion == null
+        registro.setLote(new Lote());
+        registro.setTipo(new Tipo());
+        registro.setUbicacion(new Ubicacion());
         when(repositorio.guardar(any())).thenAnswer(inv -> inv.getArgument(0));
 
         useCase.guardar(registro);

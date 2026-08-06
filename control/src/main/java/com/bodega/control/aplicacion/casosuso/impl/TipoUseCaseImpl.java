@@ -37,7 +37,6 @@ public class TipoUseCaseImpl implements ITipoUseCase {
 
 	@Override
 	public Tipo buscarPorid(int Tipo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -37,13 +37,11 @@ public class ZonaUseCaseImpl implements IZonaUseCase {
 
 	@Override
 	public Zona buscarPorid(int Zona) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Zona> listarTodo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -10,12 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-/**
- * Registra de que lote(s) se reservo cada Detalle Solicitud (una solicitud puede
- * cubrirse repartida entre varios lotes cuando el mas antiguo no alcanza).
- * Es la base para que, al momento de la Entrega, se sepa exactamente que lote
- * descontar en vez de tener que volver a calcular el FIFO.
- */
 @Entity
 @Data
 @Table(name = "detalle_solicitud_lote")

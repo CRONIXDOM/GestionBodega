@@ -26,11 +26,6 @@ import com.bodega.control.dominio.repositorio.IDetalleSolicitudLoteRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleSolicitudRepositorio;
 import com.bodega.control.dominio.repositorio.ILoteRepositorio;
 
-/**
- * Cubre la logica de reserva FIFO: es la parte mas critica del sistema (si se
- * rompe, se puede sobre-reservar stock que no existe) y la que motivo el
- * @Transactional del caso de uso real.
- */
 @ExtendWith(MockitoExtension.class)
 class DetalleSolicitudUseCaseImplTest {
 
@@ -85,7 +80,6 @@ class DetalleSolicitudUseCaseImplTest {
     void reparteEntreVariosLotesEnOrdenFifo_cuandoElPrimeroNoAlcanza() {
         Lote masAntiguo = lote(1, "L-001", 15, 0, LocalDate.of(2026, 1, 1));
         Lote masNuevo = lote(2, "L-002", 100, 0, LocalDate.of(2026, 2, 1));
-        // el repositorio ya debe entregarlos en orden FIFO (mas antiguo primero)
         when(loteRepositorio.buscarPorProductoOrdenadoFifo(10)).thenReturn(List.of(masAntiguo, masNuevo));
         when(repositorio.guardar(any())).thenAnswer(inv -> inv.getArgument(0));
 
@@ -107,8 +101,6 @@ class DetalleSolicitudUseCaseImplTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Stock insuficiente");
 
-        // nada debe quedar persistido si no alcanza: sin esto, una solicitud que
-        // falla a la mitad dejaria reservas "fantasma" sobre stock que no existe.
         verify(loteRepositorio, never()).guardar(any());
         verify(repositorio, never()).guardar(any());
         verify(asignacionRepositorio, never()).guardar(any());
@@ -128,7 +120,7 @@ class DetalleSolicitudUseCaseImplTest {
 
     @Test
     void noCuentaLotesSinDisponibilidad() {
-        Lote agotado = lote(1, "L-001", 10, 10, LocalDate.of(2026, 1, 1)); // 0 disponible
+        Lote agotado = lote(1, "L-001", 10, 10, LocalDate.of(2026, 1, 1));
         Lote conStock = lote(2, "L-002", 20, 0, LocalDate.of(2026, 2, 1));
         when(loteRepositorio.buscarPorProductoOrdenadoFifo(10)).thenReturn(List.of(agotado, conStock));
         when(repositorio.guardar(any())).thenAnswer(inv -> inv.getArgument(0));

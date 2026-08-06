@@ -9,9 +9,6 @@ import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 
 public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 
-	// \p{L} = cualquier letra de cualquier idioma (incluye tildes y ñ); se permiten
-	// ademas espacios, apostrofes y guiones para nombres como "Ana Maria",
-	// "O'Brien" o "Garcia-Lopez". Los digitos quedan fuera a proposito.
 	private static final Pattern SOLO_LETRAS = Pattern.compile("^[\\p{L} '\\-]+$");
 
 	private final IUsuarioRepositorio repositorio;
@@ -25,8 +22,6 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		if (nuevoUsuario.getNombreUsuario() == null || nuevoUsuario.getNombreUsuario().isBlank()) {
 			throw new RuntimeException("El nombre del usuario es obligatorio");
 		}
-		// se recorta antes de comparar para que " Ana " y "Ana" no se consideren
-		// usuarios distintos al validar que el nombre no este repetido.
 		nuevoUsuario.setNombreUsuario(nuevoUsuario.getNombreUsuario().trim());
 		if (nuevoUsuario.getApellidoUsuario() != null) {
 			nuevoUsuario.setApellidoUsuario(nuevoUsuario.getApellidoUsuario().trim());
@@ -48,10 +43,6 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		}
 	}
 
-	/**
-	 * Al editar hay que excluir al propio usuario de la comparacion, o guardarlo
-	 * sin cambiarle el nombre chocaria consigo mismo.
-	 */
 	private void validarNombreNoRepetido(Usuario usuario) {
 		boolean repetido = repositorio.listarTodos().stream()
 				.filter(otro -> usuario.getIdUsuario() == null || !usuario.getIdUsuario().equals(otro.getIdUsuario()))
@@ -78,13 +69,11 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 
 	@Override
 	public Usuario buscarPorid(int Usuario) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Usuario> listarTodo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

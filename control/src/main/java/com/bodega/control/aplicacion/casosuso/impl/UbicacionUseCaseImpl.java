@@ -16,9 +16,6 @@ public class UbicacionUseCaseImpl implements IUbicacionUseCase {
 
 	@Override
 	public Ubicacion guardar(Ubicacion nuevaUbicacion) {
-		// el mapper crea un objeto Zona/Sede "cascaron" (id=null) cuando el formulario
-		// no elige una opcion; hay que normalizarlo a null real o Hibernate intenta
-		// guardarlo como una entidad nueva en vez de tratarlo como ausente.
 		if (nuevaUbicacion.getZona() != null && nuevaUbicacion.getZona().getIdZona() == null) {
 			nuevaUbicacion.setZona(null);
 		}

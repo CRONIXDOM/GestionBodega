@@ -24,11 +24,6 @@ import com.bodega.control.dominio.repositorio.IDetalleEntregaRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleSolicitudLoteRepositorio;
 import com.bodega.control.dominio.repositorio.ILoteRepositorio;
 
-/**
- * Cubre las dos formas en que una entrega puede descontar stock: salida
- * directa por FIFO (sin pedido previo) y despacho que cumple exactamente una
- * reserva ya hecha por un Detalle Solicitud.
- */
 @ExtendWith(MockitoExtension.class)
 class DetalleEntregaUseCaseImplTest {
 
@@ -44,7 +39,6 @@ class DetalleEntregaUseCaseImplTest {
     @BeforeEach
     void setUp() {
         useCase = new DetalleEntregaUseCaseImpl(repositorio, loteRepositorio, asignacionRepositorio);
-        // lenient: los casos que esperan excepcion nunca llegan a llamar guardar()
         lenient().when(repositorio.guardar(any())).thenAnswer(inv -> inv.getArgument(0));
     }
 
@@ -97,7 +91,6 @@ class DetalleEntregaUseCaseImplTest {
         DetalleSolicitud solicitud = new DetalleSolicitud();
         solicitud.setIdDetalleSolicitud(99);
         DetalleSolicitudLote asignacion = new DetalleSolicitudLote(1, solicitud, lote(1, 0, 0), 12);
-        // el lote referenciado en la asignacion solo necesita el id para buscarlo
         asignacion.getLote().setIdLote(1);
         when(asignacionRepositorio.buscarPorDetalleSolicitud(99)).thenReturn(List.of(asignacion));
 

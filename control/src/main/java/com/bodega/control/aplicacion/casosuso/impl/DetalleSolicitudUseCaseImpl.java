@@ -26,14 +26,6 @@ public class DetalleSolicitudUseCaseImpl implements IDetalleSolicitudUseCase {
         this.asignacionRepositorio = asignacionRepositorio;
     }
 
-    /**
-     * Reserva stock (FIFO por fecha de ingreso, salvo que se indique un lote puntual)
-     * para cubrir la cantidad pedida, y solo despues guarda el Detalle Solicitud.
-     * La reserva se registra sumando a "cantidadReservada" del/los lote(s) usados,
-     * sin tocar todavia "cantidadLote" (eso ocurre recien cuando se registre la Entrega).
-     */
-    // atomico a proposito: si no alcanza el stock, ninguna de las reservas
-    // parciales que ya se hayan guardado en el bucle debe quedar en firme.
     @Override
     @Transactional
     public DetalleSolicitud guardar(DetalleSolicitud nuevoDetalleSolicitud, Integer idLoteManual) {
@@ -72,7 +64,6 @@ public class DetalleSolicitudUseCaseImpl implements IDetalleSolicitudUseCase {
                     + " unidades disponibles del producto solicitado");
         }
 
-        // recien se persisten los cambios una vez que se confirmo que alcanza el stock
         for (Lote lote : lotesTocados) {
             loteRepositorio.guardar(lote);
         }

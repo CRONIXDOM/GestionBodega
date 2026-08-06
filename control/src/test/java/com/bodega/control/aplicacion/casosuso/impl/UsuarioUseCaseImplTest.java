@@ -20,13 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.bodega.control.dominio.entidades.Usuario;
 import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 
-/**
- * Reglas de negocio al dar de alta o editar un usuario:
- * - nombre y apellido solo admiten letras (nada de digitos),
- * - no puede haber dos usuarios con el mismo nombre.
- * Viven en el caso de uso y no en el formulario para que se cumplan tambien
- * cuando alguien llama a la API directamente.
- */
 @ExtendWith(MockitoExtension.class)
 class UsuarioUseCaseImplTest {
 
@@ -42,7 +35,6 @@ class UsuarioUseCaseImplTest {
     @BeforeEach
     void setUp() {
         useCase = new UsuarioUseCaseImpl(repositorio);
-        // varias pruebas fallan antes de llegar a guardar, asi que el stub no siempre se usa
         lenient().when(repositorio.guardar(any())).thenAnswer(inv -> inv.getArgument(0));
         lenient().when(repositorio.listarTodos()).thenReturn(List.of(usuario(1, "admin", "Sistema")));
     }
@@ -99,7 +91,6 @@ class UsuarioUseCaseImplTest {
 
     @Test
     void permiteGuardarElMismoUsuarioSinCambiarleElNombre() {
-        // al editar, el usuario no debe chocar consigo mismo
         useCase.guardar(usuario(1, "admin", "Sistema Editado"));
 
         verify(repositorio).guardar(any());

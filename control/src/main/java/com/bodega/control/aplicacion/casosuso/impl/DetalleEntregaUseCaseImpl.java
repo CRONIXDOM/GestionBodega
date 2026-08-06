@@ -29,23 +29,9 @@ public class DetalleEntregaUseCaseImpl implements IDetalleEntregaUseCase {
         this.asignacionRepositorio = asignacionRepositorio;
     }
 
-    /**
-     * Aqui es donde el stock realmente sale de bodega:
-     * - Si la entrega cumple un Detalle Solicitud existente, se descuenta exactamente
-     *   lo que ya se habia reservado para ese pedido (mismos lotes, misma cantidad),
-     *   liberando la reserva al mismo tiempo.
-     * - Si es una salida directa (sin pedido previo), se aplica FIFO sobre el stock
-     *   disponible (o se descuenta del lote puntual indicado), tal como en la reserva.
-     */
-    // atomico a proposito: si no alcanza el stock a mitad del reparto FIFO, ningun
-    // descuento parcial ya guardado en el bucle debe quedar en firme.
     @Override
     @Transactional
     public DetalleEntrega guardar(DetalleEntrega nuevoDetalleEntrega) {
-        // el mapper DTO->dominio crea un objeto "cascaron" (p.ej. new Lote() con
-        // idLote=null) para cada relacion opcional aunque no venga informada en el
-        // request; hay que normalizarlo a null real o Hibernate intenta guardar esas
-        // relaciones como entidades nuevas en vez de tratarlas como ausentes.
         Integer idLoteManual = normalizarId(nuevoDetalleEntrega.getLote(), Lote::getIdLote);
         if (idLoteManual == null) {
             nuevoDetalleEntrega.setLote(null);

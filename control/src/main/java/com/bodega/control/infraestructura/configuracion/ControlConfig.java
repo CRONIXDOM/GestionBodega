@@ -107,7 +107,6 @@ import com.bodega.control.infraestructura.repositorio.IZonaJpaRepositorio;
 @Configuration
 public class ControlConfig {
 
-	// credenciales ****
 	@Bean
 	ICredencialesRepositorio credencialesRepositorio(ICredencialesJpaRepositorio jpaRepositorio,
 			ICredencialesJpaMapper mapper) {
@@ -119,7 +118,6 @@ public class ControlConfig {
 		return new CredencialesUseCaseImpl(repositorio);
 	}
 
-	// detalleEntrega ****
 	@Bean
 	IDetalleEntregaRepositorio detalleEntregaRepositorio(IDetalleEntregaJpaRepositorio jpaRepositorio,
 			IDetalleEntregaJpaMapper mapper) {
@@ -132,7 +130,6 @@ public class ControlConfig {
 		return new DetalleEntregaUseCaseImpl(repositorio, loteRepositorio, asignacionRepositorio);
 	}
 
-	// detalleSolicitud ****
 	@Bean
 	IDetalleSolicitudRepositorio detalleSolicitudRepositorio(IDetalleSolicitudJpaRepositorio jpaRepositorio,
 			IDetalleSolicitudJpaMapper mapper) {
@@ -145,14 +142,12 @@ public class ControlConfig {
 		return new DetalleSolicitudUseCaseImpl(repositorio, loteRepositorio, asignacionRepositorio);
 	}
 
-	// detalleSolicitudLote (reserva de stock por FIFO) ****
 	@Bean
 	IDetalleSolicitudLoteRepositorio detalleSolicitudLoteRepositorio(IDetalleSolicitudLoteJpaRepositorio jpaRepositorio,
 			IDetalleSolicitudLoteJpaMapper mapper) {
 		return new DetalleSolicitudLoteRepositorioImpl(jpaRepositorio, mapper);
 	}
 
-	// entrega ****
 	@Bean
 	IEntregaRepositorio entregaRepositorio(IEntregaJpaRepositorio jpaRepositorio, IEntregaJpaMapper mapper) {
 		return new EntregaRepositorioImpl(jpaRepositorio, mapper);
@@ -163,7 +158,6 @@ public class ControlConfig {
 		return new EntregaUseCaseImpl(repositorio);
 	}
 
-	// lote ****
 	@Bean
 	ILoteRepositorio loteRepositorio(ILoteJpaRepositorio jpaRepositorio, ILoteJpaMapper mapper) {
 		return new LoteRepositorioImpl(jpaRepositorio, mapper);
@@ -174,7 +168,6 @@ public class ControlConfig {
 		return new LoteUseCaseImpl(repositorio);
 	}
 
-	// producto ****
 	@Bean
 	IProductoRepositorio productoSolicitudRepositorio(IProductoJpaRepositorio jpaRepositorio, IProductoJpaMapper mapper) {
 		return new ProductoRepositorioImpl(jpaRepositorio, mapper);
@@ -185,7 +178,6 @@ public class ControlConfig {
 		return new ProductoUseCaseImpl(repositorio);
 	}
 
-	// registro ****
 	@Bean
 	IRegistroRepositorio registroRepositorio(IRegistroJpaRepositorio jpaRepositorio,
 			IRegistroJpaMapper mapper) {
@@ -197,7 +189,6 @@ public class ControlConfig {
 		return new RegistroUseCaseImpl(repositorio);
 	}
 
-	// reporte ****
 	@Bean
 	IReporteRepositorio reporteRepositorio(IReporteJpaRepositorio jpaRepositorio, IReporteJpaMapper mapper) {
 		return new ReporteRepositorioImpl(jpaRepositorio, mapper);
@@ -208,7 +199,6 @@ public class ControlConfig {
 		return new ReporteUseCaseImpl(repositorio);
 	}
 
-	// rol ****
 	@Bean
 	IRolRepositorio rolRepositorio(IRolJpaRepositorio jpaRepositorio, IRolJpaMapper mapper) {
 		return new RolRepositorioImpl(jpaRepositorio, mapper);
@@ -219,7 +209,6 @@ public class ControlConfig {
 		return new RolUseCaseImpl(repositorio);
 	}
 
-	// solicitud ****
 	@Bean
 	ISolicitudRepositorio solicitudRepositorio(ISolicitudJpaRepositorio jpaRepositorio,
 			ISolicitudJpaMapper mapper) {
@@ -231,7 +220,6 @@ public class ControlConfig {
 		return new SolicitudUseCaseImpl(repositorio);
 	}
 
-	// tipo ****
 	@Bean
 	ITipoRepositorio tipoRepositorio(ITipoJpaRepositorio jpaRepositorio, ITipoJpaMapper mapper) {
 		return new TipoRepositorioImpl(jpaRepositorio, mapper);
@@ -242,7 +230,6 @@ public class ControlConfig {
 		return new TipoUseCaseImpl(repositorio);
 	}
 
-	// ubicacion ****
 	@Bean
 	IUbicacionRepositorio ubicacionRepositorio(IUbicacionJpaRepositorio jpaRepositorio, IUbicacionJpaMapper mapper) {
 		return new UbicacionRepositorioImpl(jpaRepositorio, mapper);
@@ -253,7 +240,6 @@ public class ControlConfig {
 		return new UbicacionUseCaseImpl(repositorio);
 	}
 
-	// usuario ****
 	@Bean
 	IUsuarioRepositorio usuarioRepositorio(IUsuarioJpaRepositorio jpaRepositorio, IUsuarioJpaMapper mapper) {
 		return new UsuarioRepositorioImpl(jpaRepositorio, mapper);
@@ -264,7 +250,6 @@ public class ControlConfig {
 		return new UsuarioUseCaseImpl(repositorio);
 	}
 
-	// usuarioRol ****
 	@Bean
 	IUsuarioRolRepositorio usuarioRolRepositorio(IUsuarioRolJpaRepositorio jpaRepositorio, IUsuarioRolJpaMapper mapper) {
 		return new UsuarioRolRepositorioImpl(jpaRepositorio, mapper);
@@ -275,7 +260,6 @@ public class ControlConfig {
 		return new UsuarioRolUseCaseImpl(repositorio);
 	}
 
-	// zona ****
 	@Bean
 	IZonaRepositorio zonaRepositorio(IZonaJpaRepositorio jpaRepositorio, IZonaJpaMapper mapper) {
 		return new ZonaRepositorioImpl(jpaRepositorio, mapper);
@@ -286,7 +270,6 @@ public class ControlConfig {
 		return new ZonaUseCaseImpl(repositorio);
 	}
 
-	// sede ****
 	@Bean
 	ISedeRepositorio sedeRepositorio(ISedeJpaRepositorio jpaRepositorio, ISedeJpaMapper mapper) {
 		return new SedeRepositorioImpl(jpaRepositorio, mapper);

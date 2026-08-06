@@ -37,7 +37,6 @@ public class SolicitudUseCaseImpl implements ISolicitudUseCase {
 
 	@Override
 	public Solicitud buscarPorid(int Solicitud) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
