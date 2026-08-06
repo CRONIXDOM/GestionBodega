@@ -3,6 +3,7 @@ package com.bodega.controlweb.service;
 import java.util.List;
 import java.util.Map;
 
+import com.bodega.controlweb.model.dto.response.ContenidoSedeDto;
 import com.bodega.controlweb.model.dto.response.ContenidoUbicacionDto;
 
 public interface IOcupacionService {
@@ -21,4 +22,10 @@ public interface IOcupacionService {
 
     /** Unidades ya reservadas (apartadas para salir) en cada sede. */
     Map<Integer, Integer> reservadasPorSede();
+
+    /** Productos guardados en una bodega, con sus unidades y en cuántos lotes vienen. */
+    List<ContenidoSedeDto> contenidoPorSede(Integer idSede);
+
+    /** Cuántos lotes hay almacenados en cada bodega. */
+    Map<Integer, Integer> lotesPorSede();
 }

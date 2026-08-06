@@ -33,6 +33,7 @@ public class LoteController {
     @GetMapping
     public String leerPagina(Model model) {
         model.addAttribute("productos", servicioEtiquetas.productosPorId());
+        model.addAttribute("bodegas", servicioEtiquetas.bodegaPorUbicacion());
         model.addAttribute("listalote", servicioAPI.listarLote());
         return "/Lote/listarlote";
     }

@@ -9,16 +9,20 @@ import com.bodega.controlweb.model.dto.response.DetalleEntregaResponseDto;
 import com.bodega.controlweb.model.dto.response.DetalleSolicitudResponseDto;
 import com.bodega.controlweb.model.dto.response.ProductoResponseDto;
 import com.bodega.controlweb.model.dto.response.RolResponseDto;
+import com.bodega.controlweb.model.dto.response.SedeResponseDto;
 import com.bodega.controlweb.model.dto.response.SolicitudResponseDto;
 import com.bodega.controlweb.model.dto.response.UsuarioResponseDto;
+import com.bodega.controlweb.model.dto.response.UbicacionResponseDto;
 import com.bodega.controlweb.model.dto.response.UsuarioRolResponseDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
 import com.bodega.controlweb.service.IDetalleSolicitudService;
 import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.IProductoService;
 import com.bodega.controlweb.service.IRolService;
+import com.bodega.controlweb.service.ISedeService;
 import com.bodega.controlweb.service.ISolicitudService;
 import com.bodega.controlweb.service.IUsuarioRolService;
+import com.bodega.controlweb.service.IUbicacionService;
 import com.bodega.controlweb.service.IUsuarioService;
 
 @Service
@@ -31,11 +35,14 @@ public class EtiquetasServiceImpl implements IEtiquetasService {
     private final ISolicitudService servicioSolicitud;
     private final IDetalleSolicitudService servicioDetalleSolicitud;
     private final IDetalleEntregaService servicioDetalleEntrega;
+    private final ISedeService servicioSede;
+    private final IUbicacionService servicioUbicacion;
 
     public EtiquetasServiceImpl(IUsuarioService servicioUsuario, IRolService servicioRol,
             IUsuarioRolService servicioUsuarioRol, IProductoService servicioProducto,
             ISolicitudService servicioSolicitud, IDetalleSolicitudService servicioDetalleSolicitud,
-            IDetalleEntregaService servicioDetalleEntrega) {
+            IDetalleEntregaService servicioDetalleEntrega, ISedeService servicioSede,
+            IUbicacionService servicioUbicacion) {
         this.servicioUsuario = servicioUsuario;
         this.servicioRol = servicioRol;
         this.servicioUsuarioRol = servicioUsuarioRol;
@@ -43,6 +50,8 @@ public class EtiquetasServiceImpl implements IEtiquetasService {
         this.servicioSolicitud = servicioSolicitud;
         this.servicioDetalleSolicitud = servicioDetalleSolicitud;
         this.servicioDetalleEntrega = servicioDetalleEntrega;
+        this.servicioSede = servicioSede;
+        this.servicioUbicacion = servicioUbicacion;
     }
 
     @Override
@@ -104,6 +113,21 @@ public class EtiquetasServiceImpl implements IEtiquetasService {
         Map<Integer, String> resultado = new HashMap<>();
         for (SolicitudResponseDto s : servicioSolicitud.listarSolicitud()) {
             resultado.put(s.getIdSolicitud(), porUsuarioRol.get(s.getIdUsuarioRol()));
+        }
+        return resultado;
+    }
+
+    @Override
+    public Map<Integer, String> bodegaPorUbicacion() {
+        Map<Integer, String> nombrePorSede = new HashMap<>();
+        for (SedeResponseDto sede : servicioSede.listarSede()) {
+            nombrePorSede.put(sede.getIdSede(), sede.getNombreSede());
+        }
+
+        Map<Integer, String> resultado = new HashMap<>();
+        for (UbicacionResponseDto u : servicioUbicacion.listarUbicacion()) {
+            resultado.put(u.getIdUbicacion(),
+                    nombrePorSede.getOrDefault(u.getIdSede(), u.getCodigoUbicacion()));
         }
         return resultado;
     }

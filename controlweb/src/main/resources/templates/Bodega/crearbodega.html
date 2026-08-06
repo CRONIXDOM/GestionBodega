@@ -14,101 +14,53 @@
 				<div>
 					<p class="eyebrow mb-1">Bodegas</p>
 					<h1 class="h3 mb-1">Registro de Bodega</h1>
-					<p class="text-muted mb-0">Define en un solo paso la sede, la zona y la ubicación.</p>
+					<p class="text-muted mb-0">Datos del local de almacenamiento y la zona en la que se encuentra.</p>
 				</div>
 			</div>
 		</div>
 
 		<section class="row g-3 mt-1">
-			<div class="col-12 col-xl-8">
+			<div class="col-12 col-xl-7">
 				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
-				<form class="panel needs-validation" th:action="@{/bodega/guardar}" th:object="${bodega}" method="post"
-					novalidate>
-					<input type="hidden" th:field="*{idUbicacion}">
-
-					<!-- ============ SEDE ============ -->
-					<h2 class="h6 mb-1"><i class="bi bi-building" aria-hidden="true"></i> Sede</h2>
-					<p class="text-muted small mb-3">Elige una sede ya registrada o deja el selector vacío para crear una
-						nueva con los datos de abajo.</p>
+				<form class="panel" th:action="@{/bodega/guardar}" th:object="${bodega}" method="post">
+					<input type="hidden" th:field="*{idSede}">
 					<div class="row g-3">
-						<div class="col-12">
-							<label class="form-label">Sede existente</label>
-							<select class="form-select" th:field="*{idSede}" id="selectorSede">
-								<option value="">— Crear una sede nueva —</option>
-								<option th:each="op : ${opcionesSede}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
-							</select>
-						</div>
-					</div>
-
-					<div class="row g-3 mt-0" id="camposSedeNueva">
 						<div class="col-md-6">
-							<label class="form-label">Nombre de la sede</label>
-							<input class="form-control" th:field="*{nombreSede}" placeholder="Ej. Bodega Norte">
-							<div class="form-text">No puede repetirse con otra sede.</div>
+							<label class="form-label">Nombre de la bodega <span class="text-danger">*</span></label>
+							<input class="form-control" th:field="*{nombreSede}" required placeholder="Ej. Almacén 2">
+							<div class="form-text">No puede repetirse con otra bodega, aunque se escriba distinto.</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Dirección</label>
-							<input class="form-control" th:field="*{direccion}" placeholder="Ej. Av. Principal 123">
+							<label class="form-label">Dirección <span class="text-danger">*</span></label>
+							<input class="form-control" th:field="*{direccion}" required placeholder="Ej. Mariana de Jesús">
 							<div class="form-text">Tampoco puede repetirse.</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Capacidad</label>
+							<label class="form-label">Zona en la que se encuentra</label>
+							<input class="form-control" th:field="*{nombreZona}" placeholder="Ej. Zona Norte">
+							<div class="form-text">Escríbela como quieras; si ya existe una zona con ese nombre se reutiliza.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Capacidad <span class="text-danger">*</span></label>
 							<div class="input-group">
 								<input class="form-control" type="number" min="1" step="1" th:field="*{capacidad}"
-									placeholder="Ej. 5000">
+									required placeholder="Ej. 5000">
 								<span class="input-group-text">unidades</span>
 							</div>
+							<div class="form-text">Cuántas unidades caben en total. Solo números enteros.</div>
 						</div>
 						<div class="col-12">
-							<label class="form-label">Descripción</label>
-							<textarea class="form-control" th:field="*{descripcion}" rows="2"></textarea>
-						</div>
-					</div>
-
-					<hr class="my-4">
-
-					<!-- ============ ZONA ============ -->
-					<h2 class="h6 mb-1"><i class="bi bi-diagram-3" aria-hidden="true"></i> Zona</h2>
-					<p class="text-muted small mb-3">Opcional. Elige una zona existente o escribe el nombre de una nueva.</p>
-					<div class="row g-3">
-						<div class="col-md-6">
-							<label class="form-label">Zona existente</label>
-							<select class="form-select" th:field="*{idZona}">
-								<option value="">— Ninguna o crear una nueva —</option>
-								<option th:each="op : ${opcionesZona}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
-							</select>
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">Nombre de la zona nueva</label>
-							<input class="form-control" th:field="*{nombreZona}" placeholder="Ej. Zona Seca">
-							<div class="form-text">Si ya existe una zona con ese nombre, se reutiliza.</div>
-						</div>
-					</div>
-
-					<hr class="my-4">
-
-					<!-- ============ UBICACION ============ -->
-					<h2 class="h6 mb-1"><i class="bi bi-geo-alt" aria-hidden="true"></i> Ubicación</h2>
-					<p class="text-muted small mb-3">El sitio concreto donde se guarda la mercadería.</p>
-					<div class="row g-3">
-						<div class="col-md-6">
-							<label class="form-label">Código <span class="text-danger">*</span></label>
-							<input class="form-control" th:field="*{codigoUbicacion}" required placeholder="Ej. A-01">
-							<div class="invalid-feedback">El código es obligatorio.</div>
-							<div class="form-text">No puede repetirse con otra ubicación.</div>
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">Fecha</label>
-							<input class="form-control" type="date" th:field="*{fechaUbicacion}">
-							<div class="form-text">Si se deja vacía se usa la fecha de hoy.</div>
+							<label class="form-label">Descripción <span class="text-danger">*</span></label>
+							<textarea class="form-control" th:field="*{descripcion}" rows="2" required
+								placeholder="Ej. Almacenamiento de snacks"></textarea>
 						</div>
 					</div>
 
 					<div class="d-flex justify-content-end gap-2 mt-4">
-						<button class="btn btn-light" type="button" onclick="history.back()">
+						<a class="btn btn-light" th:href="@{/bodega}">
 							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
-						</button>
+						</a>
 						<button class="btn btn-primary" type="submit">
 							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
 						</button>
@@ -116,21 +68,6 @@
 				</form>
 			</div>
 		</section>
-
-		<script>
-			// si se elige una sede existente, no tiene sentido pedir los datos de una nueva
-			(function () {
-				var selector = document.getElementById("selectorSede");
-				var campos = document.getElementById("camposSedeNueva");
-				if (!selector || !campos) { return; }
-				function alternar() {
-					var usaExistente = selector.value !== "";
-					campos.style.display = usaExistente ? "none" : "";
-				}
-				selector.addEventListener("change", alternar);
-				alternar();
-			})();
-		</script>
 	</div>
 </body>
 </html>

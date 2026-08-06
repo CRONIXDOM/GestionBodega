@@ -42,7 +42,7 @@
 							<th scope="col">Fecha</th>
 							<th scope="col">Id Lote</th>
 							<th scope="col">Id Tipo</th>
-							<th scope="col">Id Ubicación</th>
+							<th scope="col">Bodega</th>
 							<th scope="col">Id Detalle Entrega</th>
 							<th scope="col">Id Usuario Rol</th>
 							<th scope="col" class="text-end">Acción</th>
@@ -54,7 +54,7 @@
 							<td th:text="${indice.fechaRegistro}"></td>
 							<td th:text="${indice.idLote}"></td>
 							<td th:text="${indice.idTipo}"></td>
-							<td th:text="${indice.idUbicacion}"></td>
+							<td th:text="${bodegas.get(indice.idUbicacion)} ?: '—'"></td>
 							<td th:text="${indice.idDetalleEntrega}"></td>
 							<td th:text="${indice.idUsuarioRol}"></td>
 							<td class="text-end">

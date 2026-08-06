@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.bodega.controlweb.model.dto.response.ContenidoSedeDto;
 import com.bodega.controlweb.model.dto.response.ContenidoUbicacionDto;
 import com.bodega.controlweb.model.dto.response.LoteResponseDto;
 import com.bodega.controlweb.model.dto.response.ProductoResponseDto;
@@ -115,6 +116,66 @@ public class OcupacionServiceImpl implements IOcupacionService {
             }
             resultado.merge(ubicacion.getIdSede(),
                     reservadaPorUbicacion.getOrDefault(ubicacion.getIdUbicacion(), 0), Integer::sum);
+        }
+        return resultado;
+    }
+
+    /**
+     * Con las ubicaciones ocultas, el detalle de una bodega se arma juntando los
+     * lotes de todas sus ubicaciones: por producto, cuántas unidades hay en total
+     * y en cuántos lotes distintos vienen repartidas.
+     */
+    @Override
+    public List<ContenidoSedeDto> contenidoPorSede(Integer idSede) {
+        List<Integer> ubicacionesDeLaSede = servicioUbicacion.listarUbicacion().stream()
+                .filter(u -> idSede.equals(u.getIdSede()))
+                .map(UbicacionResponseDto::getIdUbicacion)
+                .toList();
+
+        Map<Integer, ProductoResponseDto> productos = new HashMap<>();
+        for (ProductoResponseDto p : servicioProducto.listarProducto()) {
+            productos.put(p.getIdProducto(), p);
+        }
+
+        Map<Integer, Integer> unidades = new LinkedHashMap<>();
+        Map<Integer, Integer> lotes = new LinkedHashMap<>();
+        for (LoteResponseDto lote : servicioLote.listarLote()) {
+            if (lote.getIdProducto() == null || !ubicacionesDeLaSede.contains(lote.getIdUbicacion())) {
+                continue;
+            }
+            unidades.merge(lote.getIdProducto(), lote.getCantidadLote() == null ? 0 : lote.getCantidadLote(),
+                    Integer::sum);
+            lotes.merge(lote.getIdProducto(), 1, Integer::sum);
+        }
+
+        List<ContenidoSedeDto> lineas = new ArrayList<>();
+        unidades.forEach((idProducto, cantidad) -> {
+            ProductoResponseDto p = productos.get(idProducto);
+            lineas.add(new ContenidoSedeDto(idProducto,
+                    p == null ? null : p.getCodigoProducto(),
+                    p == null ? ("Producto #" + idProducto) : p.getNombreProducto(),
+                    cantidad, lotes.getOrDefault(idProducto, 0)));
+        });
+        lineas.sort(Comparator.comparing(ContenidoSedeDto::getNombreProducto,
+                Comparator.nullsLast(String::compareToIgnoreCase)));
+        return lineas;
+    }
+
+    @Override
+    public Map<Integer, Integer> lotesPorSede() {
+        Map<Integer, Integer> sedePorUbicacion = new HashMap<>();
+        for (UbicacionResponseDto u : servicioUbicacion.listarUbicacion()) {
+            if (u.getIdSede() != null) {
+                sedePorUbicacion.put(u.getIdUbicacion(), u.getIdSede());
+            }
+        }
+
+        Map<Integer, Integer> resultado = new HashMap<>();
+        for (LoteResponseDto lote : servicioLote.listarLote()) {
+            Integer idSede = sedePorUbicacion.get(lote.getIdUbicacion());
+            if (idSede != null) {
+                resultado.merge(idSede, 1, Integer::sum);
+            }
         }
         return resultado;
     }

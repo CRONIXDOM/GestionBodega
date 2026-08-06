@@ -48,7 +48,7 @@
 							<div class="invalid-feedback">Selecciona un tipo.</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Ubicación <span class="text-danger">*</span></label> <select
+							<label class="form-label">Bodega <span class="text-danger">*</span></label> <select
 								class="form-select" th:field="*{idUbicacion}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesUbicacion}" th:value="${op.id}" th:text="${op.etiqueta}"></option>

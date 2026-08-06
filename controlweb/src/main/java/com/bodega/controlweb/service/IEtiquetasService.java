@@ -21,4 +21,7 @@ public interface IEtiquetasService {
 
     /** idSolicitud → "NOMBRE APELLIDO (ROL)" de quien la pidió. */
     Map<Integer, String> solicitantePorSolicitud();
+
+    /** idUbicacion → nombre de la bodega, que es lo que el usuario reconoce. */
+    Map<Integer, String> bodegaPorUbicacion();
 }

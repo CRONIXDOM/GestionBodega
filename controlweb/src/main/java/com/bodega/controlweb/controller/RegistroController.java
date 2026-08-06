@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bodega.controlweb.model.dto.request.RegistroRequestDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
+import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.ILoteService;
 import com.bodega.controlweb.service.IRegistroService;
 import com.bodega.controlweb.service.ITipoService;
@@ -26,6 +27,8 @@ public class RegistroController {
     @Autowired
     private IRegistroService servicioAPI;
     @Autowired
+    private IEtiquetasService servicioEtiquetas;
+    @Autowired
     private ILoteService servicioLote;
     @Autowired
     private ITipoService servicioTipo;
@@ -38,6 +41,7 @@ public class RegistroController {
 
     @GetMapping
     public String leerPagina(Model model) {
+        model.addAttribute("bodegas", servicioEtiquetas.bodegaPorUbicacion());
         model.addAttribute("listaregistro", servicioAPI.listarRegistro());
         return "/Registro/listarregistro";
     }

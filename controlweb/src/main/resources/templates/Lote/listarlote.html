@@ -47,7 +47,7 @@
 							<th scope="col">Reservada</th>
 							<th scope="col">Disponible</th>
 							<th scope="col">Producto</th>
-							<th scope="col">Ubicación</th>
+							<th scope="col">Bodega</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -86,7 +86,7 @@
 									th:text="${p.codigoProducto}"></span>
 								<span th:text="${p != null} ? ${p.nombreProducto} : ('#' + ${indice.idProducto})"></span>
 							</td>
-							<td th:text="${indice.idUbicacion}"></td>
+							<td th:text="${bodegas.get(indice.idUbicacion)} ?: '—'"></td>
 							<td class="text-end">
 								<a class="btn btn-warning btn-sm"
 									th:href="@{/detallesolicitud/nuevo(idLote=${indice.idLote},idProducto=${indice.idProducto})}"><i
