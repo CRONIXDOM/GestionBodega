@@ -6,6 +6,7 @@ public class Sede {
 	private String nombreSede;
 	private String direccion;
 	private String descripcion;
+	private Integer capacidad;
 
 	public Sede() {
 		super();
@@ -17,6 +18,11 @@ public class Sede {
 		this.nombreSede = nombreSede;
 		this.direccion = direccion;
 		this.descripcion = descripcion;
+	}
+
+	public Sede(Integer idSede, String nombreSede, String direccion, String descripcion, Integer capacidad) {
+		this(idSede, nombreSede, direccion, descripcion);
+		this.capacidad = capacidad;
 	}
 
 	public Integer getIdSede() {
@@ -49,6 +55,14 @@ public class Sede {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public Integer getCapacidad() {
+		return capacidad;
+	}
+
+	public void setCapacidad(Integer capacidad) {
+		this.capacidad = capacidad;
 	}
 
 }

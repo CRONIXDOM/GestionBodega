@@ -5,18 +5,16 @@ public class Zona {
 	private Integer idZona;
 	private String nombreZona;
 	private String descripcion;
-	private String capacidadZona;
 
 	public Zona() {
 		super();
 	}
 
-	public Zona(Integer idZona, String nombreZona, String descripcion, String capacidadZona) {
+	public Zona(Integer idZona, String nombreZona, String descripcion) {
 		super();
 		this.idZona = idZona;
 		this.nombreZona = nombreZona;
 		this.descripcion = descripcion;
-		this.capacidadZona = capacidadZona;
 	}
 
 	public Integer getIdZona() {
@@ -41,14 +39,6 @@ public class Zona {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public String getCapacidadZona() {
-		return capacidadZona;
-	}
-
-	public void setCapacidadZona(String capacidadZona) {
-		this.capacidadZona = capacidadZona;
 	}
 
 }

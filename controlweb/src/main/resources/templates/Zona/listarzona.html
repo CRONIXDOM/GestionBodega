@@ -36,7 +36,7 @@
 							<th scope="col">Id</th>
 							<th scope="col">Nombre</th>
 							<th scope="col">Descripción</th>
-							<th scope="col">Capacidad</th>
+							<th scope="col">Almacenado</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -45,7 +45,10 @@
 							<td class="fw-semibold" th:text="${indice.idZona}"></td>
 							<td th:text="${indice.nombreZona}"></td>
 							<td th:text="${indice.descripcion}"></td>
-							<td th:text="${indice.capacidadZona}"></td>
+							<td th:with="ocu=${ocupado.getOrDefault(indice.idZona, 0)}">
+								<span class="badge bg-secondary-subtle text-body"
+									th:text="${ocu} + ' unidades'">0 unidades</span>
+							</td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/zona/editar/{id}(id=${indice.idZona})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>

@@ -23,7 +23,4 @@ public class ZonaEntity {
     @Column(name = "descripcion", length = 200)
     private String descripcion;
 
-    @Column(name = "capacidad_zona", length = 100)
-    private String capacidadZona;
-
 }

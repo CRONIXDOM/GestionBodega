@@ -35,10 +35,10 @@
 						<tr>
 							<th scope="col">Id</th>
 							<th scope="col">Código</th>
-							<th scope="col">Cantidad</th>
-							<th scope="col">Fecha</th>
-							<th scope="col">Zona</th>
 							<th scope="col">Sede</th>
+							<th scope="col">Zona</th>
+							<th scope="col" style="min-width: 280px;">Productos almacenados</th>
+							<th scope="col">Total</th>
 							<th scope="col" class="text-end">Acción</th>
 						</tr>
 					</thead>
@@ -46,10 +46,24 @@
 						<tr th:each="indice:${listaubicacion}">
 							<td class="fw-semibold" th:text="${indice.idUbicacion}"></td>
 							<td th:text="${indice.codigoUbicacion}"></td>
-							<td th:text="${indice.cantidadUbicacion}"></td>
-							<td th:text="${indice.fechaUbicacion}"></td>
-							<td th:text="${nombresZona.get(indice.idZona)} ?: '—'"></td>
 							<td th:text="${nombresSede.get(indice.idSede)} ?: '—'"></td>
+							<td th:text="${nombresZona.get(indice.idZona)} ?: '—'"></td>
+							<td th:with="lineas=${contenido.get(indice.idUbicacion)}">
+								<span th:if="${lineas == null or lineas.isEmpty()}" class="text-muted small">Vacía</span>
+								<div th:unless="${lineas == null or lineas.isEmpty()}" class="d-flex flex-column gap-1">
+									<div th:each="linea : ${lineas}" class="d-flex align-items-center gap-2">
+										<span class="badge bg-secondary-subtle text-body font-monospace"
+											th:text="${linea.codigoProducto} ?: '—'">COD</span>
+										<span th:text="${linea.nombreProducto}">Producto</span>
+										<span class="badge bg-primary-subtle text-primary"
+											th:text="${linea.cantidad} + ' u.'">0 u.</span>
+									</div>
+								</div>
+							</td>
+							<td>
+								<span class="fw-semibold" th:text="${unidades.getOrDefault(indice.idUbicacion, 0)}">0</span>
+								<span class="text-muted small">u.</span>
+							</td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/ubicacion/editar/{id}(id=${indice.idUbicacion})}"><i
 									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>

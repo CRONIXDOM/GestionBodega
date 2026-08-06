@@ -26,4 +26,7 @@ public class SedeEntity {
     @Column(name = "descripcion", length = 200)
     private String descripcion;
 
+    @Column(name = "capacidad")
+    private Integer capacidad;
+
 }

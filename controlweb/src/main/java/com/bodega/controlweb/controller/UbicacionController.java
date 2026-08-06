@@ -17,6 +17,7 @@ import com.bodega.controlweb.model.dto.request.UbicacionRequestDto;
 import com.bodega.controlweb.model.dto.response.SedeResponseDto;
 import com.bodega.controlweb.model.dto.response.UbicacionResponseDto;
 import com.bodega.controlweb.model.dto.response.ZonaResponseDto;
+import com.bodega.controlweb.service.IOcupacionService;
 import com.bodega.controlweb.service.ISedeService;
 import com.bodega.controlweb.service.IUbicacionService;
 import com.bodega.controlweb.service.IZonaService;
@@ -31,6 +32,8 @@ public class UbicacionController {
     private IZonaService servicioZona;
     @Autowired
     private ISedeService servicioSede;
+    @Autowired
+    private IOcupacionService servicioOcupacion;
 
     @GetMapping
     public String leerPagina(Model model) {
@@ -43,6 +46,9 @@ public class UbicacionController {
         model.addAttribute("listaubicacion", ubicaciones);
         model.addAttribute("nombresZona", nombresZona);
         model.addAttribute("nombresSede", nombresSede);
+        // qué productos hay guardados en cada ubicación y cuántas unidades de cada uno
+        model.addAttribute("contenido", servicioOcupacion.contenidoPorUbicacion());
+        model.addAttribute("unidades", servicioOcupacion.unidadesPorUbicacion());
         return "/Ubicacion/listarubicacion";
     }
 

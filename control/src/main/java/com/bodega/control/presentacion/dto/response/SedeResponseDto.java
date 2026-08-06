@@ -8,5 +8,6 @@ public class SedeResponseDto {
 	private String nombreSede;
 	private String direccion;
 	private String descripcion;
+	private Integer capacidad;
 
 }

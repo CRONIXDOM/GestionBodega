@@ -1,5 +1,8 @@
 package com.bodega.controlweb.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.SedeRequestDto;
+import com.bodega.controlweb.model.dto.response.SedeResponseDto;
+import com.bodega.controlweb.service.IOcupacionService;
 import com.bodega.controlweb.service.ISedeService;
 
 @Controller
@@ -18,10 +23,19 @@ public class SedeController {
 
     @Autowired
     private ISedeService servicioAPI;
+    @Autowired
+    private IOcupacionService servicioOcupacion;
 
     @GetMapping
     public String leerPagina(Model model) {
-        model.addAttribute("listasede", servicioAPI.listarSede());
+        List<SedeResponseDto> sedes = servicioAPI.listarSede();
+        Map<Integer, Integer> ocupado = servicioOcupacion.unidadesPorSede();
+
+        model.addAttribute("listasede", sedes);
+        model.addAttribute("ocupado", ocupado);
+        // una sede se marca en rojo cuando lo almacenado supera lo que declara caber
+        model.addAttribute("hayExcedidas", sedes.stream().anyMatch(s -> s.getCapacidad() != null
+                && s.getCapacidad() > 0 && ocupado.getOrDefault(s.getIdSede(), 0) > s.getCapacidad()));
         return "/Sede/listarsede";
     }
 

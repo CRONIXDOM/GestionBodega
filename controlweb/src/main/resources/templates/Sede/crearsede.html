@@ -34,6 +34,16 @@
 							<label class="form-label">Dirección</label> <input class="form-control"
 								th:field="*{direccion}">
 						</div>
+						<div class="col-md-6">
+							<label class="form-label">Capacidad de almacenamiento</label>
+							<div class="input-group">
+								<input class="form-control" type="number" min="0" step="1" th:field="*{capacidad}"
+									placeholder="Ej. 5000">
+								<span class="input-group-text">unidades</span>
+							</div>
+							<div class="form-text">Total que cabe en esta sede. El sistema descuenta automáticamente lo
+								que ya está almacenado en sus ubicaciones.</div>
+						</div>
 						<div class="col-12">
 							<label class="form-label">Descripción</label>
 							<textarea class="form-control" th:field="*{descripcion}" rows="3"></textarea>

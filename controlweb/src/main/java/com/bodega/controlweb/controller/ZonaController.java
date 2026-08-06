@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bodega.controlweb.model.dto.request.ZonaRequestDto;
+import com.bodega.controlweb.service.IOcupacionService;
 import com.bodega.controlweb.service.IZonaService;
 
 @Controller
@@ -18,10 +19,15 @@ public class ZonaController {
 
     @Autowired
     private IZonaService servicioAPI;
+    @Autowired
+    private IOcupacionService servicioOcupacion;
 
     @GetMapping
     public String leerPagina(Model model) {
         model.addAttribute("listazona", servicioAPI.listarZona());
+        // la capacidad se declara en la sede, pero sigue siendo util ver cuanto
+        // ocupa cada zona dentro de ella
+        model.addAttribute("ocupado", servicioOcupacion.unidadesPorZona());
         return "/Zona/listarzona";
     }
 

@@ -8,5 +8,4 @@ public class ZonaResponseDto {
     private Integer idZona;
     private String nombreZona;
     private String descripcion;
-    private String capacidadZona;
 }
