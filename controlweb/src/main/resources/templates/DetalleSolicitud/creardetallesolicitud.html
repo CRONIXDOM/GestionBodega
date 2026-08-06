@@ -22,19 +22,20 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/detallesolicitud/guardar}" th:object="${detalleSolicitud}" method="post">
 					<input type="hidden" th:field="*{idDetalleSolicitud}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Id del Producto</label> <select class="form-select"
-								th:field="*{idProducto}">
+							<label class="form-label">Id del Producto <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idProducto}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Cantidad del Producto</label> <input class="form-control"
-								type="number" th:field="*{cantidadProducto}">
+							<label class="form-label">Cantidad del Producto <span class="text-danger">*</span></label> <input class="form-control"
+								type="number" th:field="*{cantidadProducto}" required>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Lugar de Recogida</label> <input class="form-control"
@@ -49,8 +50,8 @@
 							<div class="form-text">Si no eliges uno, se usa automáticamente el lote más antiguo (FIFO).</div>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Solicitud</label> <select class="form-select"
-								th:field="*{idSolicitud}">
+							<label class="form-label">Solicitud <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idSolicitud}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesSolicitud}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>

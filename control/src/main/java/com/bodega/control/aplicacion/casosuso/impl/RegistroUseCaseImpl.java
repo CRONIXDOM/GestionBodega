@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IRegistroUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.DetalleEntrega;
 import com.bodega.control.dominio.entidades.Lote;
 import com.bodega.control.dominio.entidades.Registro;
@@ -37,6 +38,11 @@ public class RegistroUseCaseImpl implements IRegistroUseCase {
 		if (normalizarId(nuevoRegistro.getUsuarioRol(), UsuarioRol::getIdUsuarioRol) == null) {
 			nuevoRegistro.setUsuarioRol(null);
 		}
+
+		Validaciones.obligatorioValor(nuevoRegistro.getFechaRegistro(), "fecha del registro");
+		Validaciones.obligatorioValor(nuevoRegistro.getLote(), "lote");
+		Validaciones.obligatorioValor(nuevoRegistro.getTipo(), "tipo de movimiento");
+
 		return repositorio.guardar(nuevoRegistro);
 	}
 

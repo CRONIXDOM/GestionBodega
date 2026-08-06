@@ -26,8 +26,9 @@ public class ZonaServiceImpl implements IZonaService {
     }
 
     @Override
-    public void guardarZona(ZonaRequestDto nuevo) {
-        webCliente.post().uri("/zona").bodyValue(nuevo).retrieve().toBodilessEntity().block();
+    public ZonaResponseDto guardarZona(ZonaRequestDto nuevo) {
+        return webCliente.post().uri("/zona").bodyValue(nuevo).retrieve()
+                .bodyToMono(ZonaResponseDto.class).block();
     }
 
     @Override

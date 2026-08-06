@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bodega.controlweb.model.dto.request.DetalleEntregaRequestDto;
 import com.bodega.controlweb.service.IDetalleEntregaService;
@@ -79,8 +80,14 @@ public class DetalleEntregaController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarDetalleEntrega(@PathVariable Integer id) {
-        servicioAPI.eliminarDetalleEntrega(id);
+    public String eliminarDetalleEntrega(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.eliminarDetalleEntrega(id);
+        } catch (Exception ex) {
+            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
+            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
         return "redirect:/detalleentrega";
     }
 }

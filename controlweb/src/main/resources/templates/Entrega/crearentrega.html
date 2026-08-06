@@ -26,12 +26,12 @@
 					<input type="hidden" th:field="*{idEntrega}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Fecha de Entrega</label> <input class="form-control"
-								type="date" th:field="*{fechaEntrega}">
+							<label class="form-label">Fecha de Entrega <span class="text-danger">*</span></label> <input class="form-control"
+								type="date" th:field="*{fechaEntrega}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Responsable de Entrega</label> <input class="form-control"
-								th:field="*{responsableEntrega}">
+							<label class="form-label">Responsable de Entrega <span class="text-danger">*</span></label> <input class="form-control"
+								th:field="*{responsableEntrega}" required>
 						</div>
 						<div class="col-12" th:if="${entrega.idEntrega == null}">
 							<label class="form-label">Solicitud a entregar/recoger (opcional)</label>

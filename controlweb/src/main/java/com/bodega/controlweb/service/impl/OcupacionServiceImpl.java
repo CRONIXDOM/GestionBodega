@@ -92,6 +92,33 @@ public class OcupacionServiceImpl implements IOcupacionService {
         return agruparUbicacionesPor(UbicacionResponseDto::getIdSede);
     }
 
+    /**
+     * Lo reservado sigue ocupando sitio físicamente (aún no ha salido de bodega),
+     * pero ya está comprometido, así que se muestra aparte para saber cuánto
+     * espacio quedará realmente libre cuando se despache.
+     */
+    @Override
+    public Map<Integer, Integer> reservadasPorSede() {
+        Map<Integer, Integer> reservadaPorUbicacion = new HashMap<>();
+        for (LoteResponseDto lote : servicioLote.listarLote()) {
+            if (lote.getIdUbicacion() == null) {
+                continue;
+            }
+            int reservada = lote.getCantidadReservada() == null ? 0 : lote.getCantidadReservada();
+            reservadaPorUbicacion.merge(lote.getIdUbicacion(), reservada, Integer::sum);
+        }
+
+        Map<Integer, Integer> resultado = new HashMap<>();
+        for (UbicacionResponseDto ubicacion : servicioUbicacion.listarUbicacion()) {
+            if (ubicacion.getIdSede() == null) {
+                continue;
+            }
+            resultado.merge(ubicacion.getIdSede(),
+                    reservadaPorUbicacion.getOrDefault(ubicacion.getIdUbicacion(), 0), Integer::sum);
+        }
+        return resultado;
+    }
+
     private Map<Integer, Integer> agruparUbicacionesPor(
             java.util.function.Function<UbicacionResponseDto, Integer> clave) {
         Map<Integer, Integer> porUbicacion = unidadesPorUbicacion();

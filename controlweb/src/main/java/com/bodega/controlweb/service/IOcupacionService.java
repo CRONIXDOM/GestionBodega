@@ -16,6 +16,9 @@ public interface IOcupacionService {
     /** Unidades totales almacenadas en cada zona. */
     Map<Integer, Integer> unidadesPorZona();
 
-    /** Unidades totales almacenadas en cada sede. */
+    /** Unidades totales almacenadas en cada sede (existencia fisica). */
     Map<Integer, Integer> unidadesPorSede();
+
+    /** Unidades ya reservadas (apartadas para salir) en cada sede. */
+    Map<Integer, Integer> reservadasPorSede();
 }

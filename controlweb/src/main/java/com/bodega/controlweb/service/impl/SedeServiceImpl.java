@@ -26,8 +26,9 @@ public class SedeServiceImpl implements ISedeService {
     }
 
     @Override
-    public void guardarSede(SedeRequestDto nuevo) {
-        webCliente.post().uri("/sede").bodyValue(nuevo).retrieve().toBodilessEntity().block();
+    public SedeResponseDto guardarSede(SedeRequestDto nuevo) {
+        return webCliente.post().uri("/sede").bodyValue(nuevo).retrieve()
+                .bodyToMono(SedeResponseDto.class).block();
     }
 
     @Override

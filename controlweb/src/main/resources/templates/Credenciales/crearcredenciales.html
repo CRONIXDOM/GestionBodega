@@ -21,20 +21,21 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/credenciales/guardar}" th:object="${credenciales}" method="post">
 					<input type="hidden" th:field="*{idCredenciales}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Usuario</label> <input class="form-control"
-								th:field="*{usuario}">
+							<label class="form-label">Usuario <span class="text-danger">*</span></label> <input class="form-control"
+								th:field="*{usuario}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Contraseña</label> <input class="form-control"
-								type="password" th:field="*{contrasena}">
+							<label class="form-label">Contraseña <span class="text-danger">*</span></label> <input class="form-control"
+								type="password" th:field="*{contrasena}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Correo</label> <input class="form-control"
-								type="email" th:field="*{correo}">
+							<label class="form-label">Correo <span class="text-danger">*</span></label> <input class="form-control"
+								type="email" th:field="*{correo}" required>
 						</div>
 						<div class="col-12">
 							<div class="form-check form-switch">

@@ -38,6 +38,23 @@ public final class MensajesError {
 		return "Ocurrió un error al guardar. Verifica los datos e intenta de nuevo.";
 	}
 
+	/**
+	 * Al borrar, el fallo mas habitual es que otro registro sigue usando este
+	 * (clave foranea). El backend devuelve un error tecnico de base de datos, asi
+	 * que se traduce a una explicacion que el usuario pueda entender y resolver.
+	 */
+	public static String alEliminar(Exception ex) {
+		String tecnico = extraer(ex);
+		String enMinusculas = tecnico == null ? "" : tecnico.toLowerCase();
+		if (enMinusculas.contains("constraint") || enMinusculas.contains("foreign key")
+				|| enMinusculas.contains("viola") || enMinusculas.contains("referenc")
+				|| enMinusculas.contains("integrity")) {
+			return "No se puede eliminar: este registro está siendo usado por otros datos del sistema. "
+					+ "Elimina primero lo que depende de él.";
+		}
+		return "No se pudo eliminar. " + tecnico;
+	}
+
 	private static String limpiar(String mensaje) {
 		if (mensaje.length() > 220) {
 			return mensaje.substring(0, 220) + "...";

@@ -42,7 +42,8 @@ public class TipoUseCaseImpl implements ITipoUseCase {
 
 	@Override
 	public Tipo buscarPorid(int Tipo) {
-		return null;
+		return repositorio.buscarPorid(Tipo)
+				.orElseThrow(() -> new RuntimeException("Tipo no encontrado"));
 	}
 
 }

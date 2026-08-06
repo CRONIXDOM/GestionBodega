@@ -20,6 +20,11 @@ public class RolUseCaseImpl implements IRolUseCase {
 		nuevoRol.setNombreRol(Validaciones.normalizar(nuevoRol.getNombreRol()));
 		nuevoRol.setDescripcionRol(Validaciones.normalizar(nuevoRol.getDescripcionRol()));
 
+		Validaciones.obligatorio(nuevoRol.getNombreRol(), "nombre del rol");
+		Validaciones.obligatorio(nuevoRol.getDescripcionRol(), "descripción del rol");
+		Validaciones.noRepetido(repositorio.listarTodos(), Rol::getIdRol, Rol::getNombreRol,
+				nuevoRol.getIdRol(), nuevoRol.getNombreRol(), "un rol con el nombre");
+
         return repositorio.guardar(nuevoRol);
     }
 
@@ -41,7 +46,8 @@ public class RolUseCaseImpl implements IRolUseCase {
 
 	@Override
 	public Rol buscarPorid(int Rol) {
-		return null;
+		return repositorio.buscarPorid(Rol)
+				.orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 	}
 
 }

@@ -21,6 +21,7 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel needs-validation" th:action="@{/rol/guardar}" th:object="${rol}" method="post"
 					novalidate>
 					<input type="hidden" th:field="*{idRol}">
@@ -31,8 +32,8 @@
 							<div class="invalid-feedback">El nombre del rol es obligatorio.</div>
 						</div>
 						<div class="col-12">
-							<label class="form-label">Descripción del Rol</label>
-							<textarea class="form-control" th:field="*{descripcionRol}" rows="3"></textarea>
+							<label class="form-label">Descripción del Rol <span class="text-danger">*</span></label>
+							<textarea class="form-control" th:field="*{descripcionRol}" rows="3" required></textarea>
 						</div>
 					</div>
 

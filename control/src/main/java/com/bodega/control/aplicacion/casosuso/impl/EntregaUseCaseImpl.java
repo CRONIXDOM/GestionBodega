@@ -18,6 +18,8 @@ public class EntregaUseCaseImpl implements IEntregaUseCase {
 	@Override
 	public Entrega guardar(Entrega nuevaEntrega) {
 		nuevaEntrega.setResponsableEntrega(Validaciones.normalizar(nuevaEntrega.getResponsableEntrega()));
+		Validaciones.obligatorio(nuevaEntrega.getResponsableEntrega(), "responsable de la entrega");
+		Validaciones.obligatorioValor(nuevaEntrega.getFechaEntrega(), "fecha de la entrega");
 
 		return repositorio.guardar(nuevaEntrega);
 	}
@@ -34,12 +36,14 @@ public class EntregaUseCaseImpl implements IEntregaUseCase {
 
 	@Override
 	public Entrega buscarPorid(int Entrega) {
-		return null;
+		return repositorio.buscarPorid(Entrega)
+				.orElseThrow(() -> new RuntimeException("Entrega no encontrada"));
 	}
 
 	@Override
 	public Entrega buscarPorId(int idEntrega) {
-		return null;
+		return repositorio.buscarPorid(idEntrega)
+				.orElseThrow(() -> new RuntimeException("Entrega no encontrada"));
 	}
 
 }

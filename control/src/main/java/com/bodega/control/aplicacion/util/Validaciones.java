@@ -42,6 +42,23 @@ public final class Validaciones {
         }
     }
 
+    public static void obligatorioValor(Object valor, String campo) {
+        if (valor == null) {
+            throw new RuntimeException("El campo " + campo + " es obligatorio");
+        }
+    }
+
+    /**
+     * Para los campos que apuntan a otra tabla. El mapeador crea siempre el objeto
+     * anidado aunque el formulario no haya elegido nada, así que no basta con mirar
+     * si es null: hay que comprobar que traiga id.
+     */
+    public static <T> void obligatorioRelacion(T objeto, Function<T, Integer> obtenerId, String campo) {
+        if (objeto == null || obtenerId.apply(objeto) == null) {
+            throw new RuntimeException("El campo " + campo + " es obligatorio");
+        }
+    }
+
     /**
      * Rechaza el valor si ya lo usa OTRO registro. Al editar hay que excluir el
      * propio registro de la comparación, o guardarlo sin cambiar nada chocaría

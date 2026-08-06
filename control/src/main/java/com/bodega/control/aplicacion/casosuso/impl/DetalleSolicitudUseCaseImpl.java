@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IDetalleSolicitudUseCase;
+import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.DetalleSolicitud;
 import com.bodega.control.dominio.entidades.DetalleSolicitudLote;
 import com.bodega.control.dominio.entidades.Lote;
@@ -29,6 +30,18 @@ public class DetalleSolicitudUseCaseImpl implements IDetalleSolicitudUseCase {
     @Override
     @Transactional
     public DetalleSolicitud guardar(DetalleSolicitud nuevoDetalleSolicitud, Integer idLoteManual) {
+        // el mapeador siempre crea el objeto anidado aunque no llegue el id, asi que
+        // hay que mirar el id y no solo si el objeto es null.
+        if (nuevoDetalleSolicitud.getProducto() == null || nuevoDetalleSolicitud.getProducto().getIdProducto() == null) {
+            throw new RuntimeException("Indica el producto que se va a reservar");
+        }
+        if (nuevoDetalleSolicitud.getSolicitud() == null
+                || nuevoDetalleSolicitud.getSolicitud().getIdSolicitud() == null) {
+            throw new RuntimeException("Indica la solicitud a la que pertenece la reserva");
+        }
+        Validaciones.obligatorioPositivo(nuevoDetalleSolicitud.getCantidadProducto(), "cantidad a reservar");
+        nuevoDetalleSolicitud.setLugarRecogida(Validaciones.normalizar(nuevoDetalleSolicitud.getLugarRecogida()));
+
         int idProducto = nuevoDetalleSolicitud.getProducto().getIdProducto();
         int cantidadPedida = nuevoDetalleSolicitud.getCantidadProducto();
 

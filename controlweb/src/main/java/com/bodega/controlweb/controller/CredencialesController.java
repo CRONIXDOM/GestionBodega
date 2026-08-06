@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bodega.controlweb.model.dto.request.CredencialesRequestDto;
 import com.bodega.controlweb.service.ICredencialesService;
+import com.bodega.controlweb.util.MensajesError;
 
 @Controller
 @RequestMapping("/credenciales")
@@ -32,9 +34,17 @@ public class CredencialesController {
     }
 
     @PostMapping("/guardar")
-    public String guardarCredenciales(@ModelAttribute CredencialesRequestDto credenciales) {
-        servicioAPI.guardarCredenciales(credenciales);
-        return "redirect:/credenciales";
+    public String guardarCredenciales(@ModelAttribute CredencialesRequestDto credenciales, Model model) {
+        try {
+            servicioAPI.guardarCredenciales(credenciales);
+            return "redirect:/credenciales";
+        } catch (Exception ex) {
+            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
+            // en vez de mostrar la pagina de error de Spring.
+            model.addAttribute("credenciales", credenciales);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            return "/Credenciales/crearcredenciales";
+        }
     }
 
     @GetMapping("/editar/{id}")
@@ -44,8 +54,14 @@ public class CredencialesController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarCredenciales(@PathVariable Integer id) {
-        servicioAPI.eliminarCredenciales(id);
+    public String eliminarCredenciales(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.eliminarCredenciales(id);
+        } catch (Exception ex) {
+            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
+            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
         return "redirect:/credenciales";
     }
 }

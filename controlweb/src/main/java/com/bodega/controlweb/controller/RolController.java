@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bodega.controlweb.model.dto.request.RolRequestDto;
 import com.bodega.controlweb.service.IRolService;
+import com.bodega.controlweb.util.MensajesError;
 import com.bodega.controlweb.util.CatalogoModulos;
 
 @Controller
@@ -40,10 +42,20 @@ public class RolController {
 
     @PostMapping("/guardar")
     public String guardarRol(@ModelAttribute RolRequestDto rol,
-            @RequestParam(name = "modulos", required = false) List<String> modulosSeleccionados) {
+            @RequestParam(name = "modulos", required = false) List<String> modulosSeleccionados, Model model) {
         rol.setModulos(modulosSeleccionados == null ? "" : String.join(",", modulosSeleccionados));
-        servicioAPI.guardarRol(rol);
-        return "redirect:/rol";
+        try {
+            servicioAPI.guardarRol(rol);
+            return "redirect:/rol";
+        } catch (Exception ex) {
+            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
+            // en vez de mostrar la pagina de error de Spring.
+            model.addAttribute("rol", rol);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            agregarCatalogoModulos(model,
+                    modulosSeleccionados == null ? Set.of() : Set.copyOf(modulosSeleccionados));
+            return "/Rol/crearrol";
+        }
     }
 
     @GetMapping("/editar/{id}")
@@ -60,8 +72,14 @@ public class RolController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarRol(@PathVariable Integer id) {
-        servicioAPI.eliminarRol(id);
+    public String eliminarRol(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.eliminarRol(id);
+        } catch (Exception ex) {
+            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
+            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
         return "redirect:/rol";
     }
 

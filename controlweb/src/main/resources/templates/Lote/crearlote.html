@@ -21,35 +21,36 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/lote/guardar}" th:object="${lote}" method="post">
 					<input type="hidden" th:field="*{idLote}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Número de Lote</label> <input class="form-control"
-								th:field="*{numeroLote}">
+							<label class="form-label">Número de Lote <span class="text-danger">*</span></label> <input class="form-control"
+								th:field="*{numeroLote}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Cantidad del Lote</label> <input class="form-control"
-								type="number" th:field="*{cantidadLote}">
+							<label class="form-label">Cantidad del Lote <span class="text-danger">*</span></label> <input class="form-control"
+								type="number" th:field="*{cantidadLote}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Fecha de Ingreso</label> <input class="form-control" type="date"
-								th:field="*{fechaIngreso}">
+							<label class="form-label">Fecha de Ingreso <span class="text-danger">*</span></label> <input class="form-control" type="date"
+								th:field="*{fechaIngreso}" required>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Fecha de Vencimiento</label> <input class="form-control"
 								type="date" th:field="*{fechaVencimiento}">
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Producto</label> <select class="form-select"
-								th:field="*{idProducto}">
+							<label class="form-label">Producto <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idProducto}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Ubicación</label> <select class="form-select"
-								th:field="*{idUbicacion}">
+							<label class="form-label">Ubicación <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idUbicacion}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesUbicacion}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>

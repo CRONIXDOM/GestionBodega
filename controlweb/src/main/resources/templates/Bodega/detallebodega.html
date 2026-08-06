@@ -1,0 +1,104 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Bodegas · Detalle</p>
+					<h1 class="h3 mb-1" th:text="${sede.nombreSede}">Sede</h1>
+					<p class="text-muted mb-0">
+						<span th:text="${sede.direccion}"></span>
+						<span th:if="${sede.descripcion}"> · <span th:text="${sede.descripcion}"></span></span>
+					</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-light btn-sm" th:href="@{/bodega}"><i class="bi bi-arrow-left"
+					aria-hidden="true"></i> Volver</a>
+			</div>
+		</div>
+
+		<!-- resumen de ocupación -->
+		<section class="row g-3 mt-1"
+			th:with="cap=${sede.capacidad},libreAhora=${(cap != null and cap > 0) ? cap - ocupado : 0}">
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">En bodega</div>
+					<div class="h3 mb-0" th:text="${ocupado}">0</div>
+					<div class="text-muted small">unidades físicas</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Reservado</div>
+					<div class="h3 mb-0 text-warning" th:text="${reservado}">0</div>
+					<div class="text-muted small">apartado para salir</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Capacidad</div>
+					<div class="h3 mb-0" th:text="${cap} ?: '—'">0</div>
+					<div class="text-muted small">total declarado</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Libre al despachar</div>
+					<div class="h3 mb-0 text-success"
+						th:text="${(cap != null and cap > 0)} ? ${libreAhora + reservado} : '—'">0</div>
+					<div class="text-muted small">incluye lo reservado</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- qué hay en cada ubicación -->
+		<section class="panel mt-3">
+			<div class="p-3 border-bottom">
+				<h2 class="h6 mb-0"><i class="bi bi-box-seam" aria-hidden="true"></i> Contenido por ubicación</h2>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">Ubicación</th>
+							<th scope="col">Zona</th>
+							<th scope="col" style="min-width: 300px;">Productos</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="u : ${ubicaciones}">
+							<td class="fw-semibold font-monospace" th:text="${u.codigoUbicacion}"></td>
+							<td th:text="${nombresZona.get(u.idZona)} ?: '—'"></td>
+							<td th:with="lineas=${contenido.get(u.idUbicacion)}">
+								<span th:if="${lineas == null or lineas.isEmpty()}" class="text-muted small">Vacía</span>
+								<div th:unless="${lineas == null or lineas.isEmpty()}" class="d-flex flex-column gap-1">
+									<div th:each="l : ${lineas}" class="d-flex align-items-center gap-2">
+										<span class="badge bg-secondary-subtle text-body font-monospace"
+											th:text="${l.codigoProducto} ?: '—'"></span>
+										<span th:text="${l.nombreProducto}"></span>
+										<span class="badge bg-primary-subtle text-primary" th:text="${l.cantidad} + ' u.'"></span>
+									</div>
+								</div>
+							</td>
+							<td><span class="fw-semibold" th:text="${unidades.getOrDefault(u.idUbicacion, 0)}">0</span>
+								<span class="text-muted small">u.</span></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(ubicaciones)}">
+							<td colspan="4" class="text-center text-muted py-4">Esta bodega todavía no tiene ubicaciones.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

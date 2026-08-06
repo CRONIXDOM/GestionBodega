@@ -18,11 +18,31 @@ public class CredencialesUseCaseImpl implements ICredencialesUseCase {
 
 	@Override
 	public Credenciales guardar(Credenciales nuevaCredenciales) {
-		// el usuario y el correo se guardan en mayusculas; la contrasena NO se toca,
-		// porque cambiarla romperia el inicio de sesion y la debilitaria.
-		nuevaCredenciales.setUsuario(Validaciones.normalizar(nuevaCredenciales.getUsuario()));
-		nuevaCredenciales.setCorreo(Validaciones.normalizar(nuevaCredenciales.getCorreo()));
+		// las credenciales se guardan EXACTAMENTE como las escribe el usuario:
+		// tocar el usuario o la contrasena romperia el inicio de sesion.
+		if (nuevaCredenciales.getUsuario() != null) {
+			nuevaCredenciales.setUsuario(nuevaCredenciales.getUsuario().trim());
+		}
+		if (nuevaCredenciales.getCorreo() != null) {
+			nuevaCredenciales.setCorreo(nuevaCredenciales.getCorreo().trim());
+		}
 
+		Validaciones.obligatorio(nuevaCredenciales.getUsuario(), "usuario");
+		Validaciones.obligatorio(nuevaCredenciales.getContrasena(), "contraseña");
+		Validaciones.obligatorio(nuevaCredenciales.getCorreo(), "correo");
+		if (!nuevaCredenciales.getCorreo().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+			throw new RuntimeException("El correo no tiene un formato válido");
+		}
+
+		// dos credenciales con el mismo usuario harian que el login no supiera
+		// cual de las dos contrasenas es la buena.
+		List<Credenciales> existentes = repositorio.listarTodos();
+		Validaciones.noRepetido(existentes, Credenciales::getIdCredenciales, Credenciales::getUsuario,
+				nuevaCredenciales.getIdCredenciales(), nuevaCredenciales.getUsuario(),
+				"una credencial para el usuario");
+		Validaciones.noRepetido(existentes, Credenciales::getIdCredenciales, Credenciales::getCorreo,
+				nuevaCredenciales.getIdCredenciales(), nuevaCredenciales.getCorreo(),
+				"una credencial con el correo");
 
 		return repositorio.guardar(nuevaCredenciales);
 	}

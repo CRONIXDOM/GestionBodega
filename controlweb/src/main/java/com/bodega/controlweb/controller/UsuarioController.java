@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bodega.controlweb.model.dto.request.CredencialesRequestDto;
 import com.bodega.controlweb.model.dto.request.UsuarioRequestDto;
@@ -66,6 +67,13 @@ public class UsuarioController {
 
     private String intentarGuardar(UsuarioRequestDto usuario) {
         boolean esNuevo = usuario.getIdUsuario() == null;
+        boolean creaAcceso = esNuevo && usuario.getContrasena() != null && !usuario.getContrasena().isBlank();
+        // se comprueba ANTES de guardar el usuario: si faltara el correo, la
+        // credencial fallaria despues y quedaria un usuario suelto sin acceso.
+        if (creaAcceso && (usuario.getCorreo() == null || usuario.getCorreo().isBlank())) {
+            throw new RuntimeException("Para crear el acceso hace falta también el correo del usuario");
+        }
+
         UsuarioResponseDto guardado = servicioAPI.guardarUsuario(usuario);
 
         if (esNuevo) {
@@ -108,8 +116,14 @@ public class UsuarioController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable Integer id) {
-        servicioAPI.eliminarUsuario(id);
+    public String eliminarUsuario(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.eliminarUsuario(id);
+        } catch (Exception ex) {
+            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
+            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
         return "redirect:/usuario";
     }
 

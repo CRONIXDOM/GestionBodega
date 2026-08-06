@@ -21,6 +21,7 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/usuariorol/guardar}" th:object="${usuarioRol}" method="post">
 					<input type="hidden" th:field="*{idUsuarioRol}">
 					<div class="row g-3">
@@ -29,15 +30,15 @@
 								type="date" th:field="*{fechaAsignacion}">
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Id de Usuario</label> <select class="form-select"
-								th:field="*{idUsuario}">
+							<label class="form-label">Id de Usuario <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idUsuario}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesUsuario}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Id de Rol</label> <select class="form-select"
-								th:field="*{idRol}">
+							<label class="form-label">Id de Rol <span class="text-danger">*</span></label> <select class="form-select"
+								th:field="*{idRol}" required>
 								<option value="">Seleccione...</option>
 								<option th:each="op : ${opcionesRol}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
 							</select>

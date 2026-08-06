@@ -78,12 +78,21 @@ public class DetalleEntregaUseCaseImpl implements IDetalleEntregaUseCase {
         if (asignaciones.isEmpty()) {
             throw new RuntimeException("El Detalle Solicitud indicado no tiene stock reservado");
         }
-        // se comprueba primero que TODOS los lotes tengan la cantidad, antes de
+        // se comprueba primero que TODOS los lotes esten en condiciones, antes de
         // tocar ninguno: asi no queda un descuento a medias si uno de ellos falla.
         for (DetalleSolicitudLote asignacion : asignaciones) {
             Lote lote = loteRepositorio.buscarPorid(asignacion.getLote().getIdLote())
                     .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
             int enBodega = lote.getCantidadLote() == null ? 0 : lote.getCantidadLote();
+            int apartado = lote.getCantidadReservada() == null ? 0 : lote.getCantidadReservada();
+
+            // despachar libera la reserva, asi que si ya no queda apartado es porque
+            // este pedido se entrego antes. Sin esta comprobacion se podia despachar
+            // dos veces el mismo pedido y el stock quedaba en negativo.
+            if (apartado < asignacion.getCantidad()) {
+                throw new RuntimeException("Este pedido ya fue entregado: el lote " + lote.getNumeroLote()
+                        + " ya no tiene esas " + asignacion.getCantidad() + " unidades reservadas");
+            }
             if (enBodega < asignacion.getCantidad()) {
                 throw new RuntimeException("No se puede despachar: el lote " + lote.getNumeroLote() + " tiene "
                         + enBodega + " unidades y el pedido requiere " + asignacion.getCantidad());

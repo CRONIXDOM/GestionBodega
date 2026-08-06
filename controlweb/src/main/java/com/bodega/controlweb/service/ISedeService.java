@@ -10,7 +10,7 @@ public interface ISedeService {
 
     List<SedeResponseDto> listarSede();
 
-    void guardarSede(SedeRequestDto nuevo);
+    SedeResponseDto guardarSede(SedeRequestDto nuevo);
 
     SedeResponseDto buscarSedeId(Integer id);
 

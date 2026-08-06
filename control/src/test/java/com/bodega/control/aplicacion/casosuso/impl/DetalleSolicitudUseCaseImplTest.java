@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.bodega.control.dominio.entidades.DetalleSolicitud;
 import com.bodega.control.dominio.entidades.Lote;
 import com.bodega.control.dominio.entidades.Producto;
+import com.bodega.control.dominio.entidades.Solicitud;
 import com.bodega.control.dominio.repositorio.IDetalleSolicitudLoteRepositorio;
 import com.bodega.control.dominio.repositorio.IDetalleSolicitudRepositorio;
 import com.bodega.control.dominio.repositorio.ILoteRepositorio;
@@ -56,10 +57,31 @@ class DetalleSolicitudUseCaseImplTest {
     private DetalleSolicitud pedido(int idProducto, int cantidad) {
         Producto producto = new Producto();
         producto.setIdProducto(idProducto);
+        Solicitud solicitud = new Solicitud();
+        solicitud.setIdSolicitud(1);
         DetalleSolicitud detalle = new DetalleSolicitud();
         detalle.setProducto(producto);
+        detalle.setSolicitud(solicitud);
         detalle.setCantidadProducto(cantidad);
         return detalle;
+    }
+
+    @Test
+    void rechazaLaReservaSinProductoNiSolicitud() {
+        assertThatThrownBy(() -> useCase.guardar(new DetalleSolicitud(), null))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("producto");
+
+        verify(repositorio, never()).guardar(any());
+    }
+
+    @Test
+    void rechazaLaReservaConCantidadCero() {
+        assertThatThrownBy(() -> useCase.guardar(pedido(10, 0), null))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("mayor que cero");
+
+        verify(repositorio, never()).guardar(any());
     }
 
     @Test

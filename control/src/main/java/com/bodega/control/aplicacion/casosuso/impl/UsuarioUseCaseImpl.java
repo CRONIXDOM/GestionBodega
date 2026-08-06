@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.bodega.control.aplicacion.casosuso.entrada.IUsuarioUseCase;
-import com.bodega.control.aplicacion.util.Validaciones;
 import com.bodega.control.dominio.entidades.Usuario;
 import com.bodega.control.dominio.repositorio.IUsuarioRepositorio;
 
@@ -23,9 +22,12 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 		if (nuevoUsuario.getNombreUsuario() == null || nuevoUsuario.getNombreUsuario().isBlank()) {
 			throw new RuntimeException("El nombre del usuario es obligatorio");
 		}
-		nuevoUsuario.setNombreUsuario(Validaciones.normalizar(nuevoUsuario.getNombreUsuario()));
-		nuevoUsuario.setApellidoUsuario(Validaciones.normalizar(nuevoUsuario.getApellidoUsuario()));
-		nuevoUsuario.setEstado(Validaciones.normalizar(nuevoUsuario.getEstado()));
+		// el nombre del usuario se conserva tal cual se escribe, porque es el que
+		// se usa para iniciar sesion junto a la contrasena.
+		nuevoUsuario.setNombreUsuario(nuevoUsuario.getNombreUsuario().trim());
+		if (nuevoUsuario.getApellidoUsuario() != null) {
+			nuevoUsuario.setApellidoUsuario(nuevoUsuario.getApellidoUsuario().trim());
+		}
 
 		validarSinNumeros(nuevoUsuario.getNombreUsuario(), "nombre");
 		if (nuevoUsuario.getApellidoUsuario() != null && !nuevoUsuario.getApellidoUsuario().isBlank()) {
@@ -69,12 +71,13 @@ public class UsuarioUseCaseImpl implements IUsuarioUseCase {
 
 	@Override
 	public Usuario buscarPorid(int Usuario) {
-		return null;
+		return repositorio.buscarPorid(Usuario)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 	}
 
 	@Override
 	public List<Usuario> listarTodo() {
-		return null;
+		return listarTodos();
 	}
 
 }

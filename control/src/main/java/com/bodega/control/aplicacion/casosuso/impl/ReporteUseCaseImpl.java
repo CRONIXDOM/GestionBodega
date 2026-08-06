@@ -37,7 +37,8 @@ public class ReporteUseCaseImpl implements IReporteUseCase {
 
 	@Override
 	public Reporte buscarPorid(int Reporte) {
-		return null;
+		return repositorio.buscarPorid(Reporte)
+				.orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
 	}
 
 }

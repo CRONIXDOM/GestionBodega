@@ -44,12 +44,13 @@ public class ZonaUseCaseImpl implements IZonaUseCase {
 
 	@Override
 	public Zona buscarPorid(int Zona) {
-		return null;
+		return repositorio.buscarPorid(Zona)
+				.orElseThrow(() -> new RuntimeException("Zona no encontrada"));
 	}
 
 	@Override
 	public List<Zona> listarTodo() {
-		return null;
+		return listarTodos();
 	}
 
 }

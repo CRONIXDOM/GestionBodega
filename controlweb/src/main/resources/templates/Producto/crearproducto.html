@@ -21,16 +21,17 @@
 
 		<section class="row g-3 mt-1">
 			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 				<form class="panel" th:action="@{/producto/guardar}" th:object="${producto}" method="post">
 					<input type="hidden" th:field="*{idProducto}">
 					<div class="row g-3">
 						<div class="col-md-6">
-							<label class="form-label">Nombre del Producto</label> <input class="form-control"
-								th:field="*{nombreProducto}">
+							<label class="form-label">Nombre del Producto <span class="text-danger">*</span></label> <input class="form-control"
+								th:field="*{nombreProducto}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Código del Producto</label> <input class="form-control"
-								th:field="*{codigoProducto}">
+							<label class="form-label">Código del Producto <span class="text-danger">*</span></label> <input class="form-control"
+								th:field="*{codigoProducto}" required>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Unidades por caja <span class="text-danger">*</span></label>

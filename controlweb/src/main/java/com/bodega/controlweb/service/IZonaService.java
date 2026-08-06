@@ -10,7 +10,7 @@ public interface IZonaService {
 
     List<ZonaResponseDto> listarZona();
 
-    void guardarZona(ZonaRequestDto nuevo);
+    ZonaResponseDto guardarZona(ZonaRequestDto nuevo);
 
     ZonaResponseDto buscarZonaId(Integer id);
 

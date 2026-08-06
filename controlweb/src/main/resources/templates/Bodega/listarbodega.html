@@ -1,0 +1,149 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-buildings" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Bodegas</p>
+					<h1 class="h3 mb-1">Bodegas</h1>
+					<p class="text-muted mb-0">Sedes con sus zonas, ubicaciones y lo que hay guardado en cada una.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/bodega/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nueva ubicación</a>
+			</div>
+		</div>
+
+		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-check2-circle" aria-hidden="true"></i> <span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+		<div th:if="${hayExcedidas}" class="alert alert-danger mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+			Hay bodegas con más mercadería almacenada de la que declaran caber.
+		</div>
+
+		<p th:if="${#lists.isEmpty(sedes)}" class="text-muted mt-4">Todavía no hay bodegas registradas.</p>
+
+		<!-- una tarjeta por sede -->
+		<section class="panel mt-3" th:each="sede : ${sedes}">
+			<div class="p-3 border-bottom d-flex flex-wrap justify-content-between align-items-start gap-3">
+				<div>
+					<h2 class="h5 mb-1">
+						<i class="bi bi-building" aria-hidden="true"></i> <span th:text="${sede.nombreSede}">Sede</span>
+					</h2>
+					<div class="text-muted small">
+						<span th:text="${sede.direccion}"></span>
+						<span th:if="${sede.descripcion}"> · <span th:text="${sede.descripcion}"></span></span>
+					</div>
+				</div>
+				<div class="text-end" style="min-width: 250px;"
+					th:with="ocu=${ocupado.getOrDefault(sede.idSede, 0)},res=${reservado.getOrDefault(sede.idSede, 0)},cap=${sede.capacidad}">
+					<div th:if="${cap == null or cap <= 0}" class="text-muted small">
+						<span th:text="${ocu}">0</span> unidades · sin capacidad definida
+					</div>
+					<div th:unless="${cap == null or cap <= 0}"
+						th:with="pct=${ocu * 100 / cap},excedida=${ocu > cap}">
+						<div class="d-flex justify-content-between small mb-1">
+							<span>En bodega: <b th:text="${ocu}">0</b> / <span th:text="${cap}">0</span></span>
+							<span th:classappend="${excedida} ? 'text-danger fw-semibold' : 'text-muted'"
+								th:text="${pct} + '%'">0%</span>
+						</div>
+						<div class="progress" style="height: 6px;">
+							<div class="progress-bar"
+								th:classappend="${excedida} ? 'bg-danger' : (${pct >= 80} ? 'bg-warning' : 'bg-success')"
+								th:style="'width:' + ${pct > 100 ? 100 : pct} + '%'"></div>
+						</div>
+						<div class="small mt-1">
+							<span class="badge bg-warning-subtle text-warning" th:text="'Reservado: ' + ${res}">0</span>
+							<span class="badge bg-success-subtle text-success"
+								th:text="'Libre al despachar: ' + ${cap - ocu + res}">0</span>
+						</div>
+					</div>
+					<a class="btn btn-light btn-sm mt-2" th:href="@{/bodega/detalle/{id}(id=${sede.idSede})}">
+						<i class="bi bi-eye" aria-hidden="true"></i> Ver detalle
+					</a>
+				</div>
+			</div>
+
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">Ubicación</th>
+							<th scope="col">Zona</th>
+							<th scope="col" style="min-width: 260px;">Contenido</th>
+							<th scope="col">Total</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="u : ${ubicacionesPorSede.getOrDefault(sede.idSede, {})}">
+							<td class="fw-semibold font-monospace" th:text="${u.codigoUbicacion}"></td>
+							<td th:text="${nombresZona.get(u.idZona)} ?: '—'"></td>
+							<td th:with="lineas=${contenido.get(u.idUbicacion)}">
+								<span th:if="${lineas == null or lineas.isEmpty()}" class="text-muted small">Vacía</span>
+								<div th:unless="${lineas == null or lineas.isEmpty()}" class="d-flex flex-column gap-1">
+									<div th:each="l : ${lineas}" class="d-flex align-items-center gap-2">
+										<span class="badge bg-secondary-subtle text-body font-monospace"
+											th:text="${l.codigoProducto} ?: '—'"></span>
+										<span th:text="${l.nombreProducto}"></span>
+										<span class="badge bg-primary-subtle text-primary" th:text="${l.cantidad} + ' u.'"></span>
+									</div>
+								</div>
+							</td>
+							<td><span class="fw-semibold" th:text="${unidades.getOrDefault(u.idUbicacion, 0)}">0</span>
+								<span class="text-muted small">u.</span></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/bodega/editar/{id}(id=${u.idUbicacion})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/bodega/eliminar/{id}(id=${u.idUbicacion})}"
+									onclick="return confirm('¿Seguro que deseas eliminar esta ubicación?')"><i
+									class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(ubicacionesPorSede.getOrDefault(sede.idSede, {}))}">
+							<td colspan="5" class="text-center text-muted py-3">Esta bodega todavía no tiene ubicaciones.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<!-- ubicaciones que quedaron sin sede asignada -->
+		<section class="panel mt-3" th:if="${!#lists.isEmpty(sinSede)}">
+			<div class="p-3 border-bottom">
+				<h2 class="h6 mb-0 text-warning">
+					<i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Ubicaciones sin bodega asignada
+				</h2>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<tbody>
+						<tr th:each="u : ${sinSede}">
+							<td class="fw-semibold font-monospace" th:text="${u.codigoUbicacion}"></td>
+							<td th:text="${nombresZona.get(u.idZona)} ?: '—'"></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/bodega/editar/{id}(id=${u.idUbicacion})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Asignar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

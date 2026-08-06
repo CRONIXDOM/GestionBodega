@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bodega.controlweb.model.dto.request.TipoRequestDto;
 import com.bodega.controlweb.service.ITipoService;
+import com.bodega.controlweb.util.MensajesError;
 
 @Controller
 @RequestMapping("/tipo")
@@ -32,9 +34,17 @@ public class TipoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarTipo(@ModelAttribute TipoRequestDto tipo) {
-        servicioAPI.guardarTipo(tipo);
-        return "redirect:/tipo";
+    public String guardarTipo(@ModelAttribute TipoRequestDto tipo, Model model) {
+        try {
+            servicioAPI.guardarTipo(tipo);
+            return "redirect:/tipo";
+        } catch (Exception ex) {
+            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
+            // en vez de mostrar la pagina de error de Spring.
+            model.addAttribute("tipo", tipo);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            return "/Tipo/creartipo";
+        }
     }
 
     @GetMapping("/editar/{id}")
@@ -44,8 +54,14 @@ public class TipoController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarTipo(@PathVariable Integer id) {
-        servicioAPI.eliminarTipo(id);
+    public String eliminarTipo(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.eliminarTipo(id);
+        } catch (Exception ex) {
+            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
+            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+        }
         return "redirect:/tipo";
     }
 }
