@@ -5,7 +5,9 @@ Notas de lectura de los 8 scripts SQL entregados (copiados sin cambios en
 carga de datos, funciones, triggers, vistas, índices y consultas con JOIN.
 
 Este documento resume qué hace cada pieza, qué problemas tiene y qué de todo
-eso aplica al proyecto GestionBodega.
+eso aplica al proyecto GestionBodega. El estilo de escritura del código —
+nomenclatura, formato, patrones y forma de probar — está aparte, en
+[`estilo-sql.md`](estilo-sql.md).
 
 ## 1. Modelo de datos (`sql/creacion-tablas.sql`)
 
