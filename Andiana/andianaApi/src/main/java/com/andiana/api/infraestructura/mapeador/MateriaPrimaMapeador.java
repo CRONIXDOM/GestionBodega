@@ -14,10 +14,11 @@ public final class MateriaPrimaMapeador {
 			return null;
 		}
 		MateriaPrima modelo = new MateriaPrima();
-		modelo.setIdMateriaPrima(entidad.getIdMateriaPrima());
+		modelo.setIdMateria(entidad.getIdMateria());
 		modelo.setNombre(entidad.getNombre());
 		modelo.setUnidadMedida(entidad.getUnidadMedida());
-		modelo.setStock(entidad.getStock());
+		modelo.setStockActual(entidad.getStockActual());
+		modelo.setStockMinimo(entidad.getStockMinimo());
 		return modelo;
 	}
 
@@ -26,10 +27,11 @@ public final class MateriaPrimaMapeador {
 			return null;
 		}
 		MateriaPrimaEntidad entidad = new MateriaPrimaEntidad();
-		entidad.setIdMateriaPrima(modelo.getIdMateriaPrima());
+		entidad.setIdMateria(modelo.getIdMateria());
 		entidad.setNombre(modelo.getNombre());
 		entidad.setUnidadMedida(modelo.getUnidadMedida());
-		entidad.setStock(modelo.getStock());
+		entidad.setStockActual(modelo.getStockActual());
+		entidad.setStockMinimo(modelo.getStockMinimo());
 		return entidad;
 	}
 }

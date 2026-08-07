@@ -3,23 +3,23 @@ package com.andiana.api.aplicacion;
 import java.util.Comparator;
 import java.util.List;
 
-import com.andiana.api.dominio.modelo.MovimientoInventario;
-import com.andiana.api.dominio.puerto.MovimientoInventarioRepositorio;
+import com.andiana.api.dominio.modelo.MovimientoMateriaPrima;
+import com.andiana.api.dominio.puerto.MovimientoMateriaPrimaRepositorio;
 
 /** El falso, pero respetando el orden cronologico que exige el puerto. */
-public class MovimientosEnMemoria extends RepositorioEnMemoria<MovimientoInventario>
-		implements MovimientoInventarioRepositorio {
+public class MovimientosEnMemoria extends RepositorioEnMemoria<MovimientoMateriaPrima>
+		implements MovimientoMateriaPrimaRepositorio {
 
 	public MovimientosEnMemoria() {
-		super(MovimientoInventario::getIdMovimiento, MovimientoInventario::setIdMovimiento);
+		super(MovimientoMateriaPrima::getIdMovimiento, MovimientoMateriaPrima::setIdMovimiento);
 	}
 
 	@Override
-	public List<MovimientoInventario> buscarPorMateriaPrima(Integer idMateriaPrima) {
+	public List<MovimientoMateriaPrima> buscarPorMateria(Integer idMateria) {
 		return listar().stream()
-				.filter(m -> idMateriaPrima.equals(m.getIdMateriaPrima()))
-				.sorted(Comparator.comparing(MovimientoInventario::getFecha)
-						.thenComparing(MovimientoInventario::getIdMovimiento))
+				.filter(m -> idMateria.equals(m.getIdMateria()))
+				.sorted(Comparator.comparing(MovimientoMateriaPrima::getFecha)
+						.thenComparing(MovimientoMateriaPrima::getIdMovimiento))
 				.toList();
 	}
 }

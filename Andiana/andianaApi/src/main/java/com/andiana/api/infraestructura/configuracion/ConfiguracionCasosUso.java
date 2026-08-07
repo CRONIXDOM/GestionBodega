@@ -4,25 +4,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.andiana.api.aplicacion.puerto.ConsultaRecetas;
-import com.andiana.api.aplicacion.servicio.ServicioAlmacenProductoTerminado;
 import com.andiana.api.aplicacion.servicio.ServicioConsultaRecetas;
 import com.andiana.api.aplicacion.servicio.ServicioControlCalidad;
+import com.andiana.api.aplicacion.servicio.ServicioDetalleReceta;
+import com.andiana.api.aplicacion.servicio.ServicioInventarioProducto;
 import com.andiana.api.aplicacion.servicio.ServicioLoteProduccion;
 import com.andiana.api.aplicacion.servicio.ServicioMateriaPrima;
-import com.andiana.api.aplicacion.servicio.ServicioMovimientoInventario;
+import com.andiana.api.aplicacion.servicio.ServicioMovimientoMateriaPrima;
 import com.andiana.api.aplicacion.servicio.ServicioOrdenProduccion;
 import com.andiana.api.aplicacion.servicio.ServicioProducto;
-import com.andiana.api.aplicacion.servicio.ServicioReceta;
-import com.andiana.api.aplicacion.servicio.ServicioRecetaDetalle;
-import com.andiana.api.dominio.puerto.AlmacenProductoTerminadoRepositorio;
+import com.andiana.api.aplicacion.servicio.ServicioRecetaProduccion;
 import com.andiana.api.dominio.puerto.ControlCalidadRepositorio;
+import com.andiana.api.dominio.puerto.DetalleRecetaRepositorio;
+import com.andiana.api.dominio.puerto.InventarioProductoRepositorio;
 import com.andiana.api.dominio.puerto.LoteProduccionRepositorio;
 import com.andiana.api.dominio.puerto.MateriaPrimaRepositorio;
-import com.andiana.api.dominio.puerto.MovimientoInventarioRepositorio;
+import com.andiana.api.dominio.puerto.MovimientoMateriaPrimaRepositorio;
 import com.andiana.api.dominio.puerto.OrdenProduccionRepositorio;
 import com.andiana.api.dominio.puerto.ProductoRepositorio;
-import com.andiana.api.dominio.puerto.RecetaDetalleRepositorio;
-import com.andiana.api.dominio.puerto.RecetaRepositorio;
+import com.andiana.api.dominio.puerto.RecetaProduccionRepositorio;
 
 /**
  * Aqui, y solo aqui, se une Spring con los casos de uso. Los servicios de la
@@ -34,8 +34,8 @@ import com.andiana.api.dominio.puerto.RecetaRepositorio;
 public class ConfiguracionCasosUso {
 
 	@Bean
-	ServicioProducto servicioProducto(ProductoRepositorio productos) {
-		return new ServicioProducto(productos);
+	ServicioProducto servicioProducto(ProductoRepositorio productos, RecetaProduccionRepositorio recetas) {
+		return new ServicioProducto(productos, recetas);
 	}
 
 	@Bean
@@ -44,50 +44,50 @@ public class ConfiguracionCasosUso {
 	}
 
 	@Bean
-	ServicioReceta servicioReceta(RecetaRepositorio recetas, ProductoRepositorio productos,
-			RecetaDetalleRepositorio detalles) {
-		return new ServicioReceta(recetas, productos, detalles);
+	ServicioRecetaProduccion servicioReceta(RecetaProduccionRepositorio recetas, ProductoRepositorio productos,
+			DetalleRecetaRepositorio detalles) {
+		return new ServicioRecetaProduccion(recetas, productos, detalles);
 	}
 
 	@Bean
-	ServicioRecetaDetalle servicioRecetaDetalle(RecetaDetalleRepositorio detalles, RecetaRepositorio recetas,
+	ServicioDetalleReceta servicioDetalleReceta(DetalleRecetaRepositorio detalles,
+			RecetaProduccionRepositorio recetas, MateriaPrimaRepositorio materias) {
+		return new ServicioDetalleReceta(detalles, recetas, materias);
+	}
+
+	@Bean
+	ServicioMovimientoMateriaPrima servicioMovimiento(MovimientoMateriaPrimaRepositorio movimientos,
 			MateriaPrimaRepositorio materias) {
-		return new ServicioRecetaDetalle(detalles, recetas, materias);
+		return new ServicioMovimientoMateriaPrima(movimientos, materias);
 	}
 
 	@Bean
-	ServicioMovimientoInventario servicioMovimientoInventario(MovimientoInventarioRepositorio movimientos,
-			MateriaPrimaRepositorio materias) {
-		return new ServicioMovimientoInventario(movimientos, materias);
-	}
-
-	@Bean
-	ServicioOrdenProduccion servicioOrdenProduccion(OrdenProduccionRepositorio ordenes,
-			ProductoRepositorio productos, LoteProduccionRepositorio lotes) {
+	ServicioOrdenProduccion servicioOrden(OrdenProduccionRepositorio ordenes, ProductoRepositorio productos,
+			LoteProduccionRepositorio lotes) {
 		return new ServicioOrdenProduccion(ordenes, productos, lotes);
 	}
 
 	@Bean
-	ServicioLoteProduccion servicioLoteProduccion(LoteProduccionRepositorio lotes,
-			OrdenProduccionRepositorio ordenes, ControlCalidadRepositorio controles,
-			AlmacenProductoTerminadoRepositorio almacen) {
-		return new ServicioLoteProduccion(lotes, ordenes, controles, almacen);
+	ServicioLoteProduccion servicioLote(LoteProduccionRepositorio lotes, OrdenProduccionRepositorio ordenes,
+			ControlCalidadRepositorio controles, InventarioProductoRepositorio inventario) {
+		return new ServicioLoteProduccion(lotes, ordenes, controles, inventario);
 	}
 
 	@Bean
 	ServicioControlCalidad servicioControlCalidad(ControlCalidadRepositorio controles,
-			LoteProduccionRepositorio lotes, AlmacenProductoTerminadoRepositorio almacen) {
-		return new ServicioControlCalidad(controles, lotes, almacen);
+			LoteProduccionRepositorio lotes, InventarioProductoRepositorio inventario) {
+		return new ServicioControlCalidad(controles, lotes, inventario);
 	}
 
 	@Bean
-	ServicioAlmacenProductoTerminado servicioAlmacen(AlmacenProductoTerminadoRepositorio almacen,
-			LoteProduccionRepositorio lotes, ControlCalidadRepositorio controles) {
-		return new ServicioAlmacenProductoTerminado(almacen, lotes, controles);
+	ServicioInventarioProducto servicioInventario(InventarioProductoRepositorio inventario,
+			LoteProduccionRepositorio lotes, ControlCalidadRepositorio controles,
+			ServicioControlCalidad servicioControl) {
+		return new ServicioInventarioProducto(inventario, lotes, controles, servicioControl);
 	}
 
 	@Bean
-	ConsultaRecetas consultaRecetas(RecetaRepositorio recetas, RecetaDetalleRepositorio detalles,
+	ConsultaRecetas consultaRecetas(RecetaProduccionRepositorio recetas, DetalleRecetaRepositorio detalles,
 			MateriaPrimaRepositorio materias, ProductoRepositorio productos) {
 		return new ServicioConsultaRecetas(recetas, detalles, materias, productos);
 	}

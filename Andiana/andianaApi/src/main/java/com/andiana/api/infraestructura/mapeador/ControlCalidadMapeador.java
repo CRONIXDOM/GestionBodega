@@ -16,11 +16,12 @@ public final class ControlCalidadMapeador {
 		ControlCalidad modelo = new ControlCalidad();
 		modelo.setIdControl(entidad.getIdControl());
 		modelo.setIdLote(entidad.getIdLote());
+		modelo.setFechaControl(entidad.getFechaControl());
 		modelo.setPh(entidad.getPh());
-		modelo.setGradosBrix(entidad.getGradosBrix());
+		modelo.setBrix(entidad.getBrix());
 		modelo.setTemperatura(entidad.getTemperatura());
 		modelo.setResultado(entidad.getResultado());
-		modelo.setFechaInspeccion(entidad.getFechaInspeccion());
+		modelo.setObservaciones(entidad.getObservaciones());
 		return modelo;
 	}
 
@@ -31,11 +32,12 @@ public final class ControlCalidadMapeador {
 		ControlCalidadEntidad entidad = new ControlCalidadEntidad();
 		entidad.setIdControl(modelo.getIdControl());
 		entidad.setIdLote(modelo.getIdLote());
+		entidad.setFechaControl(modelo.getFechaControl());
 		entidad.setPh(modelo.getPh());
-		entidad.setGradosBrix(modelo.getGradosBrix());
+		entidad.setBrix(modelo.getBrix());
 		entidad.setTemperatura(modelo.getTemperatura());
 		entidad.setResultado(modelo.getResultado());
-		entidad.setFechaInspeccion(modelo.getFechaInspeccion());
+		entidad.setObservaciones(modelo.getObservaciones());
 		return entidad;
 	}
 }

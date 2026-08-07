@@ -1,6 +1,6 @@
 package com.andiana.api.infraestructura.adaptador;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +22,7 @@ public class ControlCalidadAdaptador extends AdaptadorCrud<ControlCalidad, Contr
 	}
 
 	@Override
-	public Optional<ControlCalidad> buscarPorLote(Integer idLote) {
-		return jpaControlCalidad.findByIdLote(idLote).map(ControlCalidadMapeador::aDominio);
+	public List<ControlCalidad> buscarPorLote(Integer idLote) {
+		return convertir(jpaControlCalidad.findByIdLoteOrderByFechaControlDescIdControlDesc(idLote));
 	}
 }

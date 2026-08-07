@@ -15,12 +15,12 @@ public interface ConsultaRecetas {
 	List<ConteoDeReceta> conteoDeMateriasPorReceta();
 
 	/** Una linea de la primera consulta. */
-	record MateriaEnReceta(Integer idMateriaPrima, String materiaPrima, BigDecimal cantidad,
-			String unidadMedida) {
+	record MateriaEnReceta(Integer idMateria, String materiaPrima, BigDecimal cantidad,
+			String unidad, BigDecimal stockActual) {
 	}
 
 	/** Una linea de la segunda consulta. */
-	record ConteoDeReceta(Integer idReceta, String producto, String version, boolean activa,
+	record ConteoDeReceta(Integer idReceta, String producto, Integer version, boolean activa,
 			long totalMateriasPrimas) {
 	}
 }

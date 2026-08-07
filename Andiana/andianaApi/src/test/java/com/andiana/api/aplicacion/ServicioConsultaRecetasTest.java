@@ -13,35 +13,36 @@ import org.junit.jupiter.api.Test;
 import com.andiana.api.aplicacion.puerto.ConsultaRecetas;
 import com.andiana.api.aplicacion.servicio.ServicioConsultaRecetas;
 import com.andiana.api.dominio.ReglaNegocioException;
+import com.andiana.api.dominio.modelo.DetalleReceta;
 import com.andiana.api.dominio.modelo.MateriaPrima;
 import com.andiana.api.dominio.modelo.Producto;
-import com.andiana.api.dominio.modelo.Receta;
-import com.andiana.api.dominio.modelo.RecetaDetalle;
+import com.andiana.api.dominio.modelo.RecetaProduccion;
+import com.andiana.api.dominio.puerto.DetalleRecetaRepositorio;
 import com.andiana.api.dominio.puerto.ProductoRepositorio;
-import com.andiana.api.dominio.puerto.RecetaDetalleRepositorio;
-import com.andiana.api.dominio.puerto.RecetaRepositorio;
+import com.andiana.api.dominio.puerto.RecetaProduccionRepositorio;
 
 /** Las dos consultas que pidio la gerencia. */
 class ServicioConsultaRecetasTest {
 
-	static class RecetasEnMemoria extends RepositorioEnMemoria<Receta> implements RecetaRepositorio {
+	static class RecetasEnMemoria extends RepositorioEnMemoria<RecetaProduccion>
+			implements RecetaProduccionRepositorio {
 		RecetasEnMemoria() {
-			super(Receta::getIdReceta, Receta::setIdReceta);
+			super(RecetaProduccion::getIdReceta, RecetaProduccion::setIdReceta);
 		}
 
 		@Override
-		public List<Receta> buscarPorProducto(Integer idProducto) {
+		public List<RecetaProduccion> buscarPorProducto(Integer idProducto) {
 			return listar().stream().filter(r -> idProducto.equals(r.getIdProducto())).toList();
 		}
 	}
 
-	static class DetallesEnMemoria extends RepositorioEnMemoria<RecetaDetalle> implements RecetaDetalleRepositorio {
+	static class DetallesEnMemoria extends RepositorioEnMemoria<DetalleReceta> implements DetalleRecetaRepositorio {
 		DetallesEnMemoria() {
-			super(RecetaDetalle::getIdRecetaDetalle, RecetaDetalle::setIdRecetaDetalle);
+			super(DetalleReceta::getIdDetalle, DetalleReceta::setIdDetalle);
 		}
 
 		@Override
-		public List<RecetaDetalle> buscarPorReceta(Integer idReceta) {
+		public List<DetalleReceta> buscarPorReceta(Integer idReceta) {
 			return listar().stream().filter(d -> idReceta.equals(d.getIdReceta())).toList();
 		}
 	}
@@ -64,24 +65,27 @@ class ServicioConsultaRecetasTest {
 		MateriasEnMemoria materias = new MateriasEnMemoria();
 		consultas = new ServicioConsultaRecetas(recetas, detalles, materias, productos);
 
-		Integer cola = productos.guardar(new Producto(null, "COLA ANDINA", "350 ML")).getIdProducto();
+		Integer cola = productos.guardar(new Producto(null, "COLA ANDINA", "GASEOSA", "BOTELLA PET", 350, true))
+				.getIdProducto();
 
-		Integer agua = materias.guardar(new MateriaPrima(null, "AGUA PURIFICADA", "LITRO", BigDecimal.ZERO))
-				.getIdMateriaPrima();
-		Integer azucar = materias.guardar(new MateriaPrima(null, "AZUCAR", "KILOGRAMO", BigDecimal.ZERO))
-				.getIdMateriaPrima();
-		Integer colorante = materias.guardar(new MateriaPrima(null, "COLORANTE CARAMELO", "GRAMO", BigDecimal.ZERO))
-				.getIdMateriaPrima();
+		Integer agua = materias.guardar(new MateriaPrima(null, "AGUA PURIFICADA", "LITRO",
+				new BigDecimal("100"), BigDecimal.ZERO)).getIdMateria();
+		Integer azucar = materias.guardar(new MateriaPrima(null, "AZUCAR", "KILOGRAMO",
+				new BigDecimal("50"), BigDecimal.ZERO)).getIdMateria();
+		Integer colorante = materias.guardar(new MateriaPrima(null, "COLORANTE CARAMELO", "GRAMO",
+				new BigDecimal("900"), BigDecimal.ZERO)).getIdMateria();
 
-		recetaV1 = recetas.guardar(new Receta(null, cola, "V1", LocalDate.parse("2026-01-15"), false)).getIdReceta();
-		recetaV2 = recetas.guardar(new Receta(null, cola, "V2", LocalDate.parse("2026-06-01"), true)).getIdReceta();
+		recetaV1 = recetas.guardar(new RecetaProduccion(null, cola, 1, LocalDate.parse("2026-01-15"), false))
+				.getIdReceta();
+		recetaV2 = recetas.guardar(new RecetaProduccion(null, cola, 2, LocalDate.parse("2026-06-01"), true))
+				.getIdReceta();
 
-		detalles.guardar(new RecetaDetalle(null, recetaV1, agua, new BigDecimal("0.320")));
-		detalles.guardar(new RecetaDetalle(null, recetaV1, azucar, new BigDecimal("0.035")));
-		detalles.guardar(new RecetaDetalle(null, recetaV1, colorante, new BigDecimal("1.200")));
-		// la V2 quito el colorante
-		detalles.guardar(new RecetaDetalle(null, recetaV2, agua, new BigDecimal("0.325")));
-		detalles.guardar(new RecetaDetalle(null, recetaV2, azucar, new BigDecimal("0.030")));
+		detalles.guardar(new DetalleReceta(null, recetaV1, agua, new BigDecimal("0.320"), "LITRO"));
+		detalles.guardar(new DetalleReceta(null, recetaV1, azucar, new BigDecimal("0.035"), "KILOGRAMO"));
+		detalles.guardar(new DetalleReceta(null, recetaV1, colorante, new BigDecimal("1.200"), "GRAMO"));
+		// la version 2 quito el colorante
+		detalles.guardar(new DetalleReceta(null, recetaV2, agua, new BigDecimal("0.325"), "LITRO"));
+		detalles.guardar(new DetalleReceta(null, recetaV2, azucar, new BigDecimal("0.030"), "KILOGRAMO"));
 	}
 
 	@Test
@@ -91,7 +95,8 @@ class ServicioConsultaRecetasTest {
 		assertThat(materias).extracting(ConsultaRecetas.MateriaEnReceta::materiaPrima)
 				.containsExactly("AGUA PURIFICADA", "AZUCAR", "COLORANTE CARAMELO");
 		assertThat(materias.get(0).cantidad()).isEqualByComparingTo("0.320");
-		assertThat(materias.get(0).unidadMedida()).isEqualTo("LITRO");
+		assertThat(materias.get(0).unidad()).isEqualTo("LITRO");
+		assertThat(materias.get(0).stockActual()).isEqualByComparingTo("100");
 	}
 
 	@Test
@@ -113,19 +118,21 @@ class ServicioConsultaRecetasTest {
 		List<ConsultaRecetas.ConteoDeReceta> conteo = consultas.conteoDeMateriasPorReceta();
 
 		assertThat(conteo).hasSize(2);
-		assertThat(conteo).extracting(ConsultaRecetas.ConteoDeReceta::version)
-				.containsExactly("V1", "V2");
+		assertThat(conteo).extracting(ConsultaRecetas.ConteoDeReceta::version).containsExactly(1, 2);
 		assertThat(conteo).extracting(ConsultaRecetas.ConteoDeReceta::totalMateriasPrimas)
 				.containsExactly(3L, 2L);
-		assertThat(conteo.get(0).producto()).isEqualTo("COLA ANDINA 350 ML");
+		assertThat(conteo.get(0).producto()).isEqualTo("COLA ANDINA BOTELLA PET (350 ml)");
+		assertThat(conteo.get(0).activa()).isFalse();
+		assertThat(conteo.get(1).activa()).isTrue();
 	}
 
 	@Test
 	void unaRecetaSinMateriasPrimasCuentaCero() {
 		RecetasEnMemoria recetas = new RecetasEnMemoria();
 		ProductosEnMemoria productos = new ProductosEnMemoria();
-		Integer producto = productos.guardar(new Producto(null, "LIMON ANDINA", "1 LITRO")).getIdProducto();
-		recetas.guardar(new Receta(null, producto, "V1", LocalDate.now(), true));
+		Integer producto = productos.guardar(new Producto(null, "LIMON ANDINA", "GASEOSA", "BOTELLA 1L", 1000, true))
+				.getIdProducto();
+		recetas.guardar(new RecetaProduccion(null, producto, 1, LocalDate.now(), true));
 
 		List<ConsultaRecetas.ConteoDeReceta> conteo = new ServicioConsultaRecetas(recetas,
 				new DetallesEnMemoria(), new MateriasEnMemoria(), productos).conteoDeMateriasPorReceta();

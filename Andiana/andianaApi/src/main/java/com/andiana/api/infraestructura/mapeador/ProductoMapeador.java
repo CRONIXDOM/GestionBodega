@@ -16,7 +16,10 @@ public final class ProductoMapeador {
 		Producto modelo = new Producto();
 		modelo.setIdProducto(entidad.getIdProducto());
 		modelo.setNombre(entidad.getNombre());
+		modelo.setTipo(entidad.getTipo());
 		modelo.setPresentacion(entidad.getPresentacion());
+		modelo.setVolumenMl(entidad.getVolumenMl());
+		modelo.setEstado(entidad.getEstado());
 		return modelo;
 	}
 
@@ -27,7 +30,10 @@ public final class ProductoMapeador {
 		ProductoEntidad entidad = new ProductoEntidad();
 		entidad.setIdProducto(modelo.getIdProducto());
 		entidad.setNombre(modelo.getNombre());
+		entidad.setTipo(modelo.getTipo());
 		entidad.setPresentacion(modelo.getPresentacion());
+		entidad.setVolumenMl(modelo.getVolumenMl());
+		entidad.setEstado(modelo.getEstado());
 		return entidad;
 	}
 }

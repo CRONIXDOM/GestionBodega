@@ -58,6 +58,18 @@ public final class Validar {
 		}
 	}
 
+	/**
+	 * Las cantidades vienen de la base con los decimales de la columna
+	 * (NUMERIC(12,2)), asi que "800" llega como "800.00". Para los mensajes que
+	 * lee una persona se quitan los ceros que no aportan nada.
+	 */
+	public static String legible(BigDecimal valor) {
+		if (valor == null) {
+			return "0";
+		}
+		return valor.stripTrailingZeros().toPlainString();
+	}
+
 	public static void enRango(BigDecimal valor, String campo, double minimo, double maximo) {
 		obligatorio(valor, campo);
 		if (valor.doubleValue() < minimo || valor.doubleValue() > maximo) {

@@ -15,10 +15,12 @@ public final class LoteProduccionMapeador {
 		}
 		LoteProduccion modelo = new LoteProduccion();
 		modelo.setIdLote(entidad.getIdLote());
-		modelo.setCodigoLote(entidad.getCodigoLote());
 		modelo.setIdOrden(entidad.getIdOrden());
+		modelo.setNumeroLote(entidad.getNumeroLote());
+		modelo.setFechaInicio(entidad.getFechaInicio());
+		modelo.setFechaFin(entidad.getFechaFin());
 		modelo.setCantidadProducida(entidad.getCantidadProducida());
-		modelo.setFechaFabricacion(entidad.getFechaFabricacion());
+		modelo.setEstado(entidad.getEstado());
 		return modelo;
 	}
 
@@ -28,10 +30,12 @@ public final class LoteProduccionMapeador {
 		}
 		LoteProduccionEntidad entidad = new LoteProduccionEntidad();
 		entidad.setIdLote(modelo.getIdLote());
-		entidad.setCodigoLote(modelo.getCodigoLote());
 		entidad.setIdOrden(modelo.getIdOrden());
+		entidad.setNumeroLote(modelo.getNumeroLote());
+		entidad.setFechaInicio(modelo.getFechaInicio());
+		entidad.setFechaFin(modelo.getFechaFin());
 		entidad.setCantidadProducida(modelo.getCantidadProducida());
-		entidad.setFechaFabricacion(modelo.getFechaFabricacion());
+		entidad.setEstado(modelo.getEstado());
 		return entidad;
 	}
 }

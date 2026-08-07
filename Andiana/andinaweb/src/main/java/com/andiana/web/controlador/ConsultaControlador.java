@@ -55,7 +55,7 @@ public class ConsultaControlador {
 		for (Map<String, Object> receta : api.listar("receta")) {
 			String producto = productos.stream()
 					.filter(p -> String.valueOf(receta.get("idProducto")).equals(String.valueOf(p.get("idProducto"))))
-					.map(p -> p.get("nombre") + " " + p.get("presentacion"))
+					.map(p -> p.get("nombre") + " " + p.get("presentacion") + " (" + p.get("volumenMl") + " ml)")
 					.findFirst().orElse("(producto eliminado)");
 			opciones.add(Map.of(
 					"id", receta.get("idReceta"),

@@ -21,17 +21,23 @@ public class ServicioMateriaPrima extends ServicioCrud<MateriaPrima> {
 		materia.setUnidadMedida(Validar.normalizar(materia.getUnidadMedida()));
 
 		Validar.obligatorio(materia.getNombre(), "nombre");
-		Validar.unoDe(materia.getUnidadMedida(), "unidad de medida",
-				"LITRO", "MILILITRO", "KILOGRAMO", "GRAMO", "UNIDAD");
-		Validar.noRepetido(materias.listar(), MateriaPrima::getIdMateriaPrima, MateriaPrima::getNombre,
-				materia.getIdMateriaPrima(), materia.getNombre(), "una materia prima llamada");
+		Validar.obligatorio(materia.getUnidadMedida(), "unidad de medida");
+		Validar.noRepetido(materias.listar(), MateriaPrima::getIdMateria, MateriaPrima::getNombre,
+				materia.getIdMateria(), materia.getNombre(), "una materia prima llamada");
 
-		// el stock lo mueven los movimientos de inventario, no este formulario:
-		// al crearla arranca en cero y al editarla se respeta el que ya tenia.
-		if (materia.getIdMateriaPrima() == null) {
-			materia.setStock(BigDecimal.ZERO);
+		if (materia.getStockMinimo() == null) {
+			materia.setStockMinimo(BigDecimal.ZERO);
+		}
+		if (materia.getStockMinimo().signum() < 0) {
+			throw new com.andiana.api.dominio.ReglaNegocioException("El stock minimo no puede ser negativo");
+		}
+
+		// el stock actual lo mueven los movimientos, no este formulario: al crearla
+		// arranca en cero y al editarla se respeta el que ya tenia
+		if (materia.getIdMateria() == null) {
+			materia.setStockActual(BigDecimal.ZERO);
 		} else {
-			materia.setStock(buscarPorId(materia.getIdMateriaPrima()).getStock());
+			materia.setStockActual(buscarPorId(materia.getIdMateria()).getStockActual());
 		}
 	}
 }

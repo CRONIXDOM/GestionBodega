@@ -1,6 +1,7 @@
 package com.andiana.api.infraestructura.entidad;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,17 +17,20 @@ import lombok.Data;
 @Table(name = "lote_produccion")
 public class LoteProduccionEntidad {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_lote")
 	private Integer idLote;
-	@Column(name = "codigo_lote")
-	private String codigoLote;
 	@Column(name = "id_orden")
 	private Integer idOrden;
+	@Column(name = "numero_lote")
+	private String numeroLote;
+	@Column(name = "fecha_inicio")
+	private LocalDateTime fechaInicio;
+	@Column(name = "fecha_fin")
+	private LocalDateTime fechaFin;
 	@Column(name = "cantidad_producida")
-	private Integer cantidadProducida;
-	@Column(name = "fecha_fabricacion")
-	private LocalDate fechaFabricacion;
+	private BigDecimal cantidadProducida;
+	@Column(name = "estado")
+	private String estado;
 }

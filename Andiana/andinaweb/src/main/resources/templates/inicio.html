@@ -33,7 +33,7 @@
 				<span class="cifra" th:text="${lotes}">0</span>
 			</div>
 			<div class="tarjeta">
-				<span class="rotulo">Lotes en almacen</span>
+				<span class="rotulo">En inventario</span>
 				<span class="cifra" th:text="${enAlmacen}">0</span>
 			</div>
 		</div>
@@ -48,8 +48,9 @@
 					stock de cada materia prima sale de aqui, nunca se escribe a mano.</li>
 				<li><strong>Orden de produccion</strong>: lo que planificacion manda a fabricar.</li>
 				<li><strong>Lotes</strong>: cada tanda que sale de una orden.</li>
-				<li><strong>Control de calidad</strong>: pH, grados Brix y temperatura de cada lote.</li>
-				<li><strong>Almacen</strong>: solo entran los lotes aprobados por el laboratorio.</li>
+				<li><strong>Control de calidad</strong>: pH, grados Brix y temperatura de cada lote. Vale el control mas reciente.</li>
+				<li><strong>Inventario de terminados</strong>: solo entran los lotes aprobados por el
+					laboratorio, y nunca mas unidades de las que el lote produjo.</li>
 			</ol>
 		</div>
 

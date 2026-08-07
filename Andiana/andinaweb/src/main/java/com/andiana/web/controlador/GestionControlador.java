@@ -113,6 +113,8 @@ public class GestionControlador {
 				case NUMERO, RELACION -> Integer.valueOf(valor);
 				case DECIMAL -> new java.math.BigDecimal(valor);
 				case SI_NO -> Boolean.TRUE;
+				// el input datetime-local manda "2026-08-01T08:00", que es justo el
+				// formato que la API espera para un LocalDateTime
 				default -> valor;
 			});
 		}
@@ -161,8 +163,14 @@ public class GestionControlador {
 
 		switch (seccion.clave()) {
 			// un producto se reconoce por su sabor Y su presentacion
-			case "producto" -> texto = texto + " " + fila.getOrDefault("presentacion", "");
-			case "receta" -> texto = nombreDelProducto(fila.get("idProducto")) + " - " + texto;
+			case "producto" -> texto = texto + " " + fila.getOrDefault("presentacion", "")
+					+ " (" + fila.getOrDefault("volumenMl", "?") + " ml)";
+			// una receta, por el producto al que pertenece y su version
+			case "receta" -> texto = nombreDelProducto(fila.get("idProducto")) + " - version " + texto;
+			// una orden no tiene codigo propio en la base: se la nombra por su
+			// producto y su fecha, que es como la reconoce planificacion
+			case "orden" -> texto = "Orden #" + fila.get("idOrden") + " - "
+					+ nombreDelProducto(fila.get("idProducto")) + " - " + fila.getOrDefault("fechaProgramada", "");
 			default -> {
 				// el resto ya tiene un codigo propio que lo identifica
 			}
@@ -178,5 +186,10 @@ public class GestionControlador {
 				.filter(p -> String.valueOf(idProducto).equals(String.valueOf(p.get("idProducto"))))
 				.map(p -> p.get("nombre") + " " + p.get("presentacion"))
 				.findFirst().orElse("(producto eliminado)");
+	}
+
+	/** El resumen del panel de inicio. */
+	public int cuantosHay(String rutaApi) {
+		return api.listar(rutaApi).size();
 	}
 }

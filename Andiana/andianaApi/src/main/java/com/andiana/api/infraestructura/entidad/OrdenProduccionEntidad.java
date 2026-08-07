@@ -1,5 +1,6 @@
 package com.andiana.api.infraestructura.entidad;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -16,19 +17,18 @@ import lombok.Data;
 @Table(name = "orden_produccion")
 public class OrdenProduccionEntidad {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_orden")
 	private Integer idOrden;
-	@Column(name = "codigo")
-	private String codigo;
 	@Column(name = "id_producto")
 	private Integer idProducto;
+	@Column(name = "fecha_programada")
+	private LocalDate fechaProgramada;
 	@Column(name = "cantidad_programada")
-	private Integer cantidadProgramada;
-	@Column(name = "fecha_produccion")
-	private LocalDate fechaProduccion;
+	private BigDecimal cantidadProgramada;
 	@Column(name = "estado")
 	private String estado;
+	@Column(name = "responsable")
+	private String responsable;
 }

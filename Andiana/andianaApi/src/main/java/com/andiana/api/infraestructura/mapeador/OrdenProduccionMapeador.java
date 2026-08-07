@@ -15,11 +15,11 @@ public final class OrdenProduccionMapeador {
 		}
 		OrdenProduccion modelo = new OrdenProduccion();
 		modelo.setIdOrden(entidad.getIdOrden());
-		modelo.setCodigo(entidad.getCodigo());
 		modelo.setIdProducto(entidad.getIdProducto());
+		modelo.setFechaProgramada(entidad.getFechaProgramada());
 		modelo.setCantidadProgramada(entidad.getCantidadProgramada());
-		modelo.setFechaProduccion(entidad.getFechaProduccion());
 		modelo.setEstado(entidad.getEstado());
+		modelo.setResponsable(entidad.getResponsable());
 		return modelo;
 	}
 
@@ -29,11 +29,11 @@ public final class OrdenProduccionMapeador {
 		}
 		OrdenProduccionEntidad entidad = new OrdenProduccionEntidad();
 		entidad.setIdOrden(modelo.getIdOrden());
-		entidad.setCodigo(modelo.getCodigo());
 		entidad.setIdProducto(modelo.getIdProducto());
+		entidad.setFechaProgramada(modelo.getFechaProgramada());
 		entidad.setCantidadProgramada(modelo.getCantidadProgramada());
-		entidad.setFechaProduccion(modelo.getFechaProduccion());
 		entidad.setEstado(modelo.getEstado());
+		entidad.setResponsable(modelo.getResponsable());
 		return entidad;
 	}
 }

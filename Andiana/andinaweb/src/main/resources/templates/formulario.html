@@ -48,6 +48,12 @@
 						th:id="${campo.nombre()}" th:name="${campo.nombre()}" th:value="${valor}"
 						th:required="${campo.obligatorio()}">
 
+					<!-- fecha con hora: la base guarda estas columnas como TIMESTAMP -->
+					<input th:if="${campo.tipo().name() == 'FECHA_HORA'}" type="datetime-local"
+						th:id="${campo.nombre()}" th:name="${campo.nombre()}"
+						th:value="${valor != null ? #strings.substring(#strings.toString(valor), 0, 16) : null}"
+						th:required="${campo.obligatorio()}">
+
 					<!-- lista cerrada de valores -->
 					<select th:if="${campo.tipo().name() == 'LISTA'}"
 						th:id="${campo.nombre()}" th:name="${campo.nombre()}" th:required="${campo.obligatorio()}">

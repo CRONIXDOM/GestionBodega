@@ -23,7 +23,7 @@ public class InicioControlador {
 		model.addAttribute("recetas", api.listar("receta").size());
 		model.addAttribute("ordenes", api.listar("orden").size());
 		model.addAttribute("lotes", api.listar("lote").size());
-		model.addAttribute("enAlmacen", api.listar("almacen").size());
+		model.addAttribute("enAlmacen", api.listar("inventario").size());
 		model.addAttribute("secciones", Catalogo.todas());
 		return "inicio";
 	}

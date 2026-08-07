@@ -1,6 +1,5 @@
 package com.andiana.api.infraestructura.entidad;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +14,18 @@ import lombok.Data;
 @Table(name = "producto")
 public class ProductoEntidad {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_producto")
 	private Integer idProducto;
 	@Column(name = "nombre")
 	private String nombre;
+	@Column(name = "tipo")
+	private String tipo;
 	@Column(name = "presentacion")
 	private String presentacion;
+	@Column(name = "volumen_ml")
+	private Integer volumenMl;
+	@Column(name = "estado")
+	private Boolean estado;
 }

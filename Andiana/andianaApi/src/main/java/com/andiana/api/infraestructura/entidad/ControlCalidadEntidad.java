@@ -1,7 +1,7 @@
 package com.andiana.api.infraestructura.entidad;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,21 +17,22 @@ import lombok.Data;
 @Table(name = "control_calidad")
 public class ControlCalidadEntidad {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_control")
 	private Integer idControl;
 	@Column(name = "id_lote")
 	private Integer idLote;
+	@Column(name = "fecha_control")
+	private LocalDateTime fechaControl;
 	@Column(name = "ph")
 	private BigDecimal ph;
-	@Column(name = "grados_brix")
-	private BigDecimal gradosBrix;
+	@Column(name = "brix")
+	private BigDecimal brix;
 	@Column(name = "temperatura")
 	private BigDecimal temperatura;
 	@Column(name = "resultado")
 	private String resultado;
-	@Column(name = "fecha_inspeccion")
-	private LocalDate fechaInspeccion;
+	@Column(name = "observaciones")
+	private String observaciones;
 }

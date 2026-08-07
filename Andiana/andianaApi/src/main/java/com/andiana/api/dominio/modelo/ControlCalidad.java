@@ -1,7 +1,7 @@
 package com.andiana.api.dominio.modelo;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ControlCalidad {
 
-    private Integer idControl;
-    private Integer idLote;
-    private BigDecimal ph;
-    private BigDecimal gradosBrix;
-    private BigDecimal temperatura;
-    private String resultado;
-    private LocalDate fechaInspeccion;
+	private Integer idControl;
+	private Integer idLote;
+	private LocalDateTime fechaControl;
+	private BigDecimal ph;
+	private BigDecimal brix;
+	private BigDecimal temperatura;
+	private String resultado;
+	private String observaciones;
 }

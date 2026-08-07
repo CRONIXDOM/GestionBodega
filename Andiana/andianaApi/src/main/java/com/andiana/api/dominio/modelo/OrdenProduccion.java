@@ -1,5 +1,6 @@
 package com.andiana.api.dominio.modelo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
@@ -12,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrdenProduccion {
 
-    private Integer idOrden;
-    private String codigo;
-    private Integer idProducto;
-    private Integer cantidadProgramada;
-    private LocalDate fechaProduccion;
-    private String estado;
+	private Integer idOrden;
+	private Integer idProducto;
+	private LocalDate fechaProgramada;
+	private BigDecimal cantidadProgramada;
+	private String estado;
+	private String responsable;
 }

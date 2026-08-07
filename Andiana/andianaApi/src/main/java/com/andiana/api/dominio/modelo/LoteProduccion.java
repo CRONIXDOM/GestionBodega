@@ -1,6 +1,7 @@
 package com.andiana.api.dominio.modelo;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,9 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoteProduccion {
 
-    private Integer idLote;
-    private String codigoLote;
-    private Integer idOrden;
-    private Integer cantidadProducida;
-    private LocalDate fechaFabricacion;
+	private Integer idLote;
+	private Integer idOrden;
+	private String numeroLote;
+	private LocalDateTime fechaInicio;
+	private LocalDateTime fechaFin;
+	private BigDecimal cantidadProducida;
+	private String estado;
 }

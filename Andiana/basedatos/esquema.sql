@@ -1,99 +1,277 @@
--- ===================================================================
---  Gaseosas Andinas S.A.  -  base de datos "Andiana"
+-- ==========================================
+-- BASE DE DATOS PRODUCCIÓN DE BEBIDAS
+-- PostgreSQL
 --
---  La aplicacion NO modifica la base de datos: arranca con
---  spring.jpa.hibernate.ddl-auto=none. Este script existe solo para
---  crear el esquema la primera vez.
---
---  Ejecutar:  psql -h localhost -p 5433 -U postgres -d Andiana -f esquema.sql
--- ===================================================================
+-- Este es el esquema tal cual existe. La aplicacion NO lo modifica:
+-- andianaApi arranca con spring.jpa.hibernate.ddl-auto=none, asi que
+-- Hibernate solo lee y escribe filas, nunca crea ni altera tablas.
+-- ==========================================
 
--- ---------- Lo que se fabrica ----------
-CREATE TABLE IF NOT EXISTS producto (
-    id_producto   SERIAL PRIMARY KEY,
-    nombre        VARCHAR(100) NOT NULL,
-    presentacion  VARCHAR(20)  NOT NULL,   -- 350 ML, 500 ML, 1 LITRO, 2 LITROS
-    CONSTRAINT uk_producto_nombre_presentacion UNIQUE (nombre, presentacion)
+DROP TABLE IF EXISTS inventario_producto CASCADE;
+DROP TABLE IF EXISTS control_calidad CASCADE;
+DROP TABLE IF EXISTS lote_produccion CASCADE;
+DROP TABLE IF EXISTS orden_produccion CASCADE;
+DROP TABLE IF EXISTS movimiento_materia_prima CASCADE;
+DROP TABLE IF EXISTS detalle_receta CASCADE;
+DROP TABLE IF EXISTS receta_produccion CASCADE;
+DROP TABLE IF EXISTS materia_prima CASCADE;
+DROP TABLE IF EXISTS producto CASCADE;
+
+-- ==========================================
+-- PRODUCTOS
+-- ==========================================
+
+CREATE TABLE producto(
+    id_producto SERIAL PRIMARY KEY,
+    nombre VARCHAR(120) NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    presentacion VARCHAR(50) NOT NULL,
+    volumen_ml INTEGER NOT NULL,
+    estado BOOLEAN DEFAULT TRUE,
+
+    CONSTRAINT uk_producto UNIQUE(nombre,presentacion)
 );
 
--- ---------- Con que se fabrica ----------
-CREATE TABLE IF NOT EXISTS materia_prima (
-    id_materia_prima SERIAL PRIMARY KEY,
-    nombre           VARCHAR(100) NOT NULL UNIQUE,
-    unidad_medida    VARCHAR(20)  NOT NULL,   -- LITRO, KILOGRAMO, GRAMO...
-    stock            NUMERIC(12,3) NOT NULL DEFAULT 0
+-- ==========================================
+-- MATERIAS PRIMAS
+-- ==========================================
+
+CREATE TABLE materia_prima(
+    id_materia SERIAL PRIMARY KEY,
+    nombre VARCHAR(120) NOT NULL UNIQUE,
+    unidad_medida VARCHAR(20) NOT NULL,
+    stock_actual NUMERIC(12,2) DEFAULT 0,
+    stock_minimo NUMERIC(12,2) DEFAULT 0,
+
+    CHECK(stock_actual>=0),
+    CHECK(stock_minimo>=0)
 );
 
--- ---------- La formula ----------
--- Un producto puede tener varias recetas porque la formula cambia con el
--- tiempo; por eso cada una lleva version y fecha.
-CREATE TABLE IF NOT EXISTS receta (
-    id_receta   SERIAL PRIMARY KEY,
-    id_producto INTEGER NOT NULL REFERENCES producto (id_producto),
-    version     VARCHAR(20) NOT NULL,
-    fecha       DATE        NOT NULL,
-    activa      BOOLEAN     NOT NULL DEFAULT TRUE,
-    CONSTRAINT uk_receta_producto_version UNIQUE (id_producto, version)
+-- ==========================================
+-- RECETAS
+-- ==========================================
+
+CREATE TABLE receta_produccion(
+    id_receta SERIAL PRIMARY KEY,
+    id_producto INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    fecha_vigencia DATE NOT NULL,
+    estado BOOLEAN DEFAULT TRUE,
+
+    CONSTRAINT fk_receta_producto
+        FOREIGN KEY(id_producto)
+        REFERENCES producto(id_producto),
+
+    CONSTRAINT uk_receta UNIQUE(id_producto,version)
 );
 
--- Cuanta materia prima lleva la receta. Una misma materia prima no puede
--- aparecer dos veces en la misma receta.
-CREATE TABLE IF NOT EXISTS receta_detalle (
-    id_receta_detalle SERIAL PRIMARY KEY,
-    id_receta         INTEGER NOT NULL REFERENCES receta (id_receta),
-    id_materia_prima  INTEGER NOT NULL REFERENCES materia_prima (id_materia_prima),
-    cantidad          NUMERIC(12,3) NOT NULL,
-    CONSTRAINT uk_receta_materia UNIQUE (id_receta, id_materia_prima)
+-- ==========================================
+-- DETALLE RECETA
+-- ==========================================
+
+CREATE TABLE detalle_receta(
+    id_detalle SERIAL PRIMARY KEY,
+    id_receta INTEGER NOT NULL,
+    id_materia INTEGER NOT NULL,
+    cantidad NUMERIC(12,3) NOT NULL,
+    unidad VARCHAR(20) NOT NULL,
+
+    CONSTRAINT fk_detalle_receta
+        FOREIGN KEY(id_receta)
+        REFERENCES receta_produccion(id_receta)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_detalle_materia
+        FOREIGN KEY(id_materia)
+        REFERENCES materia_prima(id_materia),
+
+    CHECK(cantidad>0)
 );
 
--- ---------- Como se mueve el inventario de materia prima ----------
--- El stock de materia_prima nunca se edita a mano: es el resultado de
--- estos movimientos.
-CREATE TABLE IF NOT EXISTS movimiento_inventario (
-    id_movimiento    SERIAL PRIMARY KEY,
-    id_materia_prima INTEGER NOT NULL REFERENCES materia_prima (id_materia_prima),
-    tipo             VARCHAR(10) NOT NULL,   -- INGRESO, CONSUMO, AJUSTE
-    cantidad         NUMERIC(12,3) NOT NULL,
-    fecha            DATE        NOT NULL,
-    observacion      VARCHAR(200)
+-- ==========================================
+-- MOVIMIENTOS MATERIA PRIMA
+-- ==========================================
+
+CREATE TABLE movimiento_materia_prima(
+
+    id_movimiento SERIAL PRIMARY KEY,
+    id_materia INTEGER NOT NULL,
+
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    tipo VARCHAR(20) NOT NULL,
+
+    cantidad NUMERIC(12,2) NOT NULL,
+
+    observacion TEXT,
+
+    CONSTRAINT fk_movimiento_materia
+        FOREIGN KEY(id_materia)
+        REFERENCES materia_prima(id_materia),
+
+    CHECK(tipo IN ('INGRESO','CONSUMO','AJUSTE')),
+
+    CHECK(cantidad>0)
+
 );
 
--- ---------- Que se manda a producir ----------
-CREATE TABLE IF NOT EXISTS orden_produccion (
-    id_orden            SERIAL PRIMARY KEY,
-    codigo              VARCHAR(30) NOT NULL UNIQUE,
-    id_producto         INTEGER     NOT NULL REFERENCES producto (id_producto),
-    cantidad_programada INTEGER     NOT NULL,
-    fecha_produccion    DATE        NOT NULL,
-    estado              VARCHAR(15) NOT NULL   -- PLANIFICADA, EN PROCESO, FINALIZADA
+-- ==========================================
+-- ORDENES DE PRODUCCIÓN
+-- ==========================================
+
+CREATE TABLE orden_produccion(
+
+    id_orden SERIAL PRIMARY KEY,
+
+    id_producto INTEGER NOT NULL,
+
+    fecha_programada DATE NOT NULL,
+
+    cantidad_programada NUMERIC(12,2) NOT NULL,
+
+    estado VARCHAR(20) DEFAULT 'PLANIFICADA',
+
+    responsable VARCHAR(100),
+
+    CONSTRAINT fk_orden_producto
+        FOREIGN KEY(id_producto)
+        REFERENCES producto(id_producto),
+
+    CHECK(estado IN
+    (
+        'PLANIFICADA',
+        'EN_PROCESO',
+        'FINALIZADA',
+        'CANCELADA'
+    )),
+
+    CHECK(cantidad_programada>0)
+
 );
 
--- Una orden puede salir en varios lotes segun la capacidad de las lineas.
-CREATE TABLE IF NOT EXISTS lote_produccion (
-    id_lote            SERIAL PRIMARY KEY,
-    codigo_lote        VARCHAR(30) NOT NULL UNIQUE,
-    id_orden           INTEGER     NOT NULL REFERENCES orden_produccion (id_orden),
-    cantidad_producida INTEGER     NOT NULL,
-    fecha_fabricacion  DATE        NOT NULL
+-- ==========================================
+-- LOTES
+-- ==========================================
+
+CREATE TABLE lote_produccion(
+
+    id_lote SERIAL PRIMARY KEY,
+
+    id_orden INTEGER NOT NULL,
+
+    numero_lote VARCHAR(40) UNIQUE NOT NULL,
+
+    fecha_inicio TIMESTAMP,
+
+    fecha_fin TIMESTAMP,
+
+    cantidad_producida NUMERIC(12,2),
+
+    estado VARCHAR(20) DEFAULT 'EN_PROCESO',
+
+    CONSTRAINT fk_lote_orden
+        FOREIGN KEY(id_orden)
+        REFERENCES orden_produccion(id_orden),
+
+    CHECK(estado IN
+    (
+        'EN_PROCESO',
+        'FINALIZADO',
+        'RECHAZADO'
+    ))
+
 );
 
--- ---------- Que dice el laboratorio ----------
-CREATE TABLE IF NOT EXISTS control_calidad (
-    id_control       SERIAL PRIMARY KEY,
-    id_lote          INTEGER NOT NULL UNIQUE REFERENCES lote_produccion (id_lote),
-    ph               NUMERIC(4,2)  NOT NULL,
-    grados_brix      NUMERIC(5,2)  NOT NULL,
-    temperatura      NUMERIC(5,2)  NOT NULL,
-    resultado        VARCHAR(12)   NOT NULL,  -- APROBADO, OBSERVADO, RECHAZADO
-    fecha_inspeccion DATE          NOT NULL
+-- ==========================================
+-- CONTROL DE CALIDAD
+-- ==========================================
+
+CREATE TABLE control_calidad(
+
+    id_control SERIAL PRIMARY KEY,
+
+    id_lote INTEGER NOT NULL,
+
+    fecha_control TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    ph NUMERIC(4,2),
+
+    brix NUMERIC(5,2),
+
+    temperatura NUMERIC(5,2),
+
+    resultado VARCHAR(20),
+
+    observaciones TEXT,
+
+    CONSTRAINT fk_control_lote
+        FOREIGN KEY(id_lote)
+        REFERENCES lote_produccion(id_lote)
+        ON DELETE CASCADE,
+
+    CHECK(resultado IN
+    (
+        'APROBADO',
+        'RECHAZADO',
+        'OBSERVADO'
+    ))
+
 );
 
--- ---------- Donde queda lo aprobado ----------
--- Solo entran aqui los lotes con control de calidad APROBADO.
-CREATE TABLE IF NOT EXISTS almacen_producto_terminado (
-    id_almacen       SERIAL PRIMARY KEY,
-    id_lote          INTEGER NOT NULL UNIQUE REFERENCES lote_produccion (id_lote),
-    cantidad         INTEGER      NOT NULL,
-    ubicacion_fisica VARCHAR(50)  NOT NULL,
-    fecha_ingreso    DATE         NOT NULL
+-- ==========================================
+-- INVENTARIO PRODUCTO TERMINADO
+-- ==========================================
+
+CREATE TABLE inventario_producto(
+
+    id_inventario SERIAL PRIMARY KEY,
+
+    id_lote INTEGER NOT NULL,
+
+    cantidad NUMERIC(12,2) NOT NULL,
+
+    ubicacion VARCHAR(80),
+
+    fecha_ingreso DATE DEFAULT CURRENT_DATE,
+
+    CONSTRAINT fk_inventario_lote
+        FOREIGN KEY(id_lote)
+        REFERENCES lote_produccion(id_lote),
+
+    CHECK(cantidad>=0)
+
 );
+
+-- ==========================================
+-- ÍNDICES
+-- ==========================================
+
+CREATE INDEX idx_producto_nombre
+ON producto(nombre);
+
+CREATE INDEX idx_materia_nombre
+ON materia_prima(nombre);
+
+CREATE INDEX idx_receta_producto
+ON receta_produccion(id_producto);
+
+CREATE INDEX idx_detalle_receta
+ON detalle_receta(id_receta);
+
+CREATE INDEX idx_detalle_materia
+ON detalle_receta(id_materia);
+
+CREATE INDEX idx_movimiento_fecha
+ON movimiento_materia_prima(fecha);
+
+CREATE INDEX idx_orden_estado
+ON orden_produccion(estado);
+
+CREATE INDEX idx_lote_numero
+ON lote_produccion(numero_lote);
+
+CREATE INDEX idx_control_resultado
+ON control_calidad(resultado);
+
+CREATE INDEX idx_inventario_fecha
+ON inventario_producto(fecha_ingreso);

@@ -16,15 +16,16 @@ import lombok.Data;
 @Table(name = "materia_prima")
 public class MateriaPrimaEntidad {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_materia_prima")
-	private Integer idMateriaPrima;
+	@Column(name = "id_materia")
+	private Integer idMateria;
 	@Column(name = "nombre")
 	private String nombre;
 	@Column(name = "unidad_medida")
 	private String unidadMedida;
-	@Column(name = "stock")
-	private BigDecimal stock;
+	@Column(name = "stock_actual")
+	private BigDecimal stockActual;
+	@Column(name = "stock_minimo")
+	private BigDecimal stockMinimo;
 }

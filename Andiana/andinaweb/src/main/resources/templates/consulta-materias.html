@@ -41,13 +41,15 @@
 							<th>Materia prima</th>
 							<th>Cantidad</th>
 							<th>Unidad</th>
+							<th>Stock actual</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="m : ${materias}">
 							<td th:text="${m.get('materiaPrima')}">Materia</td>
 							<td th:text="${m.get('cantidad')}">0</td>
-							<td th:text="${m.get('unidadMedida')}">Unidad</td>
+							<td th:text="${m.get('unidad')}">Unidad</td>
+							<td th:text="${m.get('stockActual')} ?: '-'">0</td>
 						</tr>
 					</tbody>
 				</table>

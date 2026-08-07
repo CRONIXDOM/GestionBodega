@@ -6,6 +6,6 @@ import com.andiana.api.dominio.puerto.MateriaPrimaRepositorio;
 public class MateriasEnMemoria extends RepositorioEnMemoria<MateriaPrima> implements MateriaPrimaRepositorio {
 
 	public MateriasEnMemoria() {
-		super(MateriaPrima::getIdMateriaPrima, MateriaPrima::setIdMateriaPrima);
+		super(MateriaPrima::getIdMateria, MateriaPrima::setIdMateria);
 	}
 }
