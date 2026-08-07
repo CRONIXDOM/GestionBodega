@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark" xmlns:th="http://www.thymeleaf.org"
+<html lang="es" data-theme="light" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
@@ -9,6 +9,7 @@
 <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
 <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<link rel="stylesheet" th:href="@{/assets/css/andiana.css}">
 </head>
 
 <body>
@@ -27,46 +28,59 @@
 			</div>
 
 			<nav class="sidebar-nav">
-				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
-				<a class="nav-link" th:href="@{/producto}">
+				<!-- Las opciones van en el orden en que se realiza el proceso, y el
+				     numero lo deja explicito para quien recien entra al sistema. -->
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">1 · Qué y con qué</span>
+				<a class="nav-link" th:href="@{/producto}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/producto')} ? 'active'">
+					<span class="paso">1</span>
 					<span class="nav-icon"><i class="bi bi-cup-straw" aria-hidden="true"></i></span>
 					<span class="nav-text">Productos</span>
 				</a>
-				<a class="nav-link" th:href="@{/materiaPrima}">
+				<a class="nav-link" th:href="@{/materiaPrima}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/materiaPrima')} ? 'active'">
+					<span class="paso">2</span>
 					<span class="nav-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></span>
 					<span class="nav-text">Materias Primas</span>
 				</a>
 
-				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Fórmulas</span>
-				<a class="nav-link" th:href="@{/receta}">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">2 · La fórmula</span>
+				<a class="nav-link" th:href="@{/receta}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/receta')} ? 'active'">
+					<span class="paso">3</span>
 					<span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
 					<span class="nav-text">Recetas</span>
 				</a>
-				<a class="nav-link" th:href="@{/detallereceta}">
+				<a class="nav-link" th:href="@{/detallereceta}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/detallereceta')} ? 'active'">
+					<span class="paso">4</span>
 					<span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
 					<span class="nav-text">Detalle Receta</span>
 				</a>
 
-				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Bodega</span>
-				<a class="nav-link" th:href="@{/movimiento}">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">3 · La bodega</span>
+				<a class="nav-link" th:href="@{/movimiento}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/movimiento')} ? 'active'">
+					<span class="paso">5</span>
 					<span class="nav-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span>
 					<span class="nav-text">Movimientos</span>
 				</a>
 
-				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Producción</span>
-				<a class="nav-link" th:href="@{/orden}">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">4 · Se fabrica</span>
+				<a class="nav-link" th:href="@{/orden}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/orden')} ? 'active'">
+					<span class="paso">6</span>
 					<span class="nav-icon"><i class="bi bi-clipboard-check" aria-hidden="true"></i></span>
 					<span class="nav-text">Órdenes</span>
 				</a>
-				<a class="nav-link" th:href="@{/lote}">
+				<a class="nav-link" th:href="@{/lote}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/lote')} ? 'active'">
+					<span class="paso">7</span>
 					<span class="nav-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
 					<span class="nav-text">Lotes</span>
 				</a>
-				<a class="nav-link" th:href="@{/controlcalidad}">
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">5 · Se revisa y se guarda</span>
+				<a class="nav-link" th:href="@{/controlcalidad}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/controlcalidad')} ? 'active'">
+					<span class="paso">8</span>
 					<span class="nav-icon"><i class="bi bi-thermometer-half" aria-hidden="true"></i></span>
 					<span class="nav-text">Control de Calidad</span>
 				</a>
-				<a class="nav-link" th:href="@{/inventario}">
+				<a class="nav-link" th:href="@{/inventario}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/inventario')} ? 'active'">
+					<span class="paso">9</span>
 					<span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
 					<span class="nav-text">Inventario</span>
 				</a>

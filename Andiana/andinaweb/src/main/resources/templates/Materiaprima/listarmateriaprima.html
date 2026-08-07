@@ -51,7 +51,15 @@
 							<td class="fw-semibold" th:text="${indice.idMateria}"></td>
 							<td th:text="${indice.nombre} ?: '—'"></td>
 							<td th:text="${indice.unidadMedida} ?: '—'"></td>
-							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.stockActual} ?: '—'">—</span></td>
+							<td th:with="bajo=${indice.stockMinimo != null and indice.stockActual != null
+									and indice.stockActual.compareTo(indice.stockMinimo) <= 0}">
+								<span class="badge"
+									th:classappend="${bajo} ? 'bg-danger-subtle text-danger' : 'bg-secondary-subtle text-body'"
+									th:text="${indice.stockActual} ?: '—'">—</span>
+								<span th:if="${bajo}" class="text-danger small ms-1" title="Está en el mínimo o por debajo">
+									<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> reponer
+								</span>
+							</td>
 							<td th:text="${indice.stockMinimo} ?: '—'"></td>
 							<td class="text-end">
 								<a class="btn btn-light btn-sm" th:href="@{/materiaPrima/editar/{id}(id=${indice.idMateria})}"><i

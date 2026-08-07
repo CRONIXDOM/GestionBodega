@@ -54,14 +54,11 @@
     }
   }
 
-  function getPreferredTheme(storageAvailable) {
-    var savedTheme = storageAvailable ? window.localStorage.getItem(themeStorageKey) : "";
-
-    if (savedTheme === "dark" || savedTheme === "light") {
-      return savedTheme;
-    }
-
-    return "dark";
+  // Gaseosas Andinas usa una paleta fija de blanco y amarillo, y la pantalla no
+  // ofrece ningun boton para cambiar de tema: siempre se trabaja en claro. Se
+  // ignora a proposito lo que hubiera guardado antes en el navegador.
+  function getPreferredTheme() {
+    return "light";
   }
 
   onReady(function () {

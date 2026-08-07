@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Gaseosas Andinas S.A. — colores de la marca: blanco y amarillo.
+   Se carga despues de style.css y solo cambia la paleta; el resto de la
+   maquetacion se hereda tal cual.
+   ========================================================================== */
+
+:root {
+	/* amarillo de la marca. El texto encima va oscuro, no blanco: sobre
+	   amarillo el blanco no se lee. */
+	--andiana-amarillo: #f5c518;
+	--andiana-amarillo-fuerte: #d9a900;
+	--andiana-amarillo-suave: #fff8dd;
+	--andiana-amarillo-borde: #f3e2a0;
+	--andiana-tinta: #2a2a24;
+
+	--admin-bg: #ffffff;
+	--admin-surface: #ffffff;
+	--admin-surface-soft: #fffdf4;
+	--admin-border: #ece5cf;
+	--admin-text: var(--andiana-tinta);
+	--admin-muted: #7b7566;
+
+	--admin-primary: var(--andiana-amarillo);
+	--admin-primary-dark: var(--andiana-amarillo-fuerte);
+	--admin-warning: var(--andiana-amarillo-fuerte);
+
+	--admin-shadow-sm: 0 10px 24px rgba(90, 78, 20, 0.06);
+	--admin-shadow: 0 18px 46px rgba(90, 78, 20, 0.09);
+	--admin-shadow-lg: 0 26px 70px rgba(90, 78, 20, 0.12);
+	--admin-ring: 0 0 0 4px rgba(245, 197, 24, 0.28);
+}
+
+html:not([data-theme="dark"]) {
+	--admin-sidebar: #ffffff;
+	--admin-sidebar-soft: var(--andiana-amarillo-suave);
+	--admin-sidebar-border: var(--admin-border);
+	--admin-sidebar-text: #5c5647;
+	--admin-sidebar-text-strong: var(--andiana-tinta);
+	--admin-sidebar-muted: #8a8474;
+	--admin-sidebar-icon-bg: var(--andiana-amarillo-suave);
+	--admin-sidebar-icon: var(--andiana-amarillo-fuerte);
+	--admin-sidebar-shadow: 18px 0 42px rgba(90, 78, 20, 0.07);
+}
+
+/* el fondo del body venia con un degradado azulado fijo */
+body {
+	background: #ffffff;
+	color: var(--admin-text);
+}
+
+/* ---------- cabecera y marca ---------- */
+
+.brand-icon {
+	background: var(--andiana-amarillo);
+	color: var(--andiana-tinta);
+}
+
+.admin-navbar,
+.admin-navbar.bg-white {
+	border-bottom: 1px solid var(--admin-border);
+	background: #ffffff;
+}
+
+.admin-footer {
+	border-top: 1px solid var(--admin-border);
+	background: #ffffff;
+}
+
+/* ---------- menu lateral ---------- */
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link:focus,
+.sidebar-nav .nav-link.active {
+	background: var(--andiana-amarillo-suave);
+	color: var(--andiana-tinta);
+}
+
+/* la seccion activa se marca con una franja amarilla a la izquierda */
+.sidebar-nav .nav-link.active {
+	box-shadow: inset 3px 0 0 var(--andiana-amarillo);
+}
+
+.nav-icon {
+	background: var(--andiana-amarillo-suave);
+	color: var(--andiana-amarillo-fuerte);
+}
+
+/* el numero del paso, para que se lea el orden del proceso de un vistazo */
+.paso {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	margin-right: 0.5rem;
+	border-radius: 50%;
+	background: var(--andiana-amarillo);
+	color: var(--andiana-tinta);
+	font-size: 0.72rem;
+	font-weight: 700;
+	flex: 0 0 22px;
+}
+
+/* ---------- botones ---------- */
+
+.btn-primary {
+	border-color: var(--andiana-amarillo);
+	background: var(--andiana-amarillo);
+	color: var(--andiana-tinta);
+	font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+	border-color: var(--andiana-amarillo-fuerte);
+	background: var(--andiana-amarillo-fuerte);
+	color: var(--andiana-tinta);
+}
+
+.btn-light {
+	border-color: var(--admin-border);
+	background: #ffffff;
+	color: var(--admin-text);
+}
+
+.btn-light:hover,
+.btn-light:focus {
+	background: var(--andiana-amarillo-suave);
+	border-color: var(--andiana-amarillo-borde);
+}
+
+/* ---------- paneles y tablas ---------- */
+
+.panel,
+.metric-card {
+	border: 1px solid var(--admin-border);
+	background: #ffffff;
+}
+
+.table thead th {
+	border-bottom: 2px solid var(--andiana-amarillo);
+	background: var(--andiana-amarillo-suave);
+	color: #6b6250;
+}
+
+.table tbody tr:hover {
+	background: var(--andiana-amarillo-suave);
+}
+
+.page-heading .page-icon {
+	background: var(--andiana-amarillo-suave);
+	color: var(--andiana-amarillo-fuerte);
+}
+
+.eyebrow {
+	color: var(--andiana-amarillo-fuerte);
+}
+
+/* ---------- etiquetas ---------- */
+
+.badge.bg-secondary-subtle {
+	background: var(--andiana-amarillo-suave) !important;
+	color: #6b6250 !important;
+}
+
+.badge.bg-primary-subtle {
+	background: var(--andiana-amarillo-suave) !important;
+	color: var(--andiana-amarillo-fuerte) !important;
+}
+
+/* ---------- formularios ---------- */
+
+.form-control,
+.form-select {
+	border-color: var(--admin-border);
+	background: #ffffff;
+	color: var(--admin-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+	border-color: var(--andiana-amarillo);
+	box-shadow: var(--admin-ring);
+}
+
+.form-check-input:checked {
+	border-color: var(--andiana-amarillo-fuerte);
+	background-color: var(--andiana-amarillo);
+}
+
+/* ---------- avisos ---------- */
+
+.alert-info {
+	border-color: var(--andiana-amarillo-borde);
+	background: var(--andiana-amarillo-suave);
+	color: #6b5b12;
+}
+
+.status-dot {
+	background: var(--andiana-amarillo-fuerte);
+}

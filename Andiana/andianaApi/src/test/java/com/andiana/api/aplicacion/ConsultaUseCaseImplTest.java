@@ -31,6 +31,11 @@ class ConsultaUseCaseImplTest {
 		}
 
 		@Override
+		protected RecetaProduccion copiar(RecetaProduccion r) {
+			return new RecetaProduccion(r.getIdReceta(), r.getIdProducto(), r.getVersion(), r.getFechaVigencia(), r.getEstado());
+		}
+
+		@Override
 		public List<RecetaProduccion> buscarPorProducto(int idProducto) {
 			return listarTodos().stream().filter(r -> r.getIdProducto() == idProducto).toList();
 		}
@@ -43,6 +48,11 @@ class ConsultaUseCaseImplTest {
 		}
 
 		@Override
+		protected DetalleReceta copiar(DetalleReceta d) {
+			return new DetalleReceta(d.getIdDetalle(), d.getIdReceta(), d.getIdMateria(), d.getCantidad(), d.getUnidad());
+		}
+
+		@Override
 		public List<DetalleReceta> buscarPorReceta(int idReceta) {
 			return listarTodos().stream().filter(d -> d.getIdReceta() == idReceta).toList();
 		}
@@ -51,6 +61,11 @@ class ConsultaUseCaseImplTest {
 	static class ProductosEnMemoria extends RepositorioEnMemoria<Producto> implements IProductoRepositorio {
 		ProductosEnMemoria() {
 			super(Producto::getIdProducto, Producto::setIdProducto);
+		}
+
+		@Override
+		protected Producto copiar(Producto p) {
+			return new Producto(p.getIdProducto(), p.getNombre(), p.getTipo(), p.getPresentacion(), p.getVolumenMl(), p.getEstado());
 		}
 	}
 

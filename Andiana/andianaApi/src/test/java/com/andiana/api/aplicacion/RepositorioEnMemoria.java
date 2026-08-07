@@ -9,9 +9,14 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
- * Un almacen de datos falso, en un HashMap. Sirve para probar los casos de uso
+ * Un almacén de datos falso, en un HashMap. Sirve para probar los casos de uso
  * sin levantar Spring ni PostgreSQL: justamente eso es lo que permite tener el
  * dominio separado del framework.
+ *
+ * Guarda y devuelve COPIAS, igual que haría una base de datos. Si compartiera
+ * la misma instancia, editar un objeto ya guardado cambiaría el "antes" y el
+ * "después" a la vez, y las pruebas dejarían pasar errores que en producción sí
+ * se notan.
  */
 public abstract class RepositorioEnMemoria<T> {
 
@@ -25,19 +30,26 @@ public abstract class RepositorioEnMemoria<T> {
 		this.escribirId = escribirId;
 	}
 
+	/** Una copia independiente, como la que devolvería una consulta a la base. */
+	protected abstract T copiar(T entidad);
+
 	public List<T> listarTodos() {
-		return new ArrayList<>(filas.values());
+		List<T> copias = new ArrayList<>();
+		for (T fila : filas.values()) {
+			copias.add(copiar(fila));
+		}
+		return copias;
 	}
 
 	public Optional<T> buscarPorid(int id) {
-		return Optional.ofNullable(filas.get(id));
+		return Optional.ofNullable(filas.get(id)).map(this::copiar);
 	}
 
 	public T guardar(T entidad) {
 		if (leerId.apply(entidad) == null) {
 			escribirId.accept(entidad, siguienteId++);
 		}
-		filas.put(leerId.apply(entidad), entidad);
+		filas.put(leerId.apply(entidad), copiar(entidad));
 		return entidad;
 	}
 

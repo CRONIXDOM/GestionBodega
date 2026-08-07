@@ -28,6 +28,11 @@ class InventarioProductoUseCaseImplTest {
 		}
 
 		@Override
+		protected LoteProduccion copiar(LoteProduccion l) {
+			return new LoteProduccion(l.getIdLote(), l.getIdOrden(), l.getNumeroLote(), l.getFechaInicio(), l.getFechaFin(), l.getCantidadProducida(), l.getEstado());
+		}
+
+		@Override
 		public List<LoteProduccion> buscarPorOrden(int idOrden) {
 			return listarTodos().stream().filter(l -> l.getIdOrden() == idOrden).toList();
 		}
@@ -37,6 +42,11 @@ class InventarioProductoUseCaseImplTest {
 			implements IControlCalidadRepositorio {
 		ControlesEnMemoria() {
 			super(ControlCalidad::getIdControl, ControlCalidad::setIdControl);
+		}
+
+		@Override
+		protected ControlCalidad copiar(ControlCalidad c) {
+			return new ControlCalidad(c.getIdControl(), c.getIdLote(), c.getFechaControl(), c.getPh(), c.getBrix(), c.getTemperatura(), c.getResultado(), c.getObservaciones());
 		}
 
 		/** Del mas reciente al mas antiguo, como exige el puerto. */
@@ -53,6 +63,11 @@ class InventarioProductoUseCaseImplTest {
 			implements IInventarioProductoRepositorio {
 		InventarioEnMemoria() {
 			super(InventarioProducto::getIdInventario, InventarioProducto::setIdInventario);
+		}
+
+		@Override
+		protected InventarioProducto copiar(InventarioProducto i) {
+			return new InventarioProducto(i.getIdInventario(), i.getIdLote(), i.getCantidad(), i.getUbicacion(), i.getFechaIngreso());
 		}
 
 		@Override

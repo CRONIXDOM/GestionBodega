@@ -8,4 +8,10 @@ public class MateriasEnMemoria extends RepositorioEnMemoria<MateriaPrima> implem
 	public MateriasEnMemoria() {
 		super(MateriaPrima::getIdMateria, MateriaPrima::setIdMateria);
 	}
+
+	@Override
+	protected MateriaPrima copiar(MateriaPrima m) {
+		return new MateriaPrima(m.getIdMateria(), m.getNombre(), m.getUnidadMedida(),
+				m.getStockActual(), m.getStockMinimo());
+	}
 }

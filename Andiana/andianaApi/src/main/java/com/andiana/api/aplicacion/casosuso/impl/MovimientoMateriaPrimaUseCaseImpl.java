@@ -62,13 +62,35 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 			throw new RuntimeException("La materia prima indicada no existe");
 		}
 
-		// se comprueba ANTES de guardar: si el historial resultante no cuadra, no
-		// se toca nada
+		// si la materia prima ya traia stock de antes pero no tiene ni un movimiento
+		// que lo explique, se anota ese saldo como el ingreso inicial
+		asegurarSaldoInicial(nuevoMovimientoMateriaPrima.getIdMateria(),
+				nuevoMovimientoMateriaPrima.getFecha());
+
+		// al editar, el movimiento puede haber cambiado de materia prima: entonces
+		// hay DOS bodegas que corregir, la nueva y la que lo pierde
+		Integer materiaAnterior = null;
+		if (nuevoMovimientoMateriaPrima.getIdMovimiento() != null) {
+			int anterior = buscarPorId(nuevoMovimientoMateriaPrima.getIdMovimiento()).getIdMateria();
+			if (anterior != nuevoMovimientoMateriaPrima.getIdMateria()) {
+				materiaAnterior = anterior;
+			}
+		}
+
+		// se comprueba ANTES de guardar: si alguno de los dos historiales no cuadra,
+		// no se toca nada
 		reproducir(historialConEsteMovimiento(nuevoMovimientoMateriaPrima),
 				nuevoMovimientoMateriaPrima.getIdMateria());
+		if (materiaAnterior != null) {
+			reproducir(historialSinEsteMovimiento(materiaAnterior,
+					nuevoMovimientoMateriaPrima.getIdMovimiento()), materiaAnterior);
+		}
 
 		MovimientoMateriaPrima guardado = repositorio.guardar(nuevoMovimientoMateriaPrima);
 		recalcularStock(nuevoMovimientoMateriaPrima.getIdMateria());
+		if (materiaAnterior != null) {
+			recalcularStock(materiaAnterior);
+		}
 		return guardado;
 	}
 
@@ -113,6 +135,39 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		historial.sort(Comparator.comparing(MovimientoMateriaPrima::getFecha)
 				.thenComparing(m -> m.getIdMovimiento() == null ? Integer.MAX_VALUE : m.getIdMovimiento()));
 		return historial;
+	}
+
+	/**
+	 * El stock sale de reproducir el historial, asi que una materia prima que ya
+	 * tenia existencias cargadas directamente en la base -sin ningun movimiento
+	 * que las respalde- perderia ese stock en cuanto se le registre el primero.
+	 *
+	 * Para que eso no pase, la primera vez que una materia prima recibe un
+	 * movimiento se anota lo que ya tenia como un INGRESO de "SALDO INICIAL",
+	 * fechado un dia antes. Queda a la vista en el historial y desde entonces el
+	 * stock si cuadra con sus movimientos.
+	 */
+	private void asegurarSaldoInicial(int idMateria, LocalDateTime fechaDelPrimero) {
+		if (!repositorio.buscarPorMateria(idMateria).isEmpty()) {
+			return;
+		}
+		MateriaPrima materia = materia(idMateria);
+		BigDecimal saldo = materia.getStockActual();
+		if (saldo == null || saldo.signum() <= 0) {
+			return;
+		}
+		repositorio.guardar(new MovimientoMateriaPrima(null, idMateria, fechaDelPrimero.minusDays(1),
+				INGRESO, saldo, "SALDO INICIAL"));
+	}
+
+	/**
+	 * El historial que le queda a una materia prima si se le quita un movimiento,
+	 * porque se lo llevaron a otra materia o porque se borro.
+	 */
+	private List<MovimientoMateriaPrima> historialSinEsteMovimiento(int idMateria, Integer idMovimiento) {
+		return repositorio.buscarPorMateria(idMateria).stream()
+				.filter(otro -> !otro.getIdMovimiento().equals(idMovimiento))
+				.toList();
 	}
 
 	/**
