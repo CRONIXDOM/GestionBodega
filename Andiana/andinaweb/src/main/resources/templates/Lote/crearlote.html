@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Lotes de Producción</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Producción</p>
+					<h1 class="h3 mb-1">Registro de Lotes de Producción</h1>
+					<p class="text-muted mb-0">Completa los datos del formulario.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-8">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+				<form class="panel" th:action="@{/lote/guardar}" th:object="${lote}" method="post">
+					<input type="hidden" th:field="*{idLote}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Número de lote <span class="text-danger">*</span></label>
+							<input class="form-control" type="text" th:field="*{numeroLote}" required >
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Orden de producción <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{idOrden}" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesOrden}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Fecha de inicio</label>
+							<input class="form-control" type="datetime-local" id="fechaInicio" name="fechaInicio"
+								th:value="${lote.fechaInicio}" >
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Fecha de fin</label>
+							<input class="form-control" type="datetime-local" id="fechaFin" name="fechaFin"
+								th:value="${lote.fechaFin}" >
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Cantidad producida</label>
+							<input class="form-control" type="number" th:field="*{cantidadProducida}" min="0" step="0.01">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Estado <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{estado}" required>
+								<option value="">Seleccione...</option>
+								<option th:value="'EN_PROCESO'" th:text="'EN_PROCESO'"></option>
+								<option th:value="'FINALIZADO'" th:text="'FINALIZADO'"></option>
+								<option th:value="'RECHAZADO'" th:text="'RECHAZADO'"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="alert alert-info mt-3 mb-0" role="alert">
+						<i class="bi bi-info-circle" aria-hidden="true"></i> Un lote FINALIZADO tiene que decir cuánto produjo: es el tope de lo que puede entrar al inventario.
+					</div>
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/lote}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

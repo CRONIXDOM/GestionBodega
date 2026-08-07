@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaseosas Andinas S.A.</title>
+
+<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+
+<body>
+	<div class="admin-shell">
+		<div class="sidebar-backdrop" data-sidebar-close></div>
+
+		<aside class="admin-sidebar" id="adminSidebar" aria-label="Navegación principal">
+			<div class="sidebar-header">
+				<a class="brand-mark" th:href="@{/}" aria-label="Gaseosas Andinas">
+					<span class="brand-icon"><i class="bi bi-cup-straw" aria-hidden="true"></i></span>
+					<span class="brand-copy">
+						<span class="brand-title">Andinas</span>
+						<span class="brand-subtitle">Producción</span>
+					</span>
+				</a>
+			</div>
+
+			<nav class="sidebar-nav">
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogo</span>
+				<a class="nav-link" th:href="@{/producto}">
+					<span class="nav-icon"><i class="bi bi-cup-straw" aria-hidden="true"></i></span>
+					<span class="nav-text">Productos</span>
+				</a>
+				<a class="nav-link" th:href="@{/materiaPrima}">
+					<span class="nav-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></span>
+					<span class="nav-text">Materias Primas</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Fórmulas</span>
+				<a class="nav-link" th:href="@{/receta}">
+					<span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
+					<span class="nav-text">Recetas</span>
+				</a>
+				<a class="nav-link" th:href="@{/detallereceta}">
+					<span class="nav-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+					<span class="nav-text">Detalle Receta</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Bodega</span>
+				<a class="nav-link" th:href="@{/movimiento}">
+					<span class="nav-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span>
+					<span class="nav-text">Movimientos</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Producción</span>
+				<a class="nav-link" th:href="@{/orden}">
+					<span class="nav-icon"><i class="bi bi-clipboard-check" aria-hidden="true"></i></span>
+					<span class="nav-text">Órdenes</span>
+				</a>
+				<a class="nav-link" th:href="@{/lote}">
+					<span class="nav-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span>
+					<span class="nav-text">Lotes</span>
+				</a>
+				<a class="nav-link" th:href="@{/controlcalidad}">
+					<span class="nav-icon"><i class="bi bi-thermometer-half" aria-hidden="true"></i></span>
+					<span class="nav-text">Control de Calidad</span>
+				</a>
+				<a class="nav-link" th:href="@{/inventario}">
+					<span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+					<span class="nav-text">Inventario</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Consultas</span>
+				<a class="nav-link" th:href="@{/consulta/materias-receta}">
+					<span class="nav-icon"><i class="bi bi-search" aria-hidden="true"></i></span>
+					<span class="nav-text">Materias de una Receta</span>
+				</a>
+				<a class="nav-link" th:href="@{/consulta/conteo-materias}">
+					<span class="nav-icon"><i class="bi bi-bar-chart" aria-hidden="true"></i></span>
+					<span class="nav-text">Materias por Receta</span>
+				</a>
+			</nav>
+
+			<div class="sidebar-footer">
+				<span class="status-dot"></span>
+				<span class="sidebar-footer-text">Sistema operativo</span>
+			</div>
+		</aside>
+
+		<div class="admin-main">
+			<nav class="navbar admin-navbar navbar-expand bg-white">
+				<div class="container-fluid px-3 px-lg-4">
+					<button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
+						aria-expanded="true" aria-label="Mostrar/ocultar menú">
+						<span></span> <span></span> <span></span>
+					</button>
+
+					<div class="ms-3 flex-grow-1">
+						<span class="fw-bold text-body">Gaseosas Andinas S.A.</span>
+					</div>
+				</div>
+			</nav>
+
+			<main class="dashboard-content">
+				<div class="container-fluid px-3 px-lg-4 py-4">
+					<div layout:fragment="contenidopaginas"></div>
+				</div>
+			</main>
+
+			<footer class="admin-footer">
+				<div class="container-fluid px-3 px-lg-4">
+					<span>Gaseosas Andinas S.A. — Sistema de control de producción.</span>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

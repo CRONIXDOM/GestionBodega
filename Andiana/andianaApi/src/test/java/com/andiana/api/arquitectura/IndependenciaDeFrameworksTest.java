@@ -27,7 +27,7 @@ class IndependenciaDeFrameworksTest {
 	private static final List<String> PROHIBIDOS = List.of(
 			"org.springframework", "jakarta.persistence", "org.hibernate", "jakarta.validation");
 
-	private List<String> importacionesProhibidas(String capa) throws IOException {
+	private List<String> importacionesProhibidas(String capa, List<String> prohibidos) throws IOException {
 		List<String> hallazgos = new ArrayList<>();
 		try (Stream<Path> archivos = Files.walk(FUENTES.resolve(capa))) {
 			for (Path archivo : archivos.filter(p -> p.toString().endsWith(".java")).toList()) {
@@ -35,7 +35,7 @@ class IndependenciaDeFrameworksTest {
 					if (!linea.startsWith("import ")) {
 						continue;
 					}
-					for (String prohibido : PROHIBIDOS) {
+					for (String prohibido : prohibidos) {
 						if (linea.contains(prohibido)) {
 							hallazgos.add(FUENTES.relativize(archivo) + " -> " + linea.trim());
 						}
@@ -49,26 +49,28 @@ class IndependenciaDeFrameworksTest {
 	@Test
 	@DisplayName("El dominio no depende de ningun framework")
 	void elDominioEsJavaPuro() throws IOException {
-		assertThat(importacionesProhibidas("dominio"))
+		assertThat(importacionesProhibidas("dominio", PROHIBIDOS))
 				.as("el dominio debe poder compilarse sin Spring ni JPA")
 				.isEmpty();
 	}
 
 	@Test
-	@DisplayName("Los casos de uso no dependen de ningun framework")
-	void laAplicacionEsJavaPuro() throws IOException {
-		assertThat(importacionesProhibidas("aplicacion"))
-				.as("las reglas de negocio no deben atarse a Spring ni a JPA")
+	@DisplayName("Los casos de uso no dependen de JPA ni de Hibernate")
+	void laAplicacionNoSabeDePersistencia() throws IOException {
+		// lo unico que se admite de Spring es @Transactional, para que un movimiento
+		// y el stock que recalcula se guarden o se deshagan juntos
+		assertThat(importacionesProhibidas("aplicacion",
+				List.of("jakarta.persistence", "org.hibernate", "org.springframework.data")))
+				.as("las reglas de negocio no deben saber como se guardan los datos")
 				.isEmpty();
 	}
 
 	@Test
-	@DisplayName("Todo lo que sabe de JPA vive en infraestructura")
+	@DisplayName("Los controladores no tocan las entidades de la base")
 	void laPersistenciaEstaAislada() throws IOException {
-		assertThat(importacionesProhibidas("presentacion").stream()
-				.filter(linea -> linea.contains("jakarta.persistence") || linea.contains("org.hibernate"))
-				.toList())
-				.as("los controladores no deben tocar las entidades de la base")
+		assertThat(importacionesProhibidas("presentacion",
+				List.of("jakarta.persistence", "org.hibernate")))
+				.as("los controladores hablan de DTOs y del dominio, no de tablas")
 				.isEmpty();
 	}
 }

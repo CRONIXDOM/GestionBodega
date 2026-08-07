@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,6 @@
 	<groupId>com.andiana</groupId>
 	<artifactId>andinaweb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<name>andinaweb</name>
 	<description>Interfaz de usuario de Gaseosas Andinas S.A.</description>
 
@@ -40,10 +39,15 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
 
-		<!-- WebClient: es como esta web consume andianaApi -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>

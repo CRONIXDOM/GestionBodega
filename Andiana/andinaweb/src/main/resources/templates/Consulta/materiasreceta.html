@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-search" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Consultas</p>
+					<h1 class="h3 mb-1">Materias primas utilizadas en una receta</h1>
+					<p class="text-muted mb-0">Elige una receta para ver de qué está compuesta.</p>
+				</div>
+			</div>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger mt-3" role="alert" th:text="${error}"></div>
+
+		<section class="panel mt-3 p-3">
+			<form class="row g-2 align-items-end" method="get" th:action="@{/consulta/materias-receta}">
+				<div class="col-md-6">
+					<label class="form-label">Receta</label>
+					<select class="form-select" name="idReceta" required>
+						<option value="">Seleccione una receta...</option>
+						<option th:each="op : ${opcionesReceta}" th:value="${op.id}" th:text="${op.etiqueta}"
+							th:selected="${op.id == idReceta}"></option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<button class="btn btn-primary" type="submit">
+						<i class="bi bi-search" aria-hidden="true"></i> Consultar
+					</button>
+				</div>
+			</form>
+		</section>
+
+		<p class="text-muted mt-3" th:if="${idReceta == null}">Todavía no has elegido ninguna receta.</p>
+
+		<section class="panel mt-3" th:if="${listamaterias != null}">
+			<div class="p-3 border-bottom">
+				<span>Esta receta utiliza <strong th:text="${#lists.size(listamaterias)}">0</strong>
+					materias primas.</span>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">Materia prima</th>
+							<th scope="col">Cantidad</th>
+							<th scope="col">Unidad</th>
+							<th scope="col">Stock actual</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listamaterias}">
+							<td class="fw-semibold" th:text="${indice.materiaPrima}"></td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.cantidad}">0</span></td>
+							<td th:text="${indice.unidad}"></td>
+							<td th:text="${indice.stockActual} ?: '—'"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(listamaterias)}">
+							<td colspan="4" class="text-center text-muted py-4">Esta receta todavía no tiene
+								materias primas cargadas.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

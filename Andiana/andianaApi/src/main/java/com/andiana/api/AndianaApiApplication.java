@@ -9,4 +9,5 @@ public class AndianaApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AndianaApiApplication.class, args);
 	}
+
 }

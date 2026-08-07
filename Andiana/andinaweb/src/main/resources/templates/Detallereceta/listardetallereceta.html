@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Fórmulas</p>
+					<h1 class="h3 mb-1">Detalle de Receta</h1>
+					<p class="text-muted mb-0">Cuánta materia prima lleva cada receta.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/detallereceta/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<section class="panel mt-3">
+			<div class="p-3 pb-0">
+				<div class="input-group table-search" style="max-width: 340px;">
+					<span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" data-table-search="tablaDetallereceta" placeholder="Buscar...">
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table id="tablaDetallereceta" class="table align-middle mb-0" data-page-size="15">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Receta</th>
+							<th scope="col">Materia prima</th>
+							<th scope="col">Cantidad</th>
+							<th scope="col">Unidad</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listadetallereceta}">
+							<td class="fw-semibold" th:text="${indice.idDetalle}"></td>
+							<td th:with="op=${opcionesReceta.?[id == __${indice.idReceta}__]}"
+								th:text="${#lists.isEmpty(op)} ? '—' : ${op[0].etiqueta}">—</td>
+							<td th:with="op=${opcionesMateria.?[id == __${indice.idMateria}__]}"
+								th:text="${#lists.isEmpty(op)} ? '—' : ${op[0].etiqueta}">—</td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.cantidad} ?: '—'">—</span></td>
+							<td th:text="${indice.unidad} ?: '—'"></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/detallereceta/editar/{id}(id=${indice.idDetalle})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/detallereceta/eliminar/{id}(id=${indice.idDetalle})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr data-empty-row th:if="${#lists.isEmpty(listadetallereceta)}">
+							<td colspan="6" class="text-center text-muted py-4">Todavía no hay líneas de receta registradas.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

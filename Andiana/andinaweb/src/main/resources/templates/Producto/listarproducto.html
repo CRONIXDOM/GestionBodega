@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-cup-straw" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Catálogo</p>
+					<h1 class="h3 mb-1">Productos</h1>
+					<p class="text-muted mb-0">Bebidas que fabrica la planta, en cada una de sus presentaciones.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/producto/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<section class="panel mt-3">
+			<div class="p-3 pb-0">
+				<div class="input-group table-search" style="max-width: 340px;">
+					<span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" data-table-search="tablaProducto" placeholder="Buscar...">
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table id="tablaProducto" class="table align-middle mb-0" data-page-size="15">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">Presentación</th>
+							<th scope="col">Volumen (ml)</th>
+							<th scope="col">Activo</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listaproducto}">
+							<td class="fw-semibold" th:text="${indice.idProducto}"></td>
+							<td th:text="${indice.nombre} ?: '—'"></td>
+							<td th:text="${indice.tipo} ?: '—'"></td>
+							<td th:text="${indice.presentacion} ?: '—'"></td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.volumenMl} ?: '—'">—</span></td>
+							<td><span class="badge" th:classappend="${indice.estado} ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-body'" th:text="${indice.estado} ? 'Sí' : 'No'">Sí</span></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/producto/editar/{id}(id=${indice.idProducto})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/producto/eliminar/{id}(id=${indice.idProducto})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr data-empty-row th:if="${#lists.isEmpty(listaproducto)}">
+							<td colspan="7" class="text-center text-muted py-4">Todavía no hay productos registrados.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

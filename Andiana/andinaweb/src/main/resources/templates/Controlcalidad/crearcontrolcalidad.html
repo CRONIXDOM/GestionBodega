@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Control de Calidad</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-thermometer-half" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Producción</p>
+					<h1 class="h3 mb-1">Registro de Control de Calidad</h1>
+					<p class="text-muted mb-0">Completa los datos del formulario.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-8">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+				<form class="panel" th:action="@{/controlcalidad/guardar}" th:object="${controlCalidad}" method="post">
+					<input type="hidden" th:field="*{idControl}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Lote <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{idLote}" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesLote}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Fecha del control <span class="text-danger">*</span></label>
+							<input class="form-control" type="datetime-local" id="fechaControl" name="fechaControl"
+								th:value="${controlCalidad.fechaControl}" required>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">pH <span class="text-danger">*</span></label>
+							<input class="form-control" type="number" th:field="*{ph}" required min="0" max="14" step="0.01">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Grados Brix <span class="text-danger">*</span></label>
+							<input class="form-control" type="number" th:field="*{brix}" required min="0" max="30" step="0.01">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Temperatura <span class="text-danger">*</span></label>
+							<input class="form-control" type="number" th:field="*{temperatura}" required min="-10" max="60" step="0.01">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Resultado <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{resultado}" required>
+								<option value="">Seleccione...</option>
+								<option th:value="'APROBADO'" th:text="'APROBADO'"></option>
+								<option th:value="'OBSERVADO'" th:text="'OBSERVADO'"></option>
+								<option th:value="'RECHAZADO'" th:text="'RECHAZADO'"></option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Observaciones</label>
+							<input class="form-control" type="text" th:field="*{observaciones}" >
+						</div>
+					</div>
+
+					<div class="alert alert-info mt-3 mb-0" role="alert">
+						<i class="bi bi-info-circle" aria-hidden="true"></i> Si un lote se vuelve a inspeccionar, manda el control más reciente.
+					</div>
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/controlcalidad}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

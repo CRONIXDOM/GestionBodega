@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Inicio</p>
+					<h1 class="h3 mb-1">Panel de Producción</h1>
+					<p class="text-muted mb-0">Resumen del proceso de producción de bebidas.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Productos</div>
+					<div class="h3 mb-0" th:text="${productos}">0</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Materias primas</div>
+					<div class="h3 mb-0" th:text="${materias}">0</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Recetas</div>
+					<div class="h3 mb-0" th:text="${recetas}">0</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Órdenes</div>
+					<div class="h3 mb-0" th:text="${ordenes}">0</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Lotes</div>
+					<div class="h3 mb-0" th:text="${lotes}">0</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-2">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">En inventario</div>
+					<div class="h3 mb-0" th:text="${inventario}">0</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="panel mt-3 p-4">
+			<h2 class="h5 mb-3">El proceso, paso a paso</h2>
+			<ol class="mb-0" style="line-height: 2;">
+				<li><strong>Productos</strong> y <strong>materias primas</strong>: qué se fabrica y con qué.</li>
+				<li><strong>Recetas</strong>: la fórmula con la cantidad de cada materia prima. Un producto
+					puede tener varias versiones porque la fórmula cambia con el tiempo.</li>
+				<li><strong>Movimientos de materia prima</strong>: ingreso, consumo y ajuste. El stock de cada
+					materia prima sale de aquí, nunca se escribe a mano.</li>
+				<li><strong>Órdenes de producción</strong>: lo que planificación manda a fabricar.</li>
+				<li><strong>Lotes</strong>: cada tanda que sale de una orden.</li>
+				<li><strong>Control de calidad</strong>: pH, grados Brix y temperatura de cada lote.</li>
+				<li><strong>Inventario de terminados</strong>: solo entran los lotes aprobados por el
+					laboratorio, y nunca más unidades de las que el lote produjo.</li>
+			</ol>
+		</section>
+	</div>
+</body>
+</html>
