@@ -1,0 +1,44 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaseosas Andinas S.A.</title>
+<link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+	<header class="cabecera">
+		<a class="marca" th:href="@{/}">
+			<span class="logo">GA</span>
+			<span>
+				<strong>Gaseosas Andinas S.A.</strong>
+				<small>Control de produccion</small>
+			</span>
+		</a>
+	</header>
+
+	<div class="cuerpo">
+
+		<nav class="menu">
+			<p class="grupo">Gestion</p>
+			<a th:each="s : ${T(com.andiana.web.catalogo.Catalogo).todas()}"
+				th:href="@{'/' + ${s.clave()}}" th:text="${s.titulo()}"
+				th:classappend="${seccion != null and seccion.clave() == s.clave()} ? 'activo' : ''">Seccion</a>
+
+			<p class="grupo">Consultas</p>
+			<a th:href="@{/consulta/materias-de-receta}">Materias de una receta</a>
+			<a th:href="@{/consulta/conteo-materias}">Materias por receta</a>
+		</nav>
+
+		<main class="contenido">
+			<div th:if="${exito}" class="aviso ok" th:text="${exito}"></div>
+			<div th:if="${error}" class="aviso mal" th:text="${error}"></div>
+
+			<div layout:fragment="contenido"></div>
+		</main>
+
+	</div>
+
+</body>
+</html>
