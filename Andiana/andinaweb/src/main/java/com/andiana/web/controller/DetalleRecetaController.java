@@ -85,7 +85,7 @@ public class DetalleRecetaController {
             // en vez de mostrar la página de error de Spring.
             model.addAttribute("detalleReceta", detalleReceta);
             model.addAttribute("error", MensajesError.extraer(ex));
-        agregarOpciones(model);
+            agregarOpciones(model);
             return "/Detallereceta/creardetallereceta";
         }
     }
