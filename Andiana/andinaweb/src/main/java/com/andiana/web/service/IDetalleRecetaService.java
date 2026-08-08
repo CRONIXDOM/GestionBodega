@@ -12,6 +12,9 @@ public interface IDetalleRecetaService {
 
     void guardarDetalleReceta(DetalleRecetaRequestDto nuevo);
 
+    /** Manda todas las líneas de una receta en un solo envío. */
+    void guardarVariasDetalleReceta(List<DetalleRecetaRequestDto> lineas);
+
     DetalleRecetaResponseDto buscarDetalleRecetaId(Integer id);
 
     void eliminarDetalleReceta(Integer id);

@@ -31,6 +31,11 @@ public class DetalleRecetaServiceImpl implements IDetalleRecetaService {
     }
 
     @Override
+    public void guardarVariasDetalleReceta(List<DetalleRecetaRequestDto> lineas) {
+        webCliente.post().uri("/detalleReceta/varias").bodyValue(lineas).retrieve().toBodilessEntity().block();
+    }
+
+    @Override
     public DetalleRecetaResponseDto buscarDetalleRecetaId(Integer id) {
         return webCliente.get().uri(ub -> ub.path("/detalleReceta/buscarId/{id}").build(id))
                 .retrieve().bodyToMono(DetalleRecetaResponseDto.class).block();

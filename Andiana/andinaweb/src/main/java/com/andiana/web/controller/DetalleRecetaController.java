@@ -1,5 +1,9 @@
 package com.andiana.web.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.andiana.web.model.dto.request.DetalleRecetaRequestDto;
@@ -35,11 +40,39 @@ public class DetalleRecetaController {
         return "/Detallereceta/listardetallereceta";
     }
 
+    /**
+     * Alta: una receta lleva varias materias primas, así que el formulario
+     * arranca con una fila y el usuario agrega las que necesite.
+     */
     @GetMapping("/nuevo")
     public String crearDetalleReceta(Model model) {
-        model.addAttribute("detalleReceta", new DetalleRecetaRequestDto());
+        model.addAttribute("lineas", unaFilaVacia());
         agregarOpciones(model);
         return "/Detallereceta/creardetallereceta";
+    }
+
+    /**
+     * Guarda de una sola vez todas las filas del formulario. Las tres listas
+     * llegan alineadas: la fila i son idMateria[i] y cantidad[i].
+     */
+    @PostMapping("/guardarVarias")
+    public String guardarVariasDetalleReceta(@RequestParam(required = false) Integer idReceta,
+            @RequestParam(name = "idMateria", required = false) List<Integer> idMateria,
+            @RequestParam(name = "cantidad", required = false) List<BigDecimal> cantidad, Model model) {
+
+        List<DetalleRecetaRequestDto> lineas = armarLineas(idReceta, idMateria, cantidad);
+        try {
+            servicioAPI.guardarVariasDetalleReceta(lineas);
+            return "redirect:/detallereceta";
+        } catch (Exception ex) {
+            // se vuelve al formulario con las filas ya escritas y el motivo del
+            // rechazo, en vez de mostrar la página de error de Spring.
+            model.addAttribute("lineas", lineas.isEmpty() ? unaFilaVacia() : lineas);
+            model.addAttribute("idRecetaElegida", idReceta);
+            model.addAttribute("error", MensajesError.extraer(ex));
+            agregarOpciones(model);
+            return "/Detallereceta/creardetallereceta";
+        }
     }
 
     @PostMapping("/guardar")
@@ -74,6 +107,31 @@ public class DetalleRecetaController {
             flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
         }
         return "redirect:/detallereceta";
+    }
+
+    private List<DetalleRecetaRequestDto> armarLineas(Integer idReceta, List<Integer> materias,
+            List<BigDecimal> cantidades) {
+
+        List<DetalleRecetaRequestDto> lineas = new ArrayList<>();
+        if (materias == null) {
+            return lineas;
+        }
+        for (int i = 0; i < materias.size(); i++) {
+            // una fila que se agregó y quedó sin materia prima no se manda
+            if (materias.get(i) == null) {
+                continue;
+            }
+            DetalleRecetaRequestDto linea = new DetalleRecetaRequestDto();
+            linea.setIdReceta(idReceta);
+            linea.setIdMateria(materias.get(i));
+            linea.setCantidad(cantidades != null && i < cantidades.size() ? cantidades.get(i) : null);
+            lineas.add(linea);
+        }
+        return lineas;
+    }
+
+    private List<DetalleRecetaRequestDto> unaFilaVacia() {
+        return new ArrayList<>(List.of(new DetalleRecetaRequestDto()));
     }
 
     private void agregarOpciones(Model model) {

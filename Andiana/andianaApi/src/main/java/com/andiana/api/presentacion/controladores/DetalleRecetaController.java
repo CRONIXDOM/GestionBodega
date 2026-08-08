@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andiana.api.aplicacion.casosuso.entrada.IDetalleRecetaUseCase;
+import com.andiana.api.dominio.entidades.DetalleReceta;
 import com.andiana.api.presentacion.dto.request.DetalleRecetaRequestDto;
 import com.andiana.api.presentacion.dto.response.DetalleRecetaResponseDto;
 import com.andiana.api.presentacion.mapeadores.IDetalleRecetaDtoMapper;
@@ -38,6 +39,19 @@ public class DetalleRecetaController {
 	public DetalleRecetaResponseDto guardar(@Valid @RequestBody DetalleRecetaRequestDto request) {
 
 		return mapper.toResponseDto(detalleRecetaUseCase.guardar(mapper.toDomain(request)));
+	}
+
+	/**
+	 * Recibe varias lineas de una misma receta en un solo envio. Se guardan todas
+	 * o no se guarda ninguna.
+	 */
+	@PostMapping("/varias")
+	@ResponseStatus(HttpStatus.CREATED)
+	public List<DetalleRecetaResponseDto> guardarVarias(@Valid @RequestBody List<DetalleRecetaRequestDto> request) {
+
+		List<DetalleReceta> lineas = request.stream().map(mapper::toDomain).toList();
+
+		return detalleRecetaUseCase.guardarVarias(lineas).stream().map(mapper::toResponseDto).toList();
 	}
 
 	@GetMapping

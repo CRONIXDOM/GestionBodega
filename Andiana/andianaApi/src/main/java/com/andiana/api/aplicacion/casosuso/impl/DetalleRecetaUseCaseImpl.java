@@ -1,6 +1,9 @@
 package com.andiana.api.aplicacion.casosuso.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.andiana.api.aplicacion.casosuso.entrada.IDetalleRecetaUseCase;
 import com.andiana.api.aplicacion.util.Validaciones;
@@ -25,31 +28,37 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 
 	@Override
 	public DetalleReceta guardar(DetalleReceta nuevoDetalleReceta) {
-		Validaciones.obligatorio(nuevoDetalleReceta.getIdReceta(), "receta");
-		Validaciones.obligatorio(nuevoDetalleReceta.getIdMateria(), "materia prima");
-		Validaciones.mayorQueCero(nuevoDetalleReceta.getCantidad(), "cantidad");
-
-		if (recetaRepositorio.buscarPorid(nuevoDetalleReceta.getIdReceta()).isEmpty()) {
-			throw new RuntimeException("La receta indicada no existe");
-		}
-		MateriaPrima materia = materiaRepositorio.buscarPorid(nuevoDetalleReceta.getIdMateria())
-				.orElseThrow(() -> new RuntimeException("La materia prima indicada no existe"));
-
-		// la unidad la define la materia prima: si se dejara escribir aparte se
-		// podria pedir "2 LITROS" de algo que se mide en gramos
-		nuevoDetalleReceta.setUnidad(materia.getUnidadMedida());
-
-		// la misma materia prima dos veces en una receta daria dos cantidades
-		// distintas para lo mismo
-		boolean repetida = repositorio.buscarPorReceta(nuevoDetalleReceta.getIdReceta()).stream()
-				.filter(otro -> nuevoDetalleReceta.getIdDetalle() == null
-						|| !nuevoDetalleReceta.getIdDetalle().equals(otro.getIdDetalle()))
-				.anyMatch(otro -> nuevoDetalleReceta.getIdMateria().equals(otro.getIdMateria()));
-		if (repetida) {
-			throw new RuntimeException("Esa materia prima ya está en la receta: edita la cantidad de esa línea");
-		}
+		revisar(nuevoDetalleReceta, List.of());
 
 		return repositorio.guardar(nuevoDetalleReceta);
+	}
+
+	/**
+	 * Carga de una sola vez todas las materias primas de una receta, que es como
+	 * se trabaja de verdad: una formula no se arma insumo por insumo.
+	 *
+	 * Se revisan TODAS las lineas antes de guardar ninguna, y el metodo es
+	 * transaccional: o entra la formula completa o no entra nada. Si una linea
+	 * falla, no queda media receta cargada.
+	 */
+	@Override
+	@Transactional
+	public List<DetalleReceta> guardarVarias(List<DetalleReceta> lineas) {
+		if (lineas == null || lineas.isEmpty()) {
+			throw new RuntimeException("Agrega al menos una materia prima a la receta");
+		}
+
+		List<DetalleReceta> revisadas = new ArrayList<>();
+		for (DetalleReceta linea : lineas) {
+			revisar(linea, revisadas);
+			revisadas.add(linea);
+		}
+
+		List<DetalleReceta> guardadas = new ArrayList<>();
+		for (DetalleReceta linea : revisadas) {
+			guardadas.add(repositorio.guardar(linea));
+		}
+		return guardadas;
 	}
 
 	@Override
@@ -67,5 +76,48 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 	public void eliminar(int idDetalle) {
 		buscarPorId(idDetalle);
 		repositorio.eliminar(idDetalle);
+	}
+
+	/**
+	 * Las reglas de una linea de receta.
+	 *
+	 * @param acompanantes las otras lineas que vienen en el mismo envio, para
+	 *                     poder detectar que la misma materia prima se repita
+	 *                     dentro del propio formulario y no solo contra lo que ya
+	 *                     estaba guardado.
+	 */
+	private void revisar(DetalleReceta detalle, List<DetalleReceta> acompanantes) {
+		Validaciones.obligatorio(detalle.getIdReceta(), "receta");
+		Validaciones.obligatorio(detalle.getIdMateria(), "materia prima");
+		Validaciones.mayorQueCero(detalle.getCantidad(), "cantidad");
+
+		if (recetaRepositorio.buscarPorid(detalle.getIdReceta()).isEmpty()) {
+			throw new RuntimeException("La receta indicada no existe");
+		}
+		MateriaPrima materia = materiaRepositorio.buscarPorid(detalle.getIdMateria())
+				.orElseThrow(() -> new RuntimeException("La materia prima indicada no existe"));
+
+		// la unidad la define la materia prima: si se dejara escribir aparte se
+		// podria pedir "2 LITROS" de algo que se mide en gramos
+		detalle.setUnidad(materia.getUnidadMedida());
+
+		// la misma materia prima dos veces en una receta daria dos cantidades
+		// distintas para lo mismo
+		boolean yaEstaGuardada = repositorio.buscarPorReceta(detalle.getIdReceta()).stream()
+				.filter(otro -> detalle.getIdDetalle() == null
+						|| !detalle.getIdDetalle().equals(otro.getIdDetalle()))
+				.anyMatch(otro -> detalle.getIdMateria().equals(otro.getIdMateria()));
+		if (yaEstaGuardada) {
+			throw new RuntimeException("La materia prima " + materia.getNombre()
+					+ " ya está en la receta: edita la cantidad de esa línea");
+		}
+
+		boolean repetidaEnElFormulario = acompanantes.stream()
+				.anyMatch(otro -> detalle.getIdReceta().equals(otro.getIdReceta())
+						&& detalle.getIdMateria().equals(otro.getIdMateria()));
+		if (repetidaEnElFormulario) {
+			throw new RuntimeException("Agregaste " + materia.getNombre()
+					+ " dos veces: déjala una sola vez con la cantidad total");
+		}
 	}
 }

@@ -24,40 +24,6 @@ import com.andiana.api.presentacion.dto.response.MateriaEnRecetaDto;
 /** Las dos consultas que pidio la gerencia. */
 class ConsultaUseCaseImplTest {
 
-	static class RecetasEnMemoria extends RepositorioEnMemoria<RecetaProduccion>
-			implements IRecetaProduccionRepositorio {
-		RecetasEnMemoria() {
-			super(RecetaProduccion::getIdReceta, RecetaProduccion::setIdReceta);
-		}
-
-		@Override
-		protected RecetaProduccion copiar(RecetaProduccion r) {
-			return new RecetaProduccion(r.getIdReceta(), r.getIdProducto(), r.getVersion(), r.getFechaVigencia(), r.getEstado());
-		}
-
-		@Override
-		public List<RecetaProduccion> buscarPorProducto(int idProducto) {
-			return listarTodos().stream().filter(r -> r.getIdProducto() == idProducto).toList();
-		}
-	}
-
-	static class DetallesEnMemoria extends RepositorioEnMemoria<DetalleReceta>
-			implements IDetalleRecetaRepositorio {
-		DetallesEnMemoria() {
-			super(DetalleReceta::getIdDetalle, DetalleReceta::setIdDetalle);
-		}
-
-		@Override
-		protected DetalleReceta copiar(DetalleReceta d) {
-			return new DetalleReceta(d.getIdDetalle(), d.getIdReceta(), d.getIdMateria(), d.getCantidad(), d.getUnidad());
-		}
-
-		@Override
-		public List<DetalleReceta> buscarPorReceta(int idReceta) {
-			return listarTodos().stream().filter(d -> d.getIdReceta() == idReceta).toList();
-		}
-	}
-
 	static class ProductosEnMemoria extends RepositorioEnMemoria<Producto> implements IProductoRepositorio {
 		ProductosEnMemoria() {
 			super(Producto::getIdProducto, Producto::setIdProducto);

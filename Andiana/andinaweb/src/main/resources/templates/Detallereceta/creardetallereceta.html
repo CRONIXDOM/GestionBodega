@@ -13,8 +13,8 @@
 				<span class="page-icon"><i class="bi bi-list-check" aria-hidden="true"></i></span>
 				<div>
 					<p class="eyebrow mb-1">Fórmulas</p>
-					<h1 class="h3 mb-1">Registro de Detalle de Receta</h1>
-					<p class="text-muted mb-0">Completa los datos del formulario.</p>
+					<h1 class="h3 mb-1" th:text="${detalleReceta != null} ? 'Editar línea de la receta' : 'Cargar la fórmula de una receta'">Registro de Detalle de Receta</h1>
+					<p class="text-muted mb-0" th:text="${detalleReceta != null} ? 'Corrige la cantidad o la materia prima de esta línea.' : 'Elige la receta y agrega todas las materias primas que lleva.'"></p>
 				</div>
 			</div>
 		</div>
@@ -23,7 +23,74 @@
 			<div class="col-12 col-xl-8">
 				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
-				<form class="panel" th:action="@{/detallereceta/guardar}" th:object="${detalleReceta}" method="post">
+				<!-- ============================================================
+				     Alta: una receta y todas sus materias primas de una vez.
+				     ============================================================ -->
+				<form th:unless="${detalleReceta != null}" class="panel"
+					th:action="@{/detallereceta/guardarVarias}" method="post">
+
+					<div class="row g-3">
+						<div class="col-md-8">
+							<label class="form-label">Receta <span class="text-danger">*</span></label>
+							<select class="form-select" name="idReceta" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesReceta}" th:value="${op.id}" th:text="${op.etiqueta}"
+									th:selected="${idRecetaElegida != null and op.id == idRecetaElegida}"></option>
+							</select>
+						</div>
+					</div>
+
+					<hr class="my-4">
+
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<h2 class="h6 mb-0">Materias primas de la fórmula</h2>
+						<button class="btn btn-light btn-sm" type="button" id="agregarLinea">
+							<i class="bi bi-plus-lg" aria-hidden="true"></i> Agregar materia prima
+						</button>
+					</div>
+
+					<div id="lineas">
+						<!-- una fila por cada materia prima; todas viajan juntas al guardar -->
+						<div class="linea row g-2 align-items-end mb-2" th:each="fila : ${lineas}">
+							<div class="col-md-7">
+								<label class="form-label">Materia prima <span class="text-danger">*</span></label>
+								<select class="form-select" name="idMateria" required>
+									<option value="">Seleccione...</option>
+									<option th:each="op : ${opcionesMateria}" th:value="${op.id}" th:text="${op.etiqueta}"
+										th:selected="${fila.idMateria != null and op.id == fila.idMateria}"></option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label">Cantidad <span class="text-danger">*</span></label>
+								<input class="form-control" type="number" name="cantidad" required min="0.001" step="0.001"
+									th:value="${fila.cantidad}">
+							</div>
+							<div class="col-md-1">
+								<button class="btn btn-light w-100" type="button" data-quitar title="Quitar esta materia prima">
+									<i class="bi bi-trash" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="alert alert-info mt-3 mb-0" role="alert">
+						<i class="bi bi-info-circle" aria-hidden="true"></i> La unidad la pone la materia prima elegida, para no pedir litros de algo que se mide en gramos. Una misma materia prima no puede ir dos veces: si se repite, súmala en una sola línea.
+					</div>
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/detallereceta}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+
+				<!-- ============================================================
+				     Edición: se corrige una sola línea ya guardada.
+				     ============================================================ -->
+				<form th:if="${detalleReceta != null}" class="panel"
+					th:action="@{/detallereceta/guardar}" th:object="${detalleReceta}" method="post">
 					<input type="hidden" th:field="*{idDetalle}">
 					<div class="row g-3">
 						<div class="col-md-6">
@@ -60,6 +127,42 @@
 				</form>
 			</div>
 		</section>
+
+		<script th:inline="none">
+			// Agregar y quitar materias primas del formulario. Se clona la primera
+			// fila para no repetir en JavaScript el listado de materias primas.
+			(function () {
+				var contenedor = document.getElementById("lineas");
+				if (!contenedor) { return; }
+
+				function vaciar(fila) {
+					fila.querySelectorAll("select, input").forEach(function (campo) {
+						campo.value = "";
+					});
+				}
+
+				document.getElementById("agregarLinea").addEventListener("click", function () {
+					var nueva = contenedor.querySelector(".linea").cloneNode(true);
+					vaciar(nueva);
+					contenedor.appendChild(nueva);
+					nueva.querySelector("select").focus();
+				});
+
+				// se delega en el contenedor para que las filas nuevas también respondan
+				contenedor.addEventListener("click", function (evento) {
+					var boton = evento.target.closest("[data-quitar]");
+					if (!boton) { return; }
+					var fila = boton.closest(".linea");
+					// la última fila no se borra: se deja vacía, si no el formulario
+					// quedaría sin ninguna materia prima que cargar
+					if (contenedor.querySelectorAll(".linea").length > 1) {
+						fila.remove();
+					} else {
+						vaciar(fila);
+					}
+				});
+			})();
+		</script>
 	</div>
 </body>
 </html>
