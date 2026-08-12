@@ -10,4 +10,5 @@ public class ProductoRequestDto {
     private String codigoProducto;
     private String cantidadProducto;
     private Integer unidadesPorCaja;
+    private String estado;
 }

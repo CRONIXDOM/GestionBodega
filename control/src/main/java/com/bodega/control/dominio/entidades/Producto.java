@@ -7,6 +7,8 @@ public class Producto {
 	private String codigoProducto;
 	private String cantidadProducto;
 	private Integer unidadesPorCaja;
+	/** ACTIVO o ELIMINADO. Los productos no se borran de verdad: se dan de baja. */
+	private String estado;
 
 	public Producto() {
 		super();
@@ -59,6 +61,14 @@ public class Producto {
 
 	public void setUnidadesPorCaja(Integer unidadesPorCaja) {
 		this.unidadesPorCaja = unidadesPorCaja;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 }

@@ -26,6 +26,24 @@ public class ProductoServiceImpl implements IProductoService {
     }
 
     @Override
+    public List<ProductoResponseDto> listarProductoConEliminados() {
+        return webCliente.get().uri("/producto/todos").retrieve()
+                .bodyToFlux(ProductoResponseDto.class).collectList().block();
+    }
+
+    @Override
+    public List<ProductoResponseDto> listarEliminados() {
+        return webCliente.get().uri("/producto/eliminados").retrieve()
+                .bodyToFlux(ProductoResponseDto.class).collectList().block();
+    }
+
+    @Override
+    public void recuperarProducto(Integer id) {
+        webCliente.post().uri(ub -> ub.path("/producto/recuperar/{id}").build(id))
+                .retrieve().toBodilessEntity().block();
+    }
+
+    @Override
     public void guardarProducto(ProductoRequestDto nuevo) {
         webCliente.post().uri("/producto").bodyValue(nuevo).retrieve().toBodilessEntity().block();
     }

@@ -174,8 +174,10 @@ public class ControlConfig {
 	}
 
 	@Bean
-	IProductoUseCase productoUseCase(IProductoRepositorio repositorio) {
-		return new ProductoUseCaseImpl(repositorio);
+	IProductoUseCase productoUseCase(IProductoRepositorio repositorio, ILoteRepositorio loteRepositorio,
+			IRegistroRepositorio registroRepositorio, IDetalleEntregaRepositorio detalleEntregaRepositorio) {
+		return new ProductoUseCaseImpl(repositorio, loteRepositorio, registroRepositorio,
+				detalleEntregaRepositorio);
 	}
 
 	@Bean

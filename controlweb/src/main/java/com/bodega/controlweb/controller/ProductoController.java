@@ -53,15 +53,37 @@ public class ProductoController {
         return "/Producto/crearproducto";
     }
 
+    /**
+     * Eliminar da de baja el producto: sale del listado y de los selectores, pero
+     * su historial queda intacto y se puede recuperar desde "Eliminados".
+     */
     @GetMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable Integer id, RedirectAttributes flash) {
         try {
             servicioAPI.eliminarProducto(id);
+            flash.addFlashAttribute("exito", "Producto eliminado. Puedes recuperarlo desde «Eliminados».");
         } catch (Exception ex) {
-            // normalmente pasa cuando el registro esta usado por otro (clave foranea):
-            // se avisa en pantalla en vez de mostrar la pagina de error de Spring.
+            // normalmente pasa cuando todavia queda mercaderia: se avisa en pantalla
+            // en vez de mostrar la pagina de error de Spring.
             flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
         }
         return "redirect:/producto";
+    }
+
+    @GetMapping("/eliminados")
+    public String productosEliminados(Model model) {
+        model.addAttribute("listaproducto", servicioAPI.listarEliminados());
+        return "/Producto/eliminados";
+    }
+
+    @GetMapping("/recuperar/{id}")
+    public String recuperarProducto(@PathVariable Integer id, RedirectAttributes flash) {
+        try {
+            servicioAPI.recuperarProducto(id);
+            flash.addFlashAttribute("exito", "Producto recuperado: vuelve a estar disponible.");
+        } catch (Exception ex) {
+            flash.addFlashAttribute("error", MensajesError.extraer(ex));
+        }
+        return "redirect:/producto/eliminados";
     }
 }

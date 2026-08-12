@@ -78,8 +78,10 @@ public class EtiquetasServiceImpl implements IEtiquetasService {
 
     @Override
     public Map<Integer, ProductoResponseDto> productosPorId() {
+        // van también los eliminados: un movimiento antiguo de un producto dado de
+        // baja tiene que seguir mostrando de qué producto era
         Map<Integer, ProductoResponseDto> resultado = new HashMap<>();
-        for (ProductoResponseDto p : servicioProducto.listarProducto()) {
+        for (ProductoResponseDto p : servicioProducto.listarProductoConEliminados()) {
             resultado.put(p.getIdProducto(), p);
         }
         return resultado;

@@ -32,9 +32,17 @@ public final class MensajesError {
 	 * Al borrar, el fallo mas habitual es que otro registro sigue usando este
 	 * (clave foranea). El backend devuelve un error tecnico de base de datos, asi
 	 * que se traduce a una explicacion que el usuario pueda entender y resolver.
+	 *
+	 * Cuando el backend ya explico el motivo con sus propias palabras -por
+	 * ejemplo "No se puede eliminar Arroz: todavia quedan 40 unidades"- ese
+	 * mensaje se muestra tal cual, que dice mucho mas que cualquier texto
+	 * generico.
 	 */
 	public static String alEliminar(Exception ex) {
 		String crudo = mensajeCrudo(ex);
+		if (!esDeLaBaseDeDatos(crudo)) {
+			return limpiar(crudo);
+		}
 		if (esDeIntegridad(crudo)) {
 			return "No se puede eliminar: este registro está siendo usado por otros datos del sistema. "
 					+ "Elimina primero lo que depende de él.";

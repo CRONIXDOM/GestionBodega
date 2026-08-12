@@ -44,4 +44,14 @@ public class ProductoEntity {
     @Column(name = "unidades_por_caja")
     private Integer unidadesPorCaja;
 
+    /**
+     * ACTIVO o ELIMINADO. Un producto con historial no se puede borrar de la
+     * tabla: los movimientos y las entregas apuntan a el. Se da de baja, sale de
+     * los listados y de los selectores, y se puede recuperar cuando haga falta.
+     * Las filas que ya existian llegan con la columna vacia y se tratan como
+     * activas.
+     */
+    @Column(name = "estado", length = 20)
+    private String estado;
+
 }

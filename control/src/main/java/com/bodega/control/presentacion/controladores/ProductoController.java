@@ -40,10 +40,33 @@ public class ProductoController {
 		return mapper.toResponseDto(productoUseCase.guardar(mapper.toDomain(request)));
 	}
 
+	/** Los productos que se ven en el sistema: sin los dados de baja. */
 	@GetMapping
 	public List<ProductoResponseDto> listarTodo() {
 
+		return productoUseCase.listarActivos().stream().map(mapper::toResponseDto).toList();
+	}
+
+	/**
+	 * Todos, incluidos los dados de baja. Lo necesitan las pantallas de historial,
+	 * que tienen que poder nombrar el producto de un movimiento antiguo.
+	 */
+	@GetMapping("/todos")
+	public List<ProductoResponseDto> listarConEliminados() {
+
 		return productoUseCase.listarTodos().stream().map(mapper::toResponseDto).toList();
+	}
+
+	@GetMapping("/eliminados")
+	public List<ProductoResponseDto> listarEliminados() {
+
+		return productoUseCase.listarEliminados().stream().map(mapper::toResponseDto).toList();
+	}
+
+	@PostMapping("/recuperar/{idProducto}")
+	public ProductoResponseDto recuperar(@PathVariable int idProducto) {
+
+		return mapper.toResponseDto(productoUseCase.recuperar(idProducto));
 	}
 
 	@DeleteMapping("/{idProducto}")

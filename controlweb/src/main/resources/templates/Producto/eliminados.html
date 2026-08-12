@@ -4,26 +4,24 @@
 	layout:decorate="/Plantilla/plantillaui">
 <head>
 <meta charset="utf-8">
+<title>Productos eliminados</title>
 </head>
 <body>
 	<div layout:fragment="contenidopaginas">
 		<div class="page-heading">
 			<div class="page-heading-copy">
-				<span class="page-icon"><i class="bi bi-box" aria-hidden="true"></i></span>
+				<span class="page-icon"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span>
 				<div>
 					<p class="eyebrow mb-1">Inventario</p>
-					<h1 class="h3 mb-1">Productos</h1>
-					<p class="text-muted mb-0">Productos registrados en el catálogo de bodega.</p>
+					<h1 class="h3 mb-1">Productos eliminados</h1>
+					<p class="text-muted mb-0">Productos dados de baja. Su historial sigue completo y puedes devolverlos al catálogo cuando quieras.</p>
 				</div>
 			</div>
 			<div class="heading-actions">
-				<a class="btn btn-light btn-sm" th:href="@{/producto/eliminados}"><i class="bi bi-arrow-counterclockwise"
-					aria-hidden="true"></i> Eliminados</a>
-				<a class="btn btn-primary btn-sm" th:href="@{/producto/nuevo}"><i class="bi bi-plus-circle"
-					aria-hidden="true"></i> Nuevo</a>
+				<a class="btn btn-light btn-sm" th:href="@{/producto}"><i class="bi bi-arrow-left"
+					aria-hidden="true"></i> Volver a productos</a>
 			</div>
 		</div>
-
 
 		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
 			<i class="bi bi-check2-circle" aria-hidden="true"></i> <span th:text="${exito}"></span>
@@ -33,15 +31,16 @@
 			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
 		</div>
+
 		<section class="panel mt-3">
 			<div class="p-3 pb-0">
 				<div class="input-group table-search" style="max-width: 340px;">
 					<span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
-					<input type="text" class="form-control" data-table-search="tablaProducto" placeholder="Buscar...">
+					<input type="text" class="form-control" data-table-search="tablaEliminados" placeholder="Buscar...">
 				</div>
 			</div>
 			<div class="table-responsive">
-				<table id="tablaProducto" class="table align-middle mb-0" data-page-size="15">
+				<table id="tablaEliminados" class="table align-middle mb-0" data-page-size="15">
 					<thead>
 						<tr>
 							<th scope="col">Id</th>
@@ -58,15 +57,13 @@
 							<td th:text="${indice.codigoProducto}"></td>
 							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.unidadesPorCaja} ?: '—'">—</span></td>
 							<td class="text-end">
-								<a class="btn btn-light btn-sm" th:href="@{/producto/editar/{id}(id=${indice.idProducto})}"><i
-									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
-								<a class="btn btn-outline-danger btn-sm" th:href="@{/producto/eliminar/{id}(id=${indice.idProducto})}"
-									onclick="return confirm('El producto saldrá del listado. Su historial se conserva y podrás recuperarlo desde «Eliminados». ¿Continuar?')"><i class="bi bi-trash"
-									aria-hidden="true"></i> Eliminar</a>
+								<a class="btn btn-primary btn-sm" th:href="@{/producto/recuperar/{id}(id=${indice.idProducto})}"
+									onclick="return confirm('El producto volverá al catálogo y a los selectores. ¿Continuar?')"><i
+									class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Recuperar</a>
 							</td>
 						</tr>
 						<tr data-empty-row th:if="${#lists.isEmpty(listaproducto)}">
-							<td colspan="5" class="text-center text-muted py-4">Todavía no hay productos registrados.</td>
+							<td colspan="5" class="text-center text-muted py-4">No hay productos eliminados.</td>
 						</tr>
 					</tbody>
 				</table>
