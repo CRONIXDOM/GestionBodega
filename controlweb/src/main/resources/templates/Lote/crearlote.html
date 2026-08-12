@@ -30,8 +30,27 @@
 								th:field="*{numeroLote}" required>
 						</div>
 						<div class="col-md-6">
-							<label class="form-label">Cantidad del Lote <span class="text-danger">*</span></label> <input class="form-control"
-								type="number" min="1" step="1" th:field="*{cantidadLote}" required>
+							<label class="form-label">Cajas <span class="text-danger">*</span></label>
+							<div class="input-group">
+								<input class="form-control" type="number" min="0" step="1" id="cajas" name="cajas"
+									th:value="${cajas}" required placeholder="Ej. 10">
+								<span class="input-group-text">cajas</span>
+							</div>
+							<div class="form-text">Cuántas cajas del producto entran en este lote.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Unidades sueltas</label>
+							<div class="input-group">
+								<input class="form-control" type="number" min="0" step="1" id="unidadesSueltas"
+									name="unidadesSueltas" th:value="${unidadesSueltas} ?: 0">
+								<span class="input-group-text">u.</span>
+							</div>
+							<div class="form-text">Las que no llegan a completar una caja. Normalmente 0.</div>
+						</div>
+						<div class="col-12">
+							<div class="alert alert-info mb-0 py-2" id="totalLote" role="status">
+								Elige el producto para calcular el total.
+							</div>
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">Fecha de Ingreso <span class="text-danger">*</span></label> <input class="form-control" type="date"
@@ -45,7 +64,8 @@
 							<label class="form-label">Producto <span class="text-danger">*</span></label> <select class="form-select"
 								th:field="*{idProducto}" required>
 								<option value="">Seleccione...</option>
-								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+								<option th:each="op : ${opcionesProducto}" th:value="${op.id}" th:text="${op.etiqueta}"
+									th:attr="data-upc=${unidadesPorCaja.get(op.id)}"></option>
 							</select>
 						</div>
 						<div class="col-md-6">
@@ -67,6 +87,52 @@
 				</form>
 			</div>
 		</section>
+
+		<script th:inline="none">
+			// El lote se carga en cajas, que es como llega la mercadería. Lo que se
+			// guarda son las unidades, que es la medida con la que trabajan las
+			// reservas y las entregas: aquí solo se muestra la cuenta para que el
+			// usuario vea el total antes de guardar. El cálculo bueno lo rehace el
+			// servidor.
+			(function () {
+				var producto = document.getElementById("idProducto");
+				var cajas = document.getElementById("cajas");
+				var sueltas = document.getElementById("unidadesSueltas");
+				var aviso = document.getElementById("totalLote");
+				if (!producto || !cajas || !sueltas || !aviso) { return; }
+
+				function unidadesPorCaja() {
+					var elegida = producto.options[producto.selectedIndex];
+					var porCaja = elegida ? parseInt(elegida.getAttribute("data-upc"), 10) : NaN;
+					return isNaN(porCaja) || porCaja <= 0 ? 0 : porCaja;
+				}
+
+				function entero(campo) {
+					var valor = parseInt(campo.value, 10);
+					return isNaN(valor) || valor < 0 ? 0 : valor;
+				}
+
+				function actualizar() {
+					var porCaja = unidadesPorCaja();
+					if (!porCaja) {
+						aviso.textContent = "Elige el producto para calcular el total.";
+						return;
+					}
+					var enCajas = entero(cajas);
+					var enSueltas = entero(sueltas);
+					var total = enCajas * porCaja + enSueltas;
+					aviso.textContent = enCajas + " caja(s) × " + porCaja + " u."
+							+ (enSueltas > 0 ? " + " + enSueltas + " u. sueltas" : "")
+							+ " = " + total + " unidades en total.";
+				}
+
+				[producto, cajas, sueltas].forEach(function (campo) {
+					campo.addEventListener("change", actualizar);
+					campo.addEventListener("input", actualizar);
+				});
+				actualizar();
+			})();
+		</script>
 	</div>
 </body>
 </html>

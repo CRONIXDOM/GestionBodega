@@ -33,10 +33,21 @@ public class ManejadorErroresGlobal {
 		return volverAtras(peticion);
 	}
 
-	/** Un id que no es un número, típicamente al manipular la URL a mano. */
+	/**
+	 * Un dato suelto que no encaja con lo que se esperaba: un id que no es número
+	 * al manipular la URL a mano, o un campo del formulario que no viaja dentro
+	 * del objeto (por ejemplo las cajas de un lote).
+	 */
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public String idInvalido(HttpServletRequest peticion, RedirectAttributes flash) {
-		flash.addFlashAttribute("error", "La dirección solicitada no es válida.");
+	public String datoSueltoInvalido(MethodArgumentTypeMismatchException ex, HttpServletRequest peticion,
+			RedirectAttributes flash) {
+		Object escrito = ex.getValue();
+		String loEscrito = (escrito == null || escrito.toString().isBlank()) ? ""
+				: " (se escribió \"" + escrito + "\")";
+		boolean esNumero = ex.getRequiredType() != null && Number.class.isAssignableFrom(ex.getRequiredType());
+		flash.addFlashAttribute("error", esNumero
+				? "El campo " + etiquetaLegible(ex.getName()) + " solo admite números enteros" + loEscrito + "."
+				: "La dirección solicitada no es válida.");
 		return volverAtras(peticion);
 	}
 
