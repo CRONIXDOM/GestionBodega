@@ -1,17 +1,28 @@
 package com.bodega.control.infraestructura.persistencia.jpa;
 
-import java.util.ArrayList;
-import java.util.List;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+/**
+ * El producto NO lleva la lista de sus lotes ni la de sus detalles de solicitud.
+ *
+ * Antes las tenia, con cascade = ALL y orphanRemoval = true. El problema es que
+ * al guardar un producto se arma una entidad nueva a partir del dominio, y esa
+ * entidad nueva viene con las listas vacias. Hibernate entiende entonces que al
+ * producto le quitaron TODOS sus lotes y todos sus detalles de solicitud, e
+ * intenta borrarlos: editar algo tan inocente como las unidades por caja
+ * terminaba borrando el inventario del producto, o fallando con un error de
+ * clave foranea si esas filas estaban usadas en otro lado.
+ *
+ * La relacion la sigue mandando el otro lado (LoteEntity.producto y
+ * DetalleSolicitudEntity.producto), que es donde de verdad esta la columna, asi
+ * que aqui no hace falta nada.
+ */
 @Entity
 @Data
 @Table(name = "producto")
@@ -32,11 +43,5 @@ public class ProductoEntity {
 
     @Column(name = "unidades_por_caja")
     private Integer unidadesPorCaja;
-    
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LoteEntity> lotes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleSolicitudEntity> detalleSolicitudes = new ArrayList<>();
 
 }
