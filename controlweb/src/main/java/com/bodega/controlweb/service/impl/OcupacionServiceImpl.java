@@ -180,6 +180,24 @@ public class OcupacionServiceImpl implements IOcupacionService {
         return resultado;
     }
 
+    /**
+     * Los lotes de una bodega, uno por uno. Es lo que hay detras del numero de
+     * lotes del detalle: asi se ve de donde sale la cuenta y si falta alguno.
+     */
+    @Override
+    public List<LoteResponseDto> lotesDeLaSede(Integer idSede) {
+        List<Integer> ubicacionesDeLaSede = servicioUbicacion.listarUbicacion().stream()
+                .filter(u -> idSede.equals(u.getIdSede()))
+                .map(UbicacionResponseDto::getIdUbicacion)
+                .toList();
+
+        return servicioLote.listarLote().stream()
+                .filter(lote -> ubicacionesDeLaSede.contains(lote.getIdUbicacion()))
+                .sorted(Comparator.comparing(LoteResponseDto::getNumeroLote,
+                        Comparator.nullsLast(String::compareToIgnoreCase)))
+                .toList();
+    }
+
     private Map<Integer, Integer> agruparUbicacionesPor(
             java.util.function.Function<UbicacionResponseDto, Integer> clave) {
         Map<Integer, Integer> porUbicacion = unidadesPorUbicacion();

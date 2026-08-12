@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bodega.controlweb.model.dto.response.ContenidoSedeDto;
 import com.bodega.controlweb.model.dto.response.ContenidoUbicacionDto;
+import com.bodega.controlweb.model.dto.response.LoteResponseDto;
 
 public interface IOcupacionService {
 
@@ -28,4 +29,7 @@ public interface IOcupacionService {
 
     /** Cuántos lotes hay almacenados en cada bodega. */
     Map<Integer, Integer> lotesPorSede();
+
+    /** Los lotes que hay registrados en una bodega, uno por uno. */
+    List<LoteResponseDto> lotesDeLaSede(Integer idSede);
 }

@@ -22,6 +22,7 @@ import com.bodega.controlweb.model.dto.request.ZonaRequestDto;
 import com.bodega.controlweb.model.dto.response.SedeResponseDto;
 import com.bodega.controlweb.model.dto.response.UbicacionResponseDto;
 import com.bodega.controlweb.model.dto.response.ZonaResponseDto;
+import com.bodega.controlweb.service.IEtiquetasService;
 import com.bodega.controlweb.service.IOcupacionService;
 import com.bodega.controlweb.service.ISedeService;
 import com.bodega.controlweb.service.IUbicacionService;
@@ -38,6 +39,8 @@ import com.bodega.controlweb.util.MensajesError;
 @RequestMapping("/bodega")
 public class BodegaController {
 
+    @Autowired
+    private IEtiquetasService servicioEtiquetas;
     @Autowired
     private ISedeService servicioSede;
     @Autowired
@@ -135,6 +138,8 @@ public class BodegaController {
         model.addAttribute("ocupado", servicioOcupacion.unidadesPorSede().getOrDefault(idSede, 0));
         model.addAttribute("reservado", servicioOcupacion.reservadasPorSede().getOrDefault(idSede, 0));
         model.addAttribute("lotes", servicioOcupacion.lotesPorSede().getOrDefault(idSede, 0));
+        model.addAttribute("lotesDeLaBodega", servicioOcupacion.lotesDeLaSede(idSede));
+        model.addAttribute("productos", servicioEtiquetas.productosPorId());
         return "/Bodega/detallebodega";
     }
 
