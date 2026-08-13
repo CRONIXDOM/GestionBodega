@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.MateriaPrimaRequestDto;
 import com.andiana.api.presentacion.dto.response.MateriaPrimaResponseDto;
 import com.andiana.api.presentacion.mapeadores.IMateriaPrimaDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/materiaPrima")
 public class MateriaPrimaController {
@@ -35,7 +33,7 @@ public class MateriaPrimaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public MateriaPrimaResponseDto guardar(@Valid @RequestBody MateriaPrimaRequestDto request) {
+	public MateriaPrimaResponseDto guardar(@RequestBody MateriaPrimaRequestDto request) {
 
 		return mapper.toResponseDto(materiaPrimaUseCase.guardar(mapper.toDomain(request)));
 	}

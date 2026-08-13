@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.OrdenProduccionRequestDto;
 import com.andiana.api.presentacion.dto.response.OrdenProduccionResponseDto;
 import com.andiana.api.presentacion.mapeadores.IOrdenProduccionDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/orden")
 public class OrdenProduccionController {
@@ -35,7 +33,7 @@ public class OrdenProduccionController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public OrdenProduccionResponseDto guardar(@Valid @RequestBody OrdenProduccionRequestDto request) {
+	public OrdenProduccionResponseDto guardar(@RequestBody OrdenProduccionRequestDto request) {
 
 		return mapper.toResponseDto(ordenProduccionUseCase.guardar(mapper.toDomain(request)));
 	}

@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.LoteProduccionRequestDto;
 import com.andiana.api.presentacion.dto.response.LoteProduccionResponseDto;
 import com.andiana.api.presentacion.mapeadores.ILoteProduccionDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/lote")
 public class LoteProduccionController {
@@ -35,7 +33,7 @@ public class LoteProduccionController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public LoteProduccionResponseDto guardar(@Valid @RequestBody LoteProduccionRequestDto request) {
+	public LoteProduccionResponseDto guardar(@RequestBody LoteProduccionRequestDto request) {
 
 		return mapper.toResponseDto(loteProduccionUseCase.guardar(mapper.toDomain(request)));
 	}

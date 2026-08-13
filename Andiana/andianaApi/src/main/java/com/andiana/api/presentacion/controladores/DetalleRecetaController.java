@@ -19,8 +19,6 @@ import com.andiana.api.presentacion.dto.request.DetalleRecetaRequestDto;
 import com.andiana.api.presentacion.dto.response.DetalleRecetaResponseDto;
 import com.andiana.api.presentacion.mapeadores.IDetalleRecetaDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/detalleReceta")
 public class DetalleRecetaController {
@@ -36,7 +34,7 @@ public class DetalleRecetaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public DetalleRecetaResponseDto guardar(@Valid @RequestBody DetalleRecetaRequestDto request) {
+	public DetalleRecetaResponseDto guardar(@RequestBody DetalleRecetaRequestDto request) {
 
 		return mapper.toResponseDto(detalleRecetaUseCase.guardar(mapper.toDomain(request)));
 	}
@@ -47,7 +45,7 @@ public class DetalleRecetaController {
 	 */
 	@PostMapping("/varias")
 	@ResponseStatus(HttpStatus.CREATED)
-	public List<DetalleRecetaResponseDto> guardarVarias(@Valid @RequestBody List<DetalleRecetaRequestDto> request) {
+	public List<DetalleRecetaResponseDto> guardarVarias(@RequestBody List<DetalleRecetaRequestDto> request) {
 
 		List<DetalleReceta> lineas = request.stream().map(mapper::toDomain).toList();
 

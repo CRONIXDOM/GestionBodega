@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.InventarioProductoRequestDto;
 import com.andiana.api.presentacion.dto.response.InventarioProductoResponseDto;
 import com.andiana.api.presentacion.mapeadores.IInventarioProductoDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/inventario")
 public class InventarioProductoController {
@@ -36,7 +34,7 @@ public class InventarioProductoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public InventarioProductoResponseDto guardar(@Valid @RequestBody InventarioProductoRequestDto request) {
+	public InventarioProductoResponseDto guardar(@RequestBody InventarioProductoRequestDto request) {
 
 		return mapper.toResponseDto(inventarioProductoUseCase.guardar(mapper.toDomain(request)));
 	}

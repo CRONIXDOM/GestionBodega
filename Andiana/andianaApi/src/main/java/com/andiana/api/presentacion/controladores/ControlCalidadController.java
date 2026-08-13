@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.ControlCalidadRequestDto;
 import com.andiana.api.presentacion.dto.response.ControlCalidadResponseDto;
 import com.andiana.api.presentacion.mapeadores.IControlCalidadDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/controlCalidad")
 public class ControlCalidadController {
@@ -35,7 +33,7 @@ public class ControlCalidadController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ControlCalidadResponseDto guardar(@Valid @RequestBody ControlCalidadRequestDto request) {
+	public ControlCalidadResponseDto guardar(@RequestBody ControlCalidadRequestDto request) {
 
 		return mapper.toResponseDto(controlCalidadUseCase.guardar(mapper.toDomain(request)));
 	}

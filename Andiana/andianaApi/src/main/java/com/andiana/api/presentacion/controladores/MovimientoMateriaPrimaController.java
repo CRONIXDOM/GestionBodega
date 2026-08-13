@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.MovimientoMateriaPrimaRequestDto
 import com.andiana.api.presentacion.dto.response.MovimientoMateriaPrimaResponseDto;
 import com.andiana.api.presentacion.mapeadores.IMovimientoMateriaPrimaDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/movimiento")
 public class MovimientoMateriaPrimaController {
@@ -36,7 +34,7 @@ public class MovimientoMateriaPrimaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public MovimientoMateriaPrimaResponseDto guardar(@Valid @RequestBody MovimientoMateriaPrimaRequestDto request) {
+	public MovimientoMateriaPrimaResponseDto guardar(@RequestBody MovimientoMateriaPrimaRequestDto request) {
 
 		return mapper.toResponseDto(movimientoMateriaPrimaUseCase.guardar(mapper.toDomain(request)));
 	}

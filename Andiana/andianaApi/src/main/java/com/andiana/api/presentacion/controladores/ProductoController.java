@@ -18,8 +18,6 @@ import com.andiana.api.presentacion.dto.request.ProductoRequestDto;
 import com.andiana.api.presentacion.dto.response.ProductoResponseDto;
 import com.andiana.api.presentacion.mapeadores.IProductoDtoMapper;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/producto")
 public class ProductoController {
@@ -35,7 +33,7 @@ public class ProductoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProductoResponseDto guardar(@Valid @RequestBody ProductoRequestDto request) {
+	public ProductoResponseDto guardar(@RequestBody ProductoRequestDto request) {
 
 		return mapper.toResponseDto(productoUseCase.guardar(mapper.toDomain(request)));
 	}
