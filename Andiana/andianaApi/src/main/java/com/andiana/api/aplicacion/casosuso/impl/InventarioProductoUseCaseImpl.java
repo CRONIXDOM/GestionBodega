@@ -2,6 +2,7 @@ package com.andiana.api.aplicacion.casosuso.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import com.andiana.api.aplicacion.casosuso.entrada.IInventarioProductoUseCase;
@@ -71,9 +72,17 @@ public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase
 				.orElseThrow(() -> new RuntimeException("Registro de inventario no encontrado"));
 	}
 
+	/**
+	 * Lo ultimo registrado va arriba. El listado se pagina, asi que en orden
+	 * ascendente lo que se acaba de crear cae en la ultima pagina: el usuario
+	 * vuelve del formulario, no lo ve, y cree que no se guardo.
+	 */
 	@Override
 	public List<InventarioProducto> listarTodos() {
-		return repositorio.listarTodos();
+		return repositorio.listarTodos().stream()
+				.sorted(Comparator.comparing(InventarioProducto::getIdInventario,
+						Comparator.nullsLast(Comparator.reverseOrder())))
+				.toList();
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.andiana.api.aplicacion.casosuso.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -106,9 +107,17 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 				.orElseThrow(() -> new RuntimeException("Detalle de receta no encontrado"));
 	}
 
+	/**
+	 * Lo ultimo registrado va arriba. El listado se pagina, asi que en orden
+	 * ascendente lo que se acaba de crear cae en la ultima pagina: el usuario
+	 * vuelve del formulario, no lo ve, y cree que no se guardo.
+	 */
 	@Override
 	public List<DetalleReceta> listarTodos() {
-		return repositorio.listarTodos();
+		return repositorio.listarTodos().stream()
+				.sorted(Comparator.comparing(DetalleReceta::getIdDetalle,
+						Comparator.nullsLast(Comparator.reverseOrder())))
+				.toList();
 	}
 
 	@Override

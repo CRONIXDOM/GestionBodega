@@ -1,5 +1,6 @@
 package com.andiana.api.aplicacion.casosuso.impl;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.andiana.api.aplicacion.casosuso.entrada.ILoteProduccionUseCase;
@@ -66,9 +67,17 @@ public class LoteProduccionUseCaseImpl implements ILoteProduccionUseCase {
 				.orElseThrow(() -> new RuntimeException("Lote de producción no encontrado"));
 	}
 
+	/**
+	 * Lo ultimo registrado va arriba. El listado se pagina, asi que en orden
+	 * ascendente lo que se acaba de crear cae en la ultima pagina: el usuario
+	 * vuelve del formulario, no lo ve, y cree que no se guardo.
+	 */
 	@Override
 	public List<LoteProduccion> listarTodos() {
-		return repositorio.listarTodos();
+		return repositorio.listarTodos().stream()
+				.sorted(Comparator.comparing(LoteProduccion::getIdLote,
+						Comparator.nullsLast(Comparator.reverseOrder())))
+				.toList();
 	}
 
 	@Override

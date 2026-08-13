@@ -79,9 +79,17 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 				.orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
 	}
 
+	/**
+	 * Lo ultimo registrado va arriba. El listado se pagina, asi que en orden
+	 * ascendente lo que se acaba de crear cae en la ultima pagina: el usuario
+	 * vuelve del formulario, no lo ve, y cree que no se guardo.
+	 */
 	@Override
 	public List<MovimientoMateriaPrima> listarTodos() {
-		return repositorio.listarTodos();
+		return repositorio.listarTodos().stream()
+				.sorted(Comparator.comparing(MovimientoMateriaPrima::getIdMovimiento,
+						Comparator.nullsLast(Comparator.reverseOrder())))
+				.toList();
 	}
 
 	@Override

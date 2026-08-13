@@ -1,6 +1,7 @@
 package com.andiana.api.aplicacion.casosuso.impl;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import com.andiana.api.aplicacion.casosuso.entrada.IControlCalidadUseCase;
@@ -62,9 +63,17 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 				.orElseThrow(() -> new RuntimeException("Control de calidad no encontrado"));
 	}
 
+	/**
+	 * Lo ultimo registrado va arriba. El listado se pagina, asi que en orden
+	 * ascendente lo que se acaba de crear cae en la ultima pagina: el usuario
+	 * vuelve del formulario, no lo ve, y cree que no se guardo.
+	 */
 	@Override
 	public List<ControlCalidad> listarTodos() {
-		return repositorio.listarTodos();
+		return repositorio.listarTodos().stream()
+				.sorted(Comparator.comparing(ControlCalidad::getIdControl,
+						Comparator.nullsLast(Comparator.reverseOrder())))
+				.toList();
 	}
 
 	@Override
