@@ -10,7 +10,7 @@ public interface IMovimientoMateriaPrimaRepositorio {
 
 	MovimientoMateriaPrima guardar(MovimientoMateriaPrima nuevoMovimientoMateriaPrima);
 
-	Optional<MovimientoMateriaPrima> buscarPorid(int idMovimientoMateriaPrima);
+	Optional<MovimientoMateriaPrima> buscarPorId(int idMovimientoMateriaPrima);
 
 	List<MovimientoMateriaPrima> listarTodos();
 

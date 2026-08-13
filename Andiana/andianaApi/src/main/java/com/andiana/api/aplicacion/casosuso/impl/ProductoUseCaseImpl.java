@@ -41,7 +41,7 @@ public class ProductoUseCaseImpl implements IProductoUseCase {
 
 	@Override
 	public Producto buscarPorId(int idProducto) {
-		return repositorio.buscarPorid(idProducto).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+		return repositorio.buscarPorId(idProducto).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 	}
 
 	@Override

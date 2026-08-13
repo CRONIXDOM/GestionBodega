@@ -29,7 +29,7 @@ public class MateriaPrimaRepositorioImpl implements IMateriaPrimaRepositorio {
 	}
 
 	@Override
-	public Optional<MateriaPrima> buscarPorid(int idMateriaPrima) {
+	public Optional<MateriaPrima> buscarPorId(int idMateriaPrima) {
 		return jpaRepositorio.findById(idMateriaPrima).map(entityMapper::toDominio);
 	}
 

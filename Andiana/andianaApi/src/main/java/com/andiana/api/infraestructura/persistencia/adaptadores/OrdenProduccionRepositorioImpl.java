@@ -29,7 +29,7 @@ public class OrdenProduccionRepositorioImpl implements IOrdenProduccionRepositor
 	}
 
 	@Override
-	public Optional<OrdenProduccion> buscarPorid(int idOrdenProduccion) {
+	public Optional<OrdenProduccion> buscarPorId(int idOrdenProduccion) {
 		return jpaRepositorio.findById(idOrdenProduccion).map(entityMapper::toDominio);
 	}
 

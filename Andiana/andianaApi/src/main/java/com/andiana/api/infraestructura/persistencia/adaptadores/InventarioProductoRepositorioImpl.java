@@ -29,7 +29,7 @@ public class InventarioProductoRepositorioImpl implements IInventarioProductoRep
 	}
 
 	@Override
-	public Optional<InventarioProducto> buscarPorid(int idInventarioProducto) {
+	public Optional<InventarioProducto> buscarPorId(int idInventarioProducto) {
 		return jpaRepositorio.findById(idInventarioProducto).map(entityMapper::toDominio);
 	}
 

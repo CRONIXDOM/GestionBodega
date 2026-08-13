@@ -29,7 +29,7 @@ public class RecetaProduccionRepositorioImpl implements IRecetaProduccionReposit
 	}
 
 	@Override
-	public Optional<RecetaProduccion> buscarPorid(int idRecetaProduccion) {
+	public Optional<RecetaProduccion> buscarPorId(int idRecetaProduccion) {
 		return jpaRepositorio.findById(idRecetaProduccion).map(entityMapper::toDominio);
 	}
 

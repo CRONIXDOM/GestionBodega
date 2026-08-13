@@ -29,7 +29,7 @@ public class DetalleRecetaRepositorioImpl implements IDetalleRecetaRepositorio {
 	}
 
 	@Override
-	public Optional<DetalleReceta> buscarPorid(int idDetalleReceta) {
+	public Optional<DetalleReceta> buscarPorId(int idDetalleReceta) {
 		return jpaRepositorio.findById(idDetalleReceta).map(entityMapper::toDominio);
 	}
 

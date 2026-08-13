@@ -9,7 +9,7 @@ public interface ILoteProduccionRepositorio {
 
 	LoteProduccion guardar(LoteProduccion nuevoLoteProduccion);
 
-	Optional<LoteProduccion> buscarPorid(int idLoteProduccion);
+	Optional<LoteProduccion> buscarPorId(int idLoteProduccion);
 
 	List<LoteProduccion> listarTodos();
 

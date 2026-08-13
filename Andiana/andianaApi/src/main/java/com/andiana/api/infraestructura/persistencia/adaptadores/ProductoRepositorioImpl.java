@@ -28,7 +28,7 @@ public class ProductoRepositorioImpl implements IProductoRepositorio {
 	}
 
 	@Override
-	public Optional<Producto> buscarPorid(int idProducto) {
+	public Optional<Producto> buscarPorId(int idProducto) {
 		return jpaRepositorio.findById(idProducto).map(entityMapper::toDominio);
 	}
 

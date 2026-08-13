@@ -29,7 +29,7 @@ public class LoteProduccionRepositorioImpl implements ILoteProduccionRepositorio
 	}
 
 	@Override
-	public Optional<LoteProduccion> buscarPorid(int idLoteProduccion) {
+	public Optional<LoteProduccion> buscarPorId(int idLoteProduccion) {
 		return jpaRepositorio.findById(idLoteProduccion).map(entityMapper::toDominio);
 	}
 

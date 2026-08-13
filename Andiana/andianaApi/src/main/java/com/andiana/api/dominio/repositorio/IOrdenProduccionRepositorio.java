@@ -10,7 +10,7 @@ public interface IOrdenProduccionRepositorio {
 
 	OrdenProduccion guardar(OrdenProduccion nuevoOrdenProduccion);
 
-	Optional<OrdenProduccion> buscarPorid(int idOrdenProduccion);
+	Optional<OrdenProduccion> buscarPorId(int idOrdenProduccion);
 
 	List<OrdenProduccion> listarTodos();
 

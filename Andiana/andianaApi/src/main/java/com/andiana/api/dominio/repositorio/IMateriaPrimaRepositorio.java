@@ -10,7 +10,7 @@ public interface IMateriaPrimaRepositorio {
 
 	MateriaPrima guardar(MateriaPrima nuevoMateriaPrima);
 
-	Optional<MateriaPrima> buscarPorid(int idMateriaPrima);
+	Optional<MateriaPrima> buscarPorId(int idMateriaPrima);
 
 	List<MateriaPrima> listarTodos();
 

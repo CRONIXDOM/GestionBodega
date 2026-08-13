@@ -9,7 +9,7 @@ public interface IControlCalidadRepositorio {
 
 	ControlCalidad guardar(ControlCalidad nuevoControlCalidad);
 
-	Optional<ControlCalidad> buscarPorid(int idControlCalidad);
+	Optional<ControlCalidad> buscarPorId(int idControlCalidad);
 
 	List<ControlCalidad> listarTodos();
 

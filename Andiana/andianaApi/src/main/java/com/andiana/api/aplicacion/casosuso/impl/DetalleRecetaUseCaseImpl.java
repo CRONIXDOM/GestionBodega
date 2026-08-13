@@ -74,10 +74,10 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 		Validaciones.obligatorio(detalle.getIdMateria(), "materia prima");
 		Validaciones.mayorQueCero(detalle.getCantidad(), "cantidad");
 
-		if (recetaRepositorio.buscarPorid(detalle.getIdReceta()).isEmpty()) {
+		if (recetaRepositorio.buscarPorId(detalle.getIdReceta()).isEmpty()) {
 			throw new RuntimeException("La receta indicada no existe");
 		}
-		MateriaPrima materia = materiaRepositorio.buscarPorid(detalle.getIdMateria())
+		MateriaPrima materia = materiaRepositorio.buscarPorId(detalle.getIdMateria())
 				.orElseThrow(() -> new RuntimeException("La materia prima indicada no existe"));
 
 		detalle.setUnidad(materia.getUnidadMedida());
@@ -102,7 +102,7 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 
 	@Override
 	public DetalleReceta buscarPorId(int idDetalle) {
-		return repositorio.buscarPorid(idDetalle)
+		return repositorio.buscarPorId(idDetalle)
 				.orElseThrow(() -> new RuntimeException("Detalle de receta no encontrado"));
 	}
 

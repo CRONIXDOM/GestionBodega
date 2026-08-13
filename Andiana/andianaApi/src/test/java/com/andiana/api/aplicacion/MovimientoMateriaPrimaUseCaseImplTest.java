@@ -37,7 +37,7 @@ class MovimientoMateriaPrimaUseCaseImplTest {
 	}
 
 	private BigDecimal stockDe(Integer idMateria) {
-		return materias.buscarPorid(idMateria).orElseThrow().getStockActual();
+		return materias.buscarPorId(idMateria).orElseThrow().getStockActual();
 	}
 
 	private MovimientoMateriaPrima mover(String tipo, String cantidad, String fecha) {
@@ -46,7 +46,7 @@ class MovimientoMateriaPrimaUseCaseImplTest {
 	}
 
 	private BigDecimal stock() {
-		return materias.buscarPorid(idAzucar).orElseThrow().getStockActual();
+		return materias.buscarPorId(idAzucar).orElseThrow().getStockActual();
 	}
 
 	@Test

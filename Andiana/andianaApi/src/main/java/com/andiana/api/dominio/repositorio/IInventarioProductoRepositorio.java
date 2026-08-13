@@ -9,7 +9,7 @@ public interface IInventarioProductoRepositorio {
 
 	InventarioProducto guardar(InventarioProducto nuevoInventarioProducto);
 
-	Optional<InventarioProducto> buscarPorid(int idInventarioProducto);
+	Optional<InventarioProducto> buscarPorId(int idInventarioProducto);
 
 	List<InventarioProducto> listarTodos();
 

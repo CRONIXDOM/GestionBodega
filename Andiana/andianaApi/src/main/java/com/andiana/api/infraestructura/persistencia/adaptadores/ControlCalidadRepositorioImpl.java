@@ -29,7 +29,7 @@ public class ControlCalidadRepositorioImpl implements IControlCalidadRepositorio
 	}
 
 	@Override
-	public Optional<ControlCalidad> buscarPorid(int idControlCalidad) {
+	public Optional<ControlCalidad> buscarPorId(int idControlCalidad) {
 		return jpaRepositorio.findById(idControlCalidad).map(entityMapper::toDominio);
 	}
 

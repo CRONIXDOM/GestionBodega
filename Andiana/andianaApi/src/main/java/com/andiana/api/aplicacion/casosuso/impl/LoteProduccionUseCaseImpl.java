@@ -39,7 +39,7 @@ public class LoteProduccionUseCaseImpl implements ILoteProduccionUseCase {
 		}
 		Validaciones.unoDe(nuevoLoteProduccion.getEstado(), "estado", "EN_PROCESO", "FINALIZADO", "RECHAZADO");
 
-		if (ordenRepositorio.buscarPorid(nuevoLoteProduccion.getIdOrden()).isEmpty()) {
+		if (ordenRepositorio.buscarPorId(nuevoLoteProduccion.getIdOrden()).isEmpty()) {
 			throw new RuntimeException("La orden de producción indicada no existe");
 		}
 		Validaciones.noRepetido(repositorio.listarTodos(), LoteProduccion::getIdLote, LoteProduccion::getNumeroLote,
@@ -62,7 +62,7 @@ public class LoteProduccionUseCaseImpl implements ILoteProduccionUseCase {
 
 	@Override
 	public LoteProduccion buscarPorId(int idLote) {
-		return repositorio.buscarPorid(idLote)
+		return repositorio.buscarPorId(idLote)
 				.orElseThrow(() -> new RuntimeException("Lote de producción no encontrado"));
 	}
 

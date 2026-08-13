@@ -41,7 +41,7 @@ public abstract class RepositorioEnMemoria<T> {
 		return copias;
 	}
 
-	public Optional<T> buscarPorid(int id) {
+	public Optional<T> buscarPorId(int id) {
 		return Optional.ofNullable(filas.get(id)).map(this::copiar);
 	}
 

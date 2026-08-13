@@ -31,7 +31,7 @@ public class RecetaProduccionUseCaseImpl implements IRecetaProduccionUseCase {
 		if (nuevoRecetaProduccion.getEstado() == null) {
 			nuevoRecetaProduccion.setEstado(Boolean.TRUE);
 		}
-		if (productoRepositorio.buscarPorid(nuevoRecetaProduccion.getIdProducto()).isEmpty()) {
+		if (productoRepositorio.buscarPorId(nuevoRecetaProduccion.getIdProducto()).isEmpty()) {
 			throw new RuntimeException("El producto indicado no existe");
 		}
 
@@ -49,7 +49,7 @@ public class RecetaProduccionUseCaseImpl implements IRecetaProduccionUseCase {
 
 	@Override
 	public RecetaProduccion buscarPorId(int idReceta) {
-		return repositorio.buscarPorid(idReceta).orElseThrow(() -> new RuntimeException("Receta no encontrada"));
+		return repositorio.buscarPorId(idReceta).orElseThrow(() -> new RuntimeException("Receta no encontrada"));
 	}
 
 	@Override

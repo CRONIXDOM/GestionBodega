@@ -45,7 +45,7 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		if (nuevoMovimientoMateriaPrima.getFecha() == null) {
 			nuevoMovimientoMateriaPrima.setFecha(LocalDateTime.now());
 		}
-		if (materiaRepositorio.buscarPorid(nuevoMovimientoMateriaPrima.getIdMateria()).isEmpty()) {
+		if (materiaRepositorio.buscarPorId(nuevoMovimientoMateriaPrima.getIdMateria()).isEmpty()) {
 			throw new RuntimeException("La materia prima indicada no existe");
 		}
 
@@ -75,7 +75,7 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 
 	@Override
 	public MovimientoMateriaPrima buscarPorId(int idMovimiento) {
-		return repositorio.buscarPorid(idMovimiento)
+		return repositorio.buscarPorId(idMovimiento)
 				.orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
 	}
 
@@ -152,7 +152,7 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 	}
 
 	private MateriaPrima materia(int idMateria) {
-		return materiaRepositorio.buscarPorid(idMateria)
+		return materiaRepositorio.buscarPorId(idMateria)
 				.orElseThrow(() -> new RuntimeException("La materia prima indicada no existe"));
 	}
 }

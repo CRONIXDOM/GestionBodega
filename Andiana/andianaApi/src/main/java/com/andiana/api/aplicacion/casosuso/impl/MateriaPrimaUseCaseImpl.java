@@ -44,7 +44,7 @@ public class MateriaPrimaUseCaseImpl implements IMateriaPrimaUseCase {
 
 	@Override
 	public MateriaPrima buscarPorId(int idMateria) {
-		return repositorio.buscarPorid(idMateria)
+		return repositorio.buscarPorId(idMateria)
 				.orElseThrow(() -> new RuntimeException("Materia prima no encontrada"));
 	}
 

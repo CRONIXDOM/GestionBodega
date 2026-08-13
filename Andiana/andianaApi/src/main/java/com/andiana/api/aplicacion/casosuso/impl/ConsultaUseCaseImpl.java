@@ -35,7 +35,7 @@ public class ConsultaUseCaseImpl implements IConsultaUseCase {
 
 	@Override
 	public List<MateriaEnRecetaDto> materiasDeLaReceta(int idReceta) {
-		if (recetaRepositorio.buscarPorid(idReceta).isEmpty()) {
+		if (recetaRepositorio.buscarPorId(idReceta).isEmpty()) {
 			throw new RuntimeException("La receta indicada no existe");
 		}
 

@@ -38,7 +38,7 @@ public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase
 			nuevoInventarioProducto.setFechaIngreso(LocalDate.now());
 		}
 
-		LoteProduccion lote = loteRepositorio.buscarPorid(nuevoInventarioProducto.getIdLote())
+		LoteProduccion lote = loteRepositorio.buscarPorId(nuevoInventarioProducto.getIdLote())
 				.orElseThrow(() -> new RuntimeException("El lote indicado no existe"));
 
 		String resultado = resultadoVigente(nuevoInventarioProducto.getIdLote());
@@ -67,7 +67,7 @@ public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase
 
 	@Override
 	public InventarioProducto buscarPorId(int idInventario) {
-		return repositorio.buscarPorid(idInventario)
+		return repositorio.buscarPorId(idInventario)
 				.orElseThrow(() -> new RuntimeException("Registro de inventario no encontrado"));
 	}
 

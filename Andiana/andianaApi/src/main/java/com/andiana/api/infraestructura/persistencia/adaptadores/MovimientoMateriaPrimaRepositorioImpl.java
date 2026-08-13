@@ -29,7 +29,7 @@ public class MovimientoMateriaPrimaRepositorioImpl implements IMovimientoMateria
 	}
 
 	@Override
-	public Optional<MovimientoMateriaPrima> buscarPorid(int idMovimientoMateriaPrima) {
+	public Optional<MovimientoMateriaPrima> buscarPorId(int idMovimientoMateriaPrima) {
 		return jpaRepositorio.findById(idMovimientoMateriaPrima).map(entityMapper::toDominio);
 	}
 

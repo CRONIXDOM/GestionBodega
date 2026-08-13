@@ -10,7 +10,7 @@ public interface IDetalleRecetaRepositorio {
 
 	DetalleReceta guardar(DetalleReceta nuevoDetalleReceta);
 
-	Optional<DetalleReceta> buscarPorid(int idDetalleReceta);
+	Optional<DetalleReceta> buscarPorId(int idDetalleReceta);
 
 	List<DetalleReceta> listarTodos();
 

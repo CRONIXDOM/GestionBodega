@@ -43,7 +43,7 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 		Validaciones.enRango(nuevoControlCalidad.getBrix(), "grados Brix", 0, 30);
 		Validaciones.enRango(nuevoControlCalidad.getTemperatura(), "temperatura", -10, 60);
 
-		if (loteRepositorio.buscarPorid(nuevoControlCalidad.getIdLote()).isEmpty()) {
+		if (loteRepositorio.buscarPorId(nuevoControlCalidad.getIdLote()).isEmpty()) {
 			throw new RuntimeException("El lote indicado no existe");
 		}
 
@@ -58,7 +58,7 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 
 	@Override
 	public ControlCalidad buscarPorId(int idControl) {
-		return repositorio.buscarPorid(idControl)
+		return repositorio.buscarPorId(idControl)
 				.orElseThrow(() -> new RuntimeException("Control de calidad no encontrado"));
 	}
 

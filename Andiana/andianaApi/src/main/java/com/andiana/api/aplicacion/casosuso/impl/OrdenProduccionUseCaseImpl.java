@@ -37,7 +37,7 @@ public class OrdenProduccionUseCaseImpl implements IOrdenProduccionUseCase {
 		Validaciones.unoDe(nuevoOrdenProduccion.getEstado(), "estado", "PLANIFICADA", "EN_PROCESO", "FINALIZADA",
 				"CANCELADA");
 
-		if (productoRepositorio.buscarPorid(nuevoOrdenProduccion.getIdProducto()).isEmpty()) {
+		if (productoRepositorio.buscarPorId(nuevoOrdenProduccion.getIdProducto()).isEmpty()) {
 			throw new RuntimeException("El producto indicado no existe");
 		}
 
@@ -51,7 +51,7 @@ public class OrdenProduccionUseCaseImpl implements IOrdenProduccionUseCase {
 
 	@Override
 	public OrdenProduccion buscarPorId(int idOrden) {
-		return repositorio.buscarPorid(idOrden)
+		return repositorio.buscarPorId(idOrden)
 				.orElseThrow(() -> new RuntimeException("Orden de producción no encontrada"));
 	}
 
