@@ -61,23 +61,6 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 		return guardadas;
 	}
 
-	@Override
-	public DetalleReceta buscarPorId(int idDetalle) {
-		return repositorio.buscarPorid(idDetalle)
-				.orElseThrow(() -> new RuntimeException("Detalle de receta no encontrado"));
-	}
-
-	@Override
-	public List<DetalleReceta> listarTodos() {
-		return repositorio.listarTodos();
-	}
-
-	@Override
-	public void eliminar(int idDetalle) {
-		buscarPorId(idDetalle);
-		repositorio.eliminar(idDetalle);
-	}
-
 	/**
 	 * Las reglas de una linea de receta.
 	 *
@@ -97,12 +80,8 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 		MateriaPrima materia = materiaRepositorio.buscarPorid(detalle.getIdMateria())
 				.orElseThrow(() -> new RuntimeException("La materia prima indicada no existe"));
 
-		// la unidad la define la materia prima: si se dejara escribir aparte se
-		// podria pedir "2 LITROS" de algo que se mide en gramos
 		detalle.setUnidad(materia.getUnidadMedida());
 
-		// la misma materia prima dos veces en una receta daria dos cantidades
-		// distintas para lo mismo
 		boolean yaEstaGuardada = repositorio.buscarPorReceta(detalle.getIdReceta()).stream()
 				.filter(otro -> detalle.getIdDetalle() == null
 						|| !detalle.getIdDetalle().equals(otro.getIdDetalle()))
@@ -119,5 +98,22 @@ public class DetalleRecetaUseCaseImpl implements IDetalleRecetaUseCase {
 			throw new RuntimeException("Agregaste " + materia.getNombre()
 					+ " dos veces: déjala una sola vez con la cantidad total");
 		}
+	}
+
+	@Override
+	public DetalleReceta buscarPorId(int idDetalle) {
+		return repositorio.buscarPorid(idDetalle)
+				.orElseThrow(() -> new RuntimeException("Detalle de receta no encontrado"));
+	}
+
+	@Override
+	public List<DetalleReceta> listarTodos() {
+		return repositorio.listarTodos();
+	}
+
+	@Override
+	public void eliminar(int idDetalle) {
+		buscarPorId(idDetalle);
+		repositorio.eliminar(idDetalle);
 	}
 }

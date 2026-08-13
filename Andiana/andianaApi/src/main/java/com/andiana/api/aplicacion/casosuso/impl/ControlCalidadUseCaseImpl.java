@@ -20,8 +20,8 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 	private final ILoteProduccionRepositorio loteRepositorio;
 	private final IInventarioProductoRepositorio inventarioRepositorio;
 
-	public ControlCalidadUseCaseImpl(IControlCalidadRepositorio repositorio,
-			ILoteProduccionRepositorio loteRepositorio, IInventarioProductoRepositorio inventarioRepositorio) {
+	public ControlCalidadUseCaseImpl(IControlCalidadRepositorio repositorio, ILoteProduccionRepositorio loteRepositorio,
+			IInventarioProductoRepositorio inventarioRepositorio) {
 		this.repositorio = repositorio;
 		this.loteRepositorio = loteRepositorio;
 		this.inventarioRepositorio = inventarioRepositorio;
@@ -33,14 +33,12 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 		nuevoControlCalidad.setObservaciones(Validaciones.normalizar(nuevoControlCalidad.getObservaciones()));
 
 		Validaciones.obligatorio(nuevoControlCalidad.getIdLote(), "lote");
-		// los mismos valores que admite el CHECK de la tabla
 		Validaciones.unoDe(nuevoControlCalidad.getResultado(), "resultado", APROBADO, OBSERVADO, RECHAZADO);
 
 		if (nuevoControlCalidad.getFechaControl() == null) {
 			nuevoControlCalidad.setFechaControl(LocalDateTime.now());
 		}
 
-		// rangos con los que trabaja el laboratorio en bebidas gaseosas
 		Validaciones.enRango(nuevoControlCalidad.getPh(), "pH", 0, 14);
 		Validaciones.enRango(nuevoControlCalidad.getBrix(), "grados Brix", 0, 30);
 		Validaciones.enRango(nuevoControlCalidad.getTemperatura(), "temperatura", -10, 60);
@@ -49,8 +47,6 @@ public class ControlCalidadUseCaseImpl implements IControlCalidadUseCase {
 			throw new RuntimeException("El lote indicado no existe");
 		}
 
-		// si el lote ya se envio al inventario fue porque estaba aprobado: bajarle
-		// ahora el resultado dejaria mercaderia no apta guardada como buena
 		if (!APROBADO.equals(nuevoControlCalidad.getResultado())
 				&& !inventarioRepositorio.buscarPorLote(nuevoControlCalidad.getIdLote()).isEmpty()) {
 			throw new RuntimeException("Ese lote ya está en el inventario: para cambiar el resultado hay"

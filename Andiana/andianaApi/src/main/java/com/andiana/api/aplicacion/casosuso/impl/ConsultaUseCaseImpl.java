@@ -17,11 +17,6 @@ import com.andiana.api.dominio.repositorio.IRecetaProduccionRepositorio;
 import com.andiana.api.presentacion.dto.response.ConteoRecetaDto;
 import com.andiana.api.presentacion.dto.response.MateriaEnRecetaDto;
 
-/**
- * Las consultas se resuelven aqui, uniendo lo que devuelven los repositorios.
- * Asi no hacen falta vistas ni consultas SQL a medida y la base de datos se
- * queda exactamente como esta.
- */
 public class ConsultaUseCaseImpl implements IConsultaUseCase {
 
 	private final IRecetaProduccionRepositorio recetaRepositorio;
@@ -38,7 +33,6 @@ public class ConsultaUseCaseImpl implements IConsultaUseCase {
 		this.productoRepositorio = productoRepositorio;
 	}
 
-	/** Consulta 1: las materias primas utilizadas en una receta. */
 	@Override
 	public List<MateriaEnRecetaDto> materiasDeLaReceta(int idReceta) {
 		if (recetaRepositorio.buscarPorid(idReceta).isEmpty()) {
@@ -54,16 +48,13 @@ public class ConsultaUseCaseImpl implements IConsultaUseCase {
 		for (DetalleReceta detalle : detalleRepositorio.buscarPorReceta(idReceta)) {
 			MateriaPrima materia = porId.get(detalle.getIdMateria());
 			lineas.add(new MateriaEnRecetaDto(detalle.getIdMateria(),
-					materia == null ? "(materia prima eliminada)" : materia.getNombre(),
-					detalle.getCantidad(),
-					detalle.getUnidad(),
-					materia == null ? null : materia.getStockActual()));
+					materia == null ? "(materia prima eliminada)" : materia.getNombre(), detalle.getCantidad(),
+					detalle.getUnidad(), materia == null ? null : materia.getStockActual()));
 		}
 		lineas.sort((a, b) -> a.getMateriaPrima().compareToIgnoreCase(b.getMateriaPrima()));
 		return lineas;
 	}
 
-	/** Consulta 2: cuantas materias primas lleva cada receta. */
 	@Override
 	public List<ConteoRecetaDto> conteoDeMateriasPorReceta() {
 		Map<Integer, String> nombreProducto = new HashMap<>();
@@ -72,8 +63,6 @@ public class ConsultaUseCaseImpl implements IConsultaUseCase {
 					p.getNombre() + " " + p.getPresentacion() + " (" + p.getVolumenMl() + " ml)");
 		}
 
-		// se cuentan las lineas de todas las recetas de una sola pasada, en vez de
-		// preguntar por cada receta por separado
 		Map<Integer, Long> lineasPorReceta = new HashMap<>();
 		for (DetalleReceta detalle : detalleRepositorio.listarTodos()) {
 			lineasPorReceta.merge(detalle.getIdReceta(), 1L, Long::sum);
@@ -82,10 +71,8 @@ public class ConsultaUseCaseImpl implements IConsultaUseCase {
 		List<ConteoRecetaDto> filas = new ArrayList<>();
 		for (RecetaProduccion receta : recetaRepositorio.listarTodos()) {
 			filas.add(new ConteoRecetaDto(receta.getIdReceta(),
-					nombreProducto.getOrDefault(receta.getIdProducto(), "(producto eliminado)"),
-					receta.getVersion(),
-					Boolean.TRUE.equals(receta.getEstado()),
-					lineasPorReceta.getOrDefault(receta.getIdReceta(), 0L)));
+					nombreProducto.getOrDefault(receta.getIdProducto(), "(producto eliminado)"), receta.getVersion(),
+					Boolean.TRUE.equals(receta.getEstado()), lineasPorReceta.getOrDefault(receta.getIdReceta(), 0L)));
 		}
 		filas.sort((a, b) -> {
 			int porProducto = a.getProducto().compareToIgnoreCase(b.getProducto());

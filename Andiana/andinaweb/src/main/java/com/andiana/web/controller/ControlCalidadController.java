@@ -19,60 +19,56 @@ import com.andiana.web.util.MensajesError;
 @RequestMapping("/controlcalidad")
 public class ControlCalidadController {
 
-    @Autowired
-    private IControlCalidadService servicioAPI;
-    @Autowired
-    private ILoteProduccionService servicioLote;
+	@Autowired
+	private IControlCalidadService servicioAPI;
+	@Autowired
+	private ILoteProduccionService servicioLote;
 
-    @GetMapping
-    public String leerPagina(Model model) {
-        model.addAttribute("listacontrolcalidad", servicioAPI.listarControlCalidad());
-        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
-        return "/Controlcalidad/listarcontrolcalidad";
-    }
+	@GetMapping
+	public String leerPagina(Model model) {
+		model.addAttribute("listacontrolcalidad", servicioAPI.listarControlCalidad());
+		model.addAttribute("opcionesLote", servicioLote.listarOpciones());
+		return "/Controlcalidad/listarcontrolcalidad";
+	}
 
-    @GetMapping("/nuevo")
-    public String crearControlCalidad(Model model) {
-        model.addAttribute("controlCalidad", new ControlCalidadRequestDto());
-        agregarOpciones(model);
-        return "/Controlcalidad/crearcontrolcalidad";
-    }
+	@GetMapping("/nuevo")
+	public String crearControlCalidad(Model model) {
+		model.addAttribute("controlCalidad", new ControlCalidadRequestDto());
+		agregarOpciones(model);
+		return "/Controlcalidad/crearcontrolcalidad";
+	}
 
-    @PostMapping("/guardar")
-    public String guardarControlCalidad(@ModelAttribute ControlCalidadRequestDto controlCalidad, Model model) {
-        try {
-            servicioAPI.guardarControlCalidad(controlCalidad);
-            return "redirect:/controlcalidad";
-        } catch (Exception ex) {
-            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
-            // en vez de mostrar la página de error de Spring.
-            model.addAttribute("controlCalidad", controlCalidad);
-            model.addAttribute("error", MensajesError.extraer(ex));
-        agregarOpciones(model);
-            return "/Controlcalidad/crearcontrolcalidad";
-        }
-    }
+	@PostMapping("/guardar")
+	public String guardarControlCalidad(@ModelAttribute ControlCalidadRequestDto controlCalidad, Model model) {
+		try {
+			servicioAPI.guardarControlCalidad(controlCalidad);
+			return "redirect:/controlcalidad";
+		} catch (Exception ex) {
+			model.addAttribute("controlCalidad", controlCalidad);
+			model.addAttribute("error", MensajesError.extraer(ex));
+			agregarOpciones(model);
+			return "/Controlcalidad/crearcontrolcalidad";
+		}
+	}
 
-    @GetMapping("/editar/{id}")
-    public String editarControlCalidad(@PathVariable Integer id, Model model) {
-        model.addAttribute("controlCalidad", servicioAPI.buscarControlCalidadId(id));
-        agregarOpciones(model);
-        return "/Controlcalidad/crearcontrolcalidad";
-    }
+	@GetMapping("/editar/{id}")
+	public String editarControlCalidad(@PathVariable Integer id, Model model) {
+		model.addAttribute("controlCalidad", servicioAPI.buscarControlCalidadId(id));
+		agregarOpciones(model);
+		return "/Controlcalidad/crearcontrolcalidad";
+	}
 
-    @GetMapping("/eliminar/{id}")
-    public String eliminarControlCalidad(@PathVariable Integer id, RedirectAttributes flash) {
-        try {
-            servicioAPI.eliminarControlCalidad(id);
-        } catch (Exception ex) {
-            // normalmente pasa cuando otro registro depende de este:
-            // se avisa en pantalla en vez de mostrar la página de error.
-            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
-        }
-        return "redirect:/controlcalidad";
-    }
+	@GetMapping("/eliminar/{id}")
+	public String eliminarControlCalidad(@PathVariable Integer id, RedirectAttributes flash) {
+		try {
+			servicioAPI.eliminarControlCalidad(id);
+		} catch (Exception ex) {
+			flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+		}
+		return "redirect:/controlcalidad";
+	}
 
-    private void agregarOpciones(Model model) {
-        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
-    }
+	private void agregarOpciones(Model model) {
+		model.addAttribute("opcionesLote", servicioLote.listarOpciones());
+	}
 }

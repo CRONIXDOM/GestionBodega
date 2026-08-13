@@ -27,7 +27,8 @@ public class MovimientoMateriaPrimaController {
 	private final IMovimientoMateriaPrimaUseCase movimientoMateriaPrimaUseCase;
 	private final IMovimientoMateriaPrimaDtoMapper mapper;
 
-	public MovimientoMateriaPrimaController(IMovimientoMateriaPrimaUseCase movimientoMateriaPrimaUseCase, IMovimientoMateriaPrimaDtoMapper mapper) {
+	public MovimientoMateriaPrimaController(IMovimientoMateriaPrimaUseCase movimientoMateriaPrimaUseCase,
+			IMovimientoMateriaPrimaDtoMapper mapper) {
 
 		this.movimientoMateriaPrimaUseCase = movimientoMateriaPrimaUseCase;
 		this.mapper = mapper;

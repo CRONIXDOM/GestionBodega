@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-/** Reflejo exacto de la tabla inventario_producto, tal y como ya existe en la base. */
 @Entity
 @Data
 @Table(name = "inventario_producto")

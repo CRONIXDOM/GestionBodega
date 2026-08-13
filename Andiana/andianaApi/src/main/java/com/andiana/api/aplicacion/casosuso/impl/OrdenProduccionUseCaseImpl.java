@@ -15,8 +15,8 @@ public class OrdenProduccionUseCaseImpl implements IOrdenProduccionUseCase {
 	private final IProductoRepositorio productoRepositorio;
 	private final ILoteProduccionRepositorio loteRepositorio;
 
-	public OrdenProduccionUseCaseImpl(IOrdenProduccionRepositorio repositorio,
-			IProductoRepositorio productoRepositorio, ILoteProduccionRepositorio loteRepositorio) {
+	public OrdenProduccionUseCaseImpl(IOrdenProduccionRepositorio repositorio, IProductoRepositorio productoRepositorio,
+			ILoteProduccionRepositorio loteRepositorio) {
 		this.repositorio = repositorio;
 		this.productoRepositorio = productoRepositorio;
 		this.loteRepositorio = loteRepositorio;
@@ -34,15 +34,13 @@ public class OrdenProduccionUseCaseImpl implements IOrdenProduccionUseCase {
 		if (nuevoOrdenProduccion.getEstado() == null) {
 			nuevoOrdenProduccion.setEstado("PLANIFICADA");
 		}
-		// los mismos valores que admite el CHECK de la tabla
-		Validaciones.unoDe(nuevoOrdenProduccion.getEstado(), "estado",
-				"PLANIFICADA", "EN_PROCESO", "FINALIZADA", "CANCELADA");
+		Validaciones.unoDe(nuevoOrdenProduccion.getEstado(), "estado", "PLANIFICADA", "EN_PROCESO", "FINALIZADA",
+				"CANCELADA");
 
 		if (productoRepositorio.buscarPorid(nuevoOrdenProduccion.getIdProducto()).isEmpty()) {
 			throw new RuntimeException("El producto indicado no existe");
 		}
 
-		// cancelar una orden que ya fabrico lotes dejaria esos lotes sin explicacion
 		if ("CANCELADA".equals(nuevoOrdenProduccion.getEstado()) && nuevoOrdenProduccion.getIdOrden() != null
 				&& !loteRepositorio.buscarPorOrden(nuevoOrdenProduccion.getIdOrden()).isEmpty()) {
 			throw new RuntimeException("No se puede cancelar la orden: ya tiene lotes fabricados");

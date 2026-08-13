@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import lombok.Data;
 
-/** Una línea de la consulta "materias primas utilizadas en una receta". */
 @Data
 public class MateriaEnRecetaDto {
 

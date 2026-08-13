@@ -32,8 +32,6 @@ public class ProductoUseCaseImpl implements IProductoUseCase {
 		if (nuevoProducto.getEstado() == null) {
 			nuevoProducto.setEstado(Boolean.TRUE);
 		}
-
-		// la base exige que nombre + presentacion no se repitan (uk_producto)
 		Validaciones.noRepetido(repositorio.listarTodos(), Producto::getIdProducto,
 				p -> p.getNombre() + " | " + p.getPresentacion(), nuevoProducto.getIdProducto(),
 				nuevoProducto.getNombre() + " | " + nuevoProducto.getPresentacion(), "el producto");
@@ -43,8 +41,7 @@ public class ProductoUseCaseImpl implements IProductoUseCase {
 
 	@Override
 	public Producto buscarPorId(int idProducto) {
-		return repositorio.buscarPorid(idProducto)
-				.orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+		return repositorio.buscarPorid(idProducto).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 	}
 
 	@Override

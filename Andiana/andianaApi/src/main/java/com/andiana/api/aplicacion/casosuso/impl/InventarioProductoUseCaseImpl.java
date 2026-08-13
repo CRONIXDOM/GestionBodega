@@ -13,14 +13,6 @@ import com.andiana.api.dominio.repositorio.IControlCalidadRepositorio;
 import com.andiana.api.dominio.repositorio.IInventarioProductoRepositorio;
 import com.andiana.api.dominio.repositorio.ILoteProduccionRepositorio;
 
-/**
- * La regla central del proceso: al inventario de productos terminados solo
- * entra lo que el laboratorio aprobo.
- *
- * Un mismo lote puede repartirse en varias ubicaciones, asi que se admiten
- * varios registros por lote; lo que no puede es guardarse mas de lo que el lote
- * llego a producir.
- */
 public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase {
 
 	private final IInventarioProductoRepositorio repositorio;
@@ -62,14 +54,12 @@ public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase
 		BigDecimal producido = lote.getCantidadProducida() == null ? BigDecimal.ZERO : lote.getCantidadProducida();
 		BigDecimal yaGuardado = repositorio.buscarPorLote(nuevoInventarioProducto.getIdLote()).stream()
 				.filter(otro -> !otro.getIdInventario().equals(nuevoInventarioProducto.getIdInventario()))
-				.map(InventarioProducto::getCantidad)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+				.map(InventarioProducto::getCantidad).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		if (yaGuardado.add(nuevoInventarioProducto.getCantidad()).compareTo(producido) > 0) {
 			throw new RuntimeException("No caben " + Validaciones.legible(nuevoInventarioProducto.getCantidad())
-					+ " unidades: el lote " + lote.getNumeroLote() + " produjo "
-					+ Validaciones.legible(producido) + " y ya hay " + Validaciones.legible(yaGuardado)
-					+ " guardadas");
+					+ " unidades: el lote " + lote.getNumeroLote() + " produjo " + Validaciones.legible(producido)
+					+ " y ya hay " + Validaciones.legible(yaGuardado) + " guardadas");
 		}
 
 		return repositorio.guardar(nuevoInventarioProducto);
@@ -92,14 +82,8 @@ public class InventarioProductoUseCaseImpl implements IInventarioProductoUseCase
 		repositorio.eliminar(idInventario);
 	}
 
-	/**
-	 * El resultado que vale para un lote es el de su control mas reciente: el
-	 * laboratorio puede volver a inspeccionarlo despues de una observacion.
-	 */
 	private String resultadoVigente(int idLote) {
-		return controlRepositorio.buscarPorLote(idLote).stream()
-				.findFirst()
-				.map(ControlCalidad::getResultado)
+		return controlRepositorio.buscarPorLote(idLote).stream().findFirst().map(ControlCalidad::getResultado)
 				.orElse(null);
 	}
 }

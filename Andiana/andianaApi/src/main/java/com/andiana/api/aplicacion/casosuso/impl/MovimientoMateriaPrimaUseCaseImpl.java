@@ -15,17 +15,6 @@ import com.andiana.api.dominio.entidades.MovimientoMateriaPrima;
 import com.andiana.api.dominio.repositorio.IMateriaPrimaRepositorio;
 import com.andiana.api.dominio.repositorio.IMovimientoMateriaPrimaRepositorio;
 
-/**
- * El stock de una materia prima nunca se escribe a mano: siempre se vuelve a
- * calcular reproduciendo su historial de movimientos de principio a fin.
- *
- * Se hace asi, y no sumando y restando sobre el stock que hubiera, porque un
- * AJUSTE fija el stock en un valor absoluto: si despues se corrige o se borra
- * un movimiento anterior a ese ajuste, lo unico que da el resultado correcto es
- * volver a pasar la pelicula entera.
- *
- * INGRESO suma, CONSUMO resta y AJUSTE deja el stock en la cantidad indicada.
- */
 public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrimaUseCase {
 
 	public static final String INGRESO = "INGRESO";
@@ -51,8 +40,6 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		Validaciones.obligatorio(nuevoMovimientoMateriaPrima.getIdMateria(), "materia prima");
 		Validaciones.unoDe(nuevoMovimientoMateriaPrima.getTipo(), "tipo", INGRESO, CONSUMO, AJUSTE);
 
-		// la tabla exige cantidad > 0 para los tres tipos, asi que un ajuste a cero
-		// no se puede registrar: para vaciar una materia prima se usa un CONSUMO
 		Validaciones.mayorQueCero(nuevoMovimientoMateriaPrima.getCantidad(), "cantidad");
 
 		if (nuevoMovimientoMateriaPrima.getFecha() == null) {
@@ -62,13 +49,8 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 			throw new RuntimeException("La materia prima indicada no existe");
 		}
 
-		// si la materia prima ya traia stock de antes pero no tiene ni un movimiento
-		// que lo explique, se anota ese saldo como el ingreso inicial
-		asegurarSaldoInicial(nuevoMovimientoMateriaPrima.getIdMateria(),
-				nuevoMovimientoMateriaPrima.getFecha());
+		asegurarSaldoInicial(nuevoMovimientoMateriaPrima.getIdMateria(), nuevoMovimientoMateriaPrima.getFecha());
 
-		// al editar, el movimiento puede haber cambiado de materia prima: entonces
-		// hay DOS bodegas que corregir, la nueva y la que lo pierde
 		Integer materiaAnterior = null;
 		if (nuevoMovimientoMateriaPrima.getIdMovimiento() != null) {
 			int anterior = buscarPorId(nuevoMovimientoMateriaPrima.getIdMovimiento()).getIdMateria();
@@ -77,13 +59,10 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 			}
 		}
 
-		// se comprueba ANTES de guardar: si alguno de los dos historiales no cuadra,
-		// no se toca nada
-		reproducir(historialConEsteMovimiento(nuevoMovimientoMateriaPrima),
-				nuevoMovimientoMateriaPrima.getIdMateria());
+		reproducir(historialConEsteMovimiento(nuevoMovimientoMateriaPrima), nuevoMovimientoMateriaPrima.getIdMateria());
 		if (materiaAnterior != null) {
-			reproducir(historialSinEsteMovimiento(materiaAnterior,
-					nuevoMovimientoMateriaPrima.getIdMovimiento()), materiaAnterior);
+			reproducir(historialSinEsteMovimiento(materiaAnterior, nuevoMovimientoMateriaPrima.getIdMovimiento()),
+					materiaAnterior);
 		}
 
 		MovimientoMateriaPrima guardado = repositorio.guardar(nuevoMovimientoMateriaPrima);
@@ -105,7 +84,6 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		return repositorio.listarTodos();
 	}
 
-	/** Al borrar un movimiento el stock vuelve a lo que diga el resto del historial. */
 	@Override
 	@Transactional
 	public void eliminar(int idMovimiento) {
@@ -120,10 +98,6 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		materiaRepositorio.guardar(materia);
 	}
 
-	/**
-	 * El historial que quedaria si se guardara este movimiento: sustituye el
-	 * suyo propio cuando se esta editando, o se agrega al final cuando es nuevo.
-	 */
 	private List<MovimientoMateriaPrima> historialConEsteMovimiento(MovimientoMateriaPrima movimiento) {
 		List<MovimientoMateriaPrima> historial = new ArrayList<>();
 		for (MovimientoMateriaPrima otro : repositorio.buscarPorMateria(movimiento.getIdMateria())) {
@@ -137,16 +111,6 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		return historial;
 	}
 
-	/**
-	 * El stock sale de reproducir el historial, asi que una materia prima que ya
-	 * tenia existencias cargadas directamente en la base -sin ningun movimiento
-	 * que las respalde- perderia ese stock en cuanto se le registre el primero.
-	 *
-	 * Para que eso no pase, la primera vez que una materia prima recibe un
-	 * movimiento se anota lo que ya tenia como un INGRESO de "SALDO INICIAL",
-	 * fechado un dia antes. Queda a la vista en el historial y desde entonces el
-	 * stock si cuadra con sus movimientos.
-	 */
 	private void asegurarSaldoInicial(int idMateria, LocalDateTime fechaDelPrimero) {
 		if (!repositorio.buscarPorMateria(idMateria).isEmpty()) {
 			return;
@@ -156,43 +120,32 @@ public class MovimientoMateriaPrimaUseCaseImpl implements IMovimientoMateriaPrim
 		if (saldo == null || saldo.signum() <= 0) {
 			return;
 		}
-		repositorio.guardar(new MovimientoMateriaPrima(null, idMateria, fechaDelPrimero.minusDays(1),
-				INGRESO, saldo, "SALDO INICIAL"));
+		repositorio.guardar(new MovimientoMateriaPrima(null, idMateria, fechaDelPrimero.minusDays(1), INGRESO, saldo,
+				"SALDO INICIAL"));
 	}
 
-	/**
-	 * El historial que le queda a una materia prima si se le quita un movimiento,
-	 * porque se lo llevaron a otra materia o porque se borro.
-	 */
 	private List<MovimientoMateriaPrima> historialSinEsteMovimiento(int idMateria, Integer idMovimiento) {
 		return repositorio.buscarPorMateria(idMateria).stream()
-				.filter(otro -> !otro.getIdMovimiento().equals(idMovimiento))
-				.toList();
+				.filter(otro -> !otro.getIdMovimiento().equals(idMovimiento)).toList();
 	}
 
-	/**
-	 * Pasa la pelicula del historial y devuelve el stock final. Si en algun punto
-	 * un consumo dejaria el stock en negativo se corta ahi mismo, para poder decir
-	 * exactamente cuanto habia y cuanto se pedia. La tabla ademas tiene un
-	 * CHECK(stock_actual >= 0), asi que un negativo ni siquiera se podria guardar.
-	 */
 	private BigDecimal reproducir(List<MovimientoMateriaPrima> historial, int idMateria) {
 		BigDecimal stock = BigDecimal.ZERO;
 		for (MovimientoMateriaPrima m : historial) {
 			switch (m.getTipo()) {
-				case INGRESO -> stock = stock.add(m.getCantidad());
-				case CONSUMO -> {
-					BigDecimal resultado = stock.subtract(m.getCantidad());
-					if (resultado.signum() < 0) {
-						MateriaPrima materia = materia(idMateria);
-						throw new RuntimeException("No hay stock suficiente de " + materia.getNombre()
-								+ ": el " + m.getFecha().toLocalDate() + " habría " + Validaciones.legible(stock)
-								+ " " + materia.getUnidadMedida() + " y se quieren consumir "
-								+ Validaciones.legible(m.getCantidad()));
-					}
-					stock = resultado;
+			case INGRESO -> stock = stock.add(m.getCantidad());
+			case CONSUMO -> {
+				BigDecimal resultado = stock.subtract(m.getCantidad());
+				if (resultado.signum() < 0) {
+					MateriaPrima materia = materia(idMateria);
+					throw new RuntimeException(
+							"No hay stock suficiente de " + materia.getNombre() + ": el " + m.getFecha().toLocalDate()
+									+ " habría " + Validaciones.legible(stock) + " " + materia.getUnidadMedida()
+									+ " y se quieren consumir " + Validaciones.legible(m.getCantidad()));
 				}
-				default -> stock = m.getCantidad();
+				stock = resultado;
+			}
+			default -> stock = m.getCantidad();
 			}
 		}
 		return stock;

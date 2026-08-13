@@ -5,10 +5,7 @@ import java.util.Optional;
 
 import com.andiana.api.dominio.entidades.DetalleReceta;
 
-/**
- * Lo que el dominio necesita del almacen de datos. Es una interfaz propia, sin
- * nada de JPA ni de Spring: quien la implementa vive en infraestructura.
- */
+
 public interface IDetalleRecetaRepositorio {
 
 	DetalleReceta guardar(DetalleReceta nuevoDetalleReceta);
@@ -19,6 +16,5 @@ public interface IDetalleRecetaRepositorio {
 
 	void eliminar(int idDetalleReceta);
 
-	/** Las materias primas que lleva una receta. */
 	List<DetalleReceta> buscarPorReceta(int idReceta);
 }

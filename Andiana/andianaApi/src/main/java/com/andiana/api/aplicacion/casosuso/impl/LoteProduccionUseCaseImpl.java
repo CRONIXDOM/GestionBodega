@@ -37,7 +37,6 @@ public class LoteProduccionUseCaseImpl implements ILoteProduccionUseCase {
 		if (nuevoLoteProduccion.getEstado() == null) {
 			nuevoLoteProduccion.setEstado("EN_PROCESO");
 		}
-		// los mismos valores que admite el CHECK de la tabla
 		Validaciones.unoDe(nuevoLoteProduccion.getEstado(), "estado", "EN_PROCESO", "FINALIZADO", "RECHAZADO");
 
 		if (ordenRepositorio.buscarPorid(nuevoLoteProduccion.getIdOrden()).isEmpty()) {
@@ -51,8 +50,6 @@ public class LoteProduccionUseCaseImpl implements ILoteProduccionUseCase {
 			throw new RuntimeException("La fecha de fin no puede ser anterior a la de inicio");
 		}
 
-		// un lote terminado tiene que decir cuanto produjo, o no se sabria cuanto
-		// puede entrar al inventario
 		if ("FINALIZADO".equals(nuevoLoteProduccion.getEstado())) {
 			Validaciones.mayorQueCero(nuevoLoteProduccion.getCantidadProducida(), "cantidad producida");
 		} else if (nuevoLoteProduccion.getCantidadProducida() != null

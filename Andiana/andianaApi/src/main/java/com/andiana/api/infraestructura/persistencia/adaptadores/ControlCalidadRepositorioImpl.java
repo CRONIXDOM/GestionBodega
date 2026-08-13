@@ -11,48 +11,41 @@ import com.andiana.api.infraestructura.repositorio.IControlCalidadJpaRepositorio
 
 public class ControlCalidadRepositorioImpl implements IControlCalidadRepositorio {
 
-    private final IControlCalidadJpaRepositorio jpaRepositorio;
-    private final IControlCalidadJpaMapper entityMapper;
+	private final IControlCalidadJpaRepositorio jpaRepositorio;
+	private final IControlCalidadJpaMapper entityMapper;
 
-    public ControlCalidadRepositorioImpl(
-            IControlCalidadJpaRepositorio jpaRepositorio,
-            IControlCalidadJpaMapper entityMapper) {
+	public ControlCalidadRepositorioImpl(IControlCalidadJpaRepositorio jpaRepositorio,
+			IControlCalidadJpaMapper entityMapper) {
 
-        this.jpaRepositorio = jpaRepositorio;
-        this.entityMapper = entityMapper;
-    }
+		this.jpaRepositorio = jpaRepositorio;
+		this.entityMapper = entityMapper;
+	}
 
-    @Override
-    public ControlCalidad guardar(ControlCalidad nuevoControlCalidad) {
-        ControlCalidadEntity entidad = entityMapper.toEntity(nuevoControlCalidad);
-        ControlCalidadEntity guardado = jpaRepositorio.save(entidad);
-        return entityMapper.toDominio(guardado);
-    }
+	@Override
+	public ControlCalidad guardar(ControlCalidad nuevoControlCalidad) {
+		ControlCalidadEntity entidad = entityMapper.toEntity(nuevoControlCalidad);
+		ControlCalidadEntity guardado = jpaRepositorio.save(entidad);
+		return entityMapper.toDominio(guardado);
+	}
 
-    @Override
-    public Optional<ControlCalidad> buscarPorid(int idControlCalidad) {
-        return jpaRepositorio.findById(idControlCalidad)
-                .map(entityMapper::toDominio);
-    }
+	@Override
+	public Optional<ControlCalidad> buscarPorid(int idControlCalidad) {
+		return jpaRepositorio.findById(idControlCalidad).map(entityMapper::toDominio);
+	}
 
-    @Override
-    public List<ControlCalidad> listarTodos() {
-        return jpaRepositorio.findAll()
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<ControlCalidad> listarTodos() {
+		return jpaRepositorio.findAll().stream().map(entityMapper::toDominio).toList();
+	}
 
-    @Override
-    public void eliminar(int idControlCalidad) {
-        jpaRepositorio.deleteById(idControlCalidad);
-    }
+	@Override
+	public void eliminar(int idControlCalidad) {
+		jpaRepositorio.deleteById(idControlCalidad);
+	}
 
-    @Override
-    public List<ControlCalidad> buscarPorLote(int idLote) {
-        return jpaRepositorio.findByIdLoteOrderByFechaControlDescIdControlDesc(idLote)
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<ControlCalidad> buscarPorLote(int idLote) {
+		return jpaRepositorio.findByIdLoteOrderByFechaControlDescIdControlDesc(idLote).stream()
+				.map(entityMapper::toDominio).toList();
+	}
 }

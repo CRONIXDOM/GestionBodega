@@ -33,8 +33,6 @@ public class MateriaPrimaUseCaseImpl implements IMateriaPrimaUseCase {
 			throw new RuntimeException("El stock mínimo no puede ser negativo");
 		}
 
-		// el stock actual lo mueven los movimientos, no este formulario: al crearla
-		// arranca en cero y al editarla se respeta el que ya tenia
 		if (nuevaMateriaPrima.getIdMateria() == null) {
 			nuevaMateriaPrima.setStockActual(BigDecimal.ZERO);
 		} else {

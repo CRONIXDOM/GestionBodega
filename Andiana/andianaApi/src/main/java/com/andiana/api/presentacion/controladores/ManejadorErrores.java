@@ -7,10 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * Convierte los avisos del negocio en respuestas con un mensaje legible, para
- * que quien consuma la API reciba el motivo y no un error generico.
- */
 @RestControllerAdvice
 public class ManejadorErrores {
 

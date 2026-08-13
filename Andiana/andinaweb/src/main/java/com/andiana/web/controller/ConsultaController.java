@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.andiana.web.service.IConsultaService;
 import com.andiana.web.util.MensajesError;
 
-/**
- * Las dos consultas que pidió la gerencia. La web no hace ningún cálculo: se
- * los pide a andianaApi, que es donde vive esa lógica.
- */
+
 @Controller
 @RequestMapping("/consulta")
 public class ConsultaController {
@@ -21,7 +18,6 @@ public class ConsultaController {
     @Autowired
     private IConsultaService servicioAPI;
 
-    /** Consulta 1: materias primas utilizadas en una receta. */
     @GetMapping("/materias-receta")
     public String materiasDeReceta(@RequestParam(required = false) Integer idReceta, Model model) {
         model.addAttribute("opcionesReceta", servicioAPI.recetasParaElSelector());
@@ -37,7 +33,6 @@ public class ConsultaController {
         return "/Consulta/materiasreceta";
     }
 
-    /** Consulta 2: número de materias primas por receta. */
     @GetMapping("/conteo-materias")
     public String conteoDeMaterias(Model model) {
         model.addAttribute("listaconteo", servicioAPI.conteoDeMateriasPorReceta());

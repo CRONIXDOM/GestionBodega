@@ -19,60 +19,57 @@ import com.andiana.web.util.MensajesError;
 @RequestMapping("/inventario")
 public class InventarioProductoController {
 
-    @Autowired
-    private IInventarioProductoService servicioAPI;
-    @Autowired
-    private ILoteProduccionService servicioLote;
+	@Autowired
+	private IInventarioProductoService servicioAPI;
+	@Autowired
+	private ILoteProduccionService servicioLote;
 
-    @GetMapping
-    public String leerPagina(Model model) {
-        model.addAttribute("listainventario", servicioAPI.listarInventario());
-        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
-        return "/Inventario/listarinventario";
-    }
+	@GetMapping
+	public String leerPagina(Model model) {
+		model.addAttribute("listainventario", servicioAPI.listarInventario());
+		model.addAttribute("opcionesLote", servicioLote.listarOpciones());
+		return "/Inventario/listarinventario";
+	}
 
-    @GetMapping("/nuevo")
-    public String crearInventarioProducto(Model model) {
-        model.addAttribute("inventario", new InventarioProductoRequestDto());
-        agregarOpciones(model);
-        return "/Inventario/crearinventario";
-    }
+	@GetMapping("/nuevo")
+	public String crearInventarioProducto(Model model) {
+		model.addAttribute("inventario", new InventarioProductoRequestDto());
+		agregarOpciones(model);
+		return "/Inventario/crearinventario";
+	}
 
-    @PostMapping("/guardar")
-    public String guardarInventarioProducto(@ModelAttribute InventarioProductoRequestDto inventario, Model model) {
-        try {
-            servicioAPI.guardarInventario(inventario);
-            return "redirect:/inventario";
-        } catch (Exception ex) {
-            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
-            // en vez de mostrar la página de error de Spring.
-            model.addAttribute("inventario", inventario);
-            model.addAttribute("error", MensajesError.extraer(ex));
-        agregarOpciones(model);
-            return "/Inventario/crearinventario";
-        }
-    }
+	@PostMapping("/guardar")
+	public String guardarInventarioProducto(@ModelAttribute InventarioProductoRequestDto inventario, Model model) {
+		try {
+			servicioAPI.guardarInventario(inventario);
+			return "redirect:/inventario";
+		} catch (Exception ex) {
 
-    @GetMapping("/editar/{id}")
-    public String editarInventarioProducto(@PathVariable Integer id, Model model) {
-        model.addAttribute("inventario", servicioAPI.buscarInventarioId(id));
-        agregarOpciones(model);
-        return "/Inventario/crearinventario";
-    }
+			model.addAttribute("inventario", inventario);
+			model.addAttribute("error", MensajesError.extraer(ex));
+			agregarOpciones(model);
+			return "/Inventario/crearinventario";
+		}
+	}
 
-    @GetMapping("/eliminar/{id}")
-    public String eliminarInventarioProducto(@PathVariable Integer id, RedirectAttributes flash) {
-        try {
-            servicioAPI.eliminarInventario(id);
-        } catch (Exception ex) {
-            // normalmente pasa cuando otro registro depende de este:
-            // se avisa en pantalla en vez de mostrar la página de error.
-            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
-        }
-        return "redirect:/inventario";
-    }
+	@GetMapping("/editar/{id}")
+	public String editarInventarioProducto(@PathVariable Integer id, Model model) {
+		model.addAttribute("inventario", servicioAPI.buscarInventarioId(id));
+		agregarOpciones(model);
+		return "/Inventario/crearinventario";
+	}
 
-    private void agregarOpciones(Model model) {
-        model.addAttribute("opcionesLote", servicioLote.listarOpciones());
-    }
+	@GetMapping("/eliminar/{id}")
+	public String eliminarInventarioProducto(@PathVariable Integer id, RedirectAttributes flash) {
+		try {
+			servicioAPI.eliminarInventario(id);
+		} catch (Exception ex) {
+			flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+		}
+		return "redirect:/inventario";
+	}
+
+	private void agregarOpciones(Model model) {
+		model.addAttribute("opcionesLote", servicioLote.listarOpciones());
+	}
 }

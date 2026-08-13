@@ -4,10 +4,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import tools.jackson.databind.ObjectMapper;
 
-/**
- * andianaApi contesta los rechazos con {"message": "..."}. Aquí se saca ese
- * texto para poder mostrárselo al usuario tal cual, en vez de un error técnico.
- */
 public final class MensajesError {
 
 	private static final ObjectMapper JSON = new ObjectMapper();
@@ -24,7 +20,6 @@ public final class MensajesError {
 					return mensaje.toString();
 				}
 			} catch (Exception noEraJson) {
-				// se cae al mensaje genérico de abajo
 			}
 		}
 		Throwable causa = ex;
@@ -34,7 +29,6 @@ public final class MensajesError {
 		return causa.getMessage() == null ? "No se pudo completar la operación" : causa.getMessage();
 	}
 
-	/** Cuando el borrado falla suele ser porque otro registro depende de este. */
 	public static String alEliminar(Exception ex) {
 		String mensaje = extraer(ex);
 		if (mensaje.toLowerCase().contains("constraint") || mensaje.toLowerCase().contains("foreign key")) {

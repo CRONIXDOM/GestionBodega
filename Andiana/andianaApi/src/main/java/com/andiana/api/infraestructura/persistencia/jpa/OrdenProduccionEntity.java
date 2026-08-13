@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-/** Reflejo exacto de la tabla orden_produccion, tal y como ya existe en la base. */
 @Entity
 @Data
 @Table(name = "orden_produccion")

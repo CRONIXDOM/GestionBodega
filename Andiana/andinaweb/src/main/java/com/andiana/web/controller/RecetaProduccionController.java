@@ -19,60 +19,58 @@ import com.andiana.web.util.MensajesError;
 @RequestMapping("/receta")
 public class RecetaProduccionController {
 
-    @Autowired
-    private IRecetaProduccionService servicioAPI;
-    @Autowired
-    private IProductoService servicioProducto;
+	@Autowired
+	private IRecetaProduccionService servicioAPI;
+	@Autowired
+	private IProductoService servicioProducto;
 
-    @GetMapping
-    public String leerPagina(Model model) {
-        model.addAttribute("listareceta", servicioAPI.listarReceta());
-        model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
-        return "/Receta/listarreceta";
-    }
+	@GetMapping
+	public String leerPagina(Model model) {
+		model.addAttribute("listareceta", servicioAPI.listarReceta());
+		model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+		return "/Receta/listarreceta";
+	}
 
-    @GetMapping("/nuevo")
-    public String crearRecetaProduccion(Model model) {
-        model.addAttribute("receta", new RecetaProduccionRequestDto());
-        agregarOpciones(model);
-        return "/Receta/crearreceta";
-    }
+	@GetMapping("/nuevo")
+	public String crearRecetaProduccion(Model model) {
+		model.addAttribute("receta", new RecetaProduccionRequestDto());
+		agregarOpciones(model);
+		return "/Receta/crearreceta";
+	}
 
-    @PostMapping("/guardar")
-    public String guardarRecetaProduccion(@ModelAttribute RecetaProduccionRequestDto receta, Model model) {
-        try {
-            servicioAPI.guardarReceta(receta);
-            return "redirect:/receta";
-        } catch (Exception ex) {
-            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
-            // en vez de mostrar la página de error de Spring.
-            model.addAttribute("receta", receta);
-            model.addAttribute("error", MensajesError.extraer(ex));
-        agregarOpciones(model);
-            return "/Receta/crearreceta";
-        }
-    }
+	@PostMapping("/guardar")
+	public String guardarRecetaProduccion(@ModelAttribute RecetaProduccionRequestDto receta, Model model) {
+		try {
+			servicioAPI.guardarReceta(receta);
+			return "redirect:/receta";
+		} catch (Exception ex) {
 
-    @GetMapping("/editar/{id}")
-    public String editarRecetaProduccion(@PathVariable Integer id, Model model) {
-        model.addAttribute("receta", servicioAPI.buscarRecetaId(id));
-        agregarOpciones(model);
-        return "/Receta/crearreceta";
-    }
+			model.addAttribute("receta", receta);
+			model.addAttribute("error", MensajesError.extraer(ex));
+			agregarOpciones(model);
+			return "/Receta/crearreceta";
+		}
+	}
 
-    @GetMapping("/eliminar/{id}")
-    public String eliminarRecetaProduccion(@PathVariable Integer id, RedirectAttributes flash) {
-        try {
-            servicioAPI.eliminarReceta(id);
-        } catch (Exception ex) {
-            // normalmente pasa cuando otro registro depende de este:
-            // se avisa en pantalla en vez de mostrar la página de error.
-            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
-        }
-        return "redirect:/receta";
-    }
+	@GetMapping("/editar/{id}")
+	public String editarRecetaProduccion(@PathVariable Integer id, Model model) {
+		model.addAttribute("receta", servicioAPI.buscarRecetaId(id));
+		agregarOpciones(model);
+		return "/Receta/crearreceta";
+	}
 
-    private void agregarOpciones(Model model) {
-        model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
-    }
+	@GetMapping("/eliminar/{id}")
+	public String eliminarRecetaProduccion(@PathVariable Integer id, RedirectAttributes flash) {
+		try {
+			servicioAPI.eliminarReceta(id);
+		} catch (Exception ex) {
+
+			flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+		}
+		return "redirect:/receta";
+	}
+
+	private void agregarOpciones(Model model) {
+		model.addAttribute("opcionesProducto", servicioProducto.listarOpciones());
+	}
 }

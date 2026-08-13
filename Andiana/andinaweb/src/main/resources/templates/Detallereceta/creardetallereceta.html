@@ -23,9 +23,7 @@
 			<div class="col-12 col-xl-8">
 				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
-				<!-- ============================================================
-				     Alta: una receta y todas sus materias primas de una vez.
-				     ============================================================ -->
+				<!-- Alta: una receta y todas sus materias primas de una vez -->
 				<form th:unless="${detalleReceta != null}" class="panel"
 					th:action="@{/detallereceta/guardarVarias}" method="post">
 
@@ -86,9 +84,7 @@
 					</div>
 				</form>
 
-				<!-- ============================================================
-				     Edición: se corrige una sola línea ya guardada.
-				     ============================================================ -->
+				<!-- Edición: se corrige una sola línea ya guardada -->
 				<form th:if="${detalleReceta != null}" class="panel"
 					th:action="@{/detallereceta/guardar}" th:object="${detalleReceta}" method="post">
 					<input type="hidden" th:field="*{idDetalle}">

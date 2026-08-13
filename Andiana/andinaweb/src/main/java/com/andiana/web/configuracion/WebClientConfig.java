@@ -12,7 +12,6 @@ public class WebClientConfig {
 		return WebClient.builder();
 	}
 
-	// define la ruta base del backend "andianaApi"
 	@Bean
 	WebClient webCliente(WebClient.Builder builder) {
 		return builder.baseUrl("http://localhost:8090").build();

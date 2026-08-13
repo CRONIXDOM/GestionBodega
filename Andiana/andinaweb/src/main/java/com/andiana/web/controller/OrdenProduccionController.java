@@ -44,8 +44,7 @@ public class OrdenProduccionController {
             servicioAPI.guardarOrden(orden);
             return "redirect:/orden";
         } catch (Exception ex) {
-            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
-            // en vez de mostrar la página de error de Spring.
+
             model.addAttribute("orden", orden);
             model.addAttribute("error", MensajesError.extraer(ex));
         agregarOpciones(model);
@@ -65,8 +64,7 @@ public class OrdenProduccionController {
         try {
             servicioAPI.eliminarOrden(id);
         } catch (Exception ex) {
-            // normalmente pasa cuando otro registro depende de este:
-            // se avisa en pantalla en vez de mostrar la página de error.
+
             flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
         }
         return "redirect:/orden";

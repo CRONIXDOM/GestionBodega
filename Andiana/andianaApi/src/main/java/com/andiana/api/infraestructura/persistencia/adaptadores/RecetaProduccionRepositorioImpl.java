@@ -11,48 +11,41 @@ import com.andiana.api.infraestructura.repositorio.IRecetaProduccionJpaRepositor
 
 public class RecetaProduccionRepositorioImpl implements IRecetaProduccionRepositorio {
 
-    private final IRecetaProduccionJpaRepositorio jpaRepositorio;
-    private final IRecetaProduccionJpaMapper entityMapper;
+	private final IRecetaProduccionJpaRepositorio jpaRepositorio;
+	private final IRecetaProduccionJpaMapper entityMapper;
 
-    public RecetaProduccionRepositorioImpl(
-            IRecetaProduccionJpaRepositorio jpaRepositorio,
-            IRecetaProduccionJpaMapper entityMapper) {
+	public RecetaProduccionRepositorioImpl(IRecetaProduccionJpaRepositorio jpaRepositorio,
+			IRecetaProduccionJpaMapper entityMapper) {
 
-        this.jpaRepositorio = jpaRepositorio;
-        this.entityMapper = entityMapper;
-    }
+		this.jpaRepositorio = jpaRepositorio;
+		this.entityMapper = entityMapper;
+	}
 
-    @Override
-    public RecetaProduccion guardar(RecetaProduccion nuevoRecetaProduccion) {
-        RecetaProduccionEntity entidad = entityMapper.toEntity(nuevoRecetaProduccion);
-        RecetaProduccionEntity guardado = jpaRepositorio.save(entidad);
-        return entityMapper.toDominio(guardado);
-    }
+	@Override
+	public RecetaProduccion guardar(RecetaProduccion nuevoRecetaProduccion) {
+		RecetaProduccionEntity entidad = entityMapper.toEntity(nuevoRecetaProduccion);
+		RecetaProduccionEntity guardado = jpaRepositorio.save(entidad);
+		return entityMapper.toDominio(guardado);
+	}
 
-    @Override
-    public Optional<RecetaProduccion> buscarPorid(int idRecetaProduccion) {
-        return jpaRepositorio.findById(idRecetaProduccion)
-                .map(entityMapper::toDominio);
-    }
+	@Override
+	public Optional<RecetaProduccion> buscarPorid(int idRecetaProduccion) {
+		return jpaRepositorio.findById(idRecetaProduccion).map(entityMapper::toDominio);
+	}
 
-    @Override
-    public List<RecetaProduccion> listarTodos() {
-        return jpaRepositorio.findAll()
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<RecetaProduccion> listarTodos() {
+		return jpaRepositorio.findAll().stream().map(entityMapper::toDominio).toList();
+	}
 
-    @Override
-    public void eliminar(int idRecetaProduccion) {
-        jpaRepositorio.deleteById(idRecetaProduccion);
-    }
+	@Override
+	public void eliminar(int idRecetaProduccion) {
+		jpaRepositorio.deleteById(idRecetaProduccion);
+	}
 
-    @Override
-    public List<RecetaProduccion> buscarPorProducto(int idProducto) {
-        return jpaRepositorio.findByIdProductoOrderByVersionAsc(idProducto)
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<RecetaProduccion> buscarPorProducto(int idProducto) {
+		return jpaRepositorio.findByIdProductoOrderByVersionAsc(idProducto).stream().map(entityMapper::toDominio)
+				.toList();
+	}
 }

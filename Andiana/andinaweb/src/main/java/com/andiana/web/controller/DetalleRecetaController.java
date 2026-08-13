@@ -25,117 +25,111 @@ import com.andiana.web.util.MensajesError;
 @RequestMapping("/detallereceta")
 public class DetalleRecetaController {
 
-    @Autowired
-    private IDetalleRecetaService servicioAPI;
-    @Autowired
-    private IRecetaProduccionService servicioReceta;
-    @Autowired
-    private IMateriaPrimaService servicioMateriaPrima;
+	@Autowired
+	private IDetalleRecetaService servicioAPI;
+	@Autowired
+	private IRecetaProduccionService servicioReceta;
+	@Autowired
+	private IMateriaPrimaService servicioMateriaPrima;
 
-    @GetMapping
-    public String leerPagina(Model model) {
-        model.addAttribute("listadetallereceta", servicioAPI.listarDetalleReceta());
-        model.addAttribute("opcionesReceta", servicioReceta.listarOpciones());
-        model.addAttribute("opcionesMateria", servicioMateriaPrima.listarOpciones());
-        return "/Detallereceta/listardetallereceta";
-    }
+	@GetMapping
+	public String leerPagina(Model model) {
+		model.addAttribute("listadetallereceta", servicioAPI.listarDetalleReceta());
+		model.addAttribute("opcionesReceta", servicioReceta.listarOpciones());
+		model.addAttribute("opcionesMateria", servicioMateriaPrima.listarOpciones());
+		return "/Detallereceta/listardetallereceta";
+	}
 
-    /**
-     * Alta: una receta lleva varias materias primas, así que el formulario
-     * arranca con una fila y el usuario agrega las que necesite.
-     */
-    @GetMapping("/nuevo")
-    public String crearDetalleReceta(Model model) {
-        model.addAttribute("lineas", unaFilaVacia());
-        agregarOpciones(model);
-        return "/Detallereceta/creardetallereceta";
-    }
+	/**
+	 * Alta: una receta lleva varias materias primas, así que el formulario arranca
+	 * con una fila y el usuario agrega las que necesite.
+	 */
+	@GetMapping("/nuevo")
+	public String crearDetalleReceta(Model model) {
+		model.addAttribute("lineas", unaFilaVacia());
+		agregarOpciones(model);
+		return "/Detallereceta/creardetallereceta";
+	}
 
-    /**
-     * Guarda de una sola vez todas las filas del formulario. Las tres listas
-     * llegan alineadas: la fila i son idMateria[i] y cantidad[i].
-     */
-    @PostMapping("/guardarVarias")
-    public String guardarVariasDetalleReceta(@RequestParam(required = false) Integer idReceta,
-            @RequestParam(name = "idMateria", required = false) List<Integer> idMateria,
-            @RequestParam(name = "cantidad", required = false) List<BigDecimal> cantidad, Model model) {
+	/**
+	 * Guarda de una sola vez todas las filas del formulario. Las listas llegan
+	 * alineadas: la fila i son idMateria[i] y cantidad[i].
+	 */
+	@PostMapping("/guardarVarias")
+	public String guardarVariasDetalleReceta(@RequestParam(required = false) Integer idReceta,
+			@RequestParam(name = "idMateria", required = false) List<Integer> idMateria,
+			@RequestParam(name = "cantidad", required = false) List<BigDecimal> cantidad, Model model) {
 
-        List<DetalleRecetaRequestDto> lineas = armarLineas(idReceta, idMateria, cantidad);
-        try {
-            servicioAPI.guardarVariasDetalleReceta(lineas);
-            return "redirect:/detallereceta";
-        } catch (Exception ex) {
-            // se vuelve al formulario con las filas ya escritas y el motivo del
-            // rechazo, en vez de mostrar la página de error de Spring.
-            model.addAttribute("lineas", lineas.isEmpty() ? unaFilaVacia() : lineas);
-            model.addAttribute("idRecetaElegida", idReceta);
-            model.addAttribute("error", MensajesError.extraer(ex));
-            agregarOpciones(model);
-            return "/Detallereceta/creardetallereceta";
-        }
-    }
+		List<DetalleRecetaRequestDto> lineas = armarLineas(idReceta, idMateria, cantidad);
+		try {
+			servicioAPI.guardarVariasDetalleReceta(lineas);
+			return "redirect:/detallereceta";
+		} catch (Exception ex) {
+			model.addAttribute("lineas", lineas.isEmpty() ? unaFilaVacia() : lineas);
+			model.addAttribute("idRecetaElegida", idReceta);
+			model.addAttribute("error", MensajesError.extraer(ex));
+			agregarOpciones(model);
+			return "/Detallereceta/creardetallereceta";
+		}
+	}
 
-    @PostMapping("/guardar")
-    public String guardarDetalleReceta(@ModelAttribute DetalleRecetaRequestDto detalleReceta, Model model) {
-        try {
-            servicioAPI.guardarDetalleReceta(detalleReceta);
-            return "redirect:/detallereceta";
-        } catch (Exception ex) {
-            // se vuelve al formulario con lo ya escrito y el motivo del rechazo,
-            // en vez de mostrar la página de error de Spring.
-            model.addAttribute("detalleReceta", detalleReceta);
-            model.addAttribute("error", MensajesError.extraer(ex));
-            agregarOpciones(model);
-            return "/Detallereceta/creardetallereceta";
-        }
-    }
+	@PostMapping("/guardar")
+	public String guardarDetalleReceta(@ModelAttribute DetalleRecetaRequestDto detalleReceta, Model model) {
+		try {
+			servicioAPI.guardarDetalleReceta(detalleReceta);
+			return "redirect:/detallereceta";
+		} catch (Exception ex) {
+			model.addAttribute("detalleReceta", detalleReceta);
+			model.addAttribute("error", MensajesError.extraer(ex));
+			agregarOpciones(model);
+			return "/Detallereceta/creardetallereceta";
+		}
+	}
 
-    @GetMapping("/editar/{id}")
-    public String editarDetalleReceta(@PathVariable Integer id, Model model) {
-        model.addAttribute("detalleReceta", servicioAPI.buscarDetalleRecetaId(id));
-        agregarOpciones(model);
-        return "/Detallereceta/creardetallereceta";
-    }
+	@GetMapping("/editar/{id}")
+	public String editarDetalleReceta(@PathVariable Integer id, Model model) {
+		model.addAttribute("detalleReceta", servicioAPI.buscarDetalleRecetaId(id));
+		agregarOpciones(model);
+		return "/Detallereceta/creardetallereceta";
+	}
 
-    @GetMapping("/eliminar/{id}")
-    public String eliminarDetalleReceta(@PathVariable Integer id, RedirectAttributes flash) {
-        try {
-            servicioAPI.eliminarDetalleReceta(id);
-        } catch (Exception ex) {
-            // normalmente pasa cuando otro registro depende de este:
-            // se avisa en pantalla en vez de mostrar la página de error.
-            flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
-        }
-        return "redirect:/detallereceta";
-    }
+	@GetMapping("/eliminar/{id}")
+	public String eliminarDetalleReceta(@PathVariable Integer id, RedirectAttributes flash) {
+		try {
+			servicioAPI.eliminarDetalleReceta(id);
+		} catch (Exception ex) {
+			flash.addFlashAttribute("error", MensajesError.alEliminar(ex));
+		}
+		return "redirect:/detallereceta";
+	}
 
-    private List<DetalleRecetaRequestDto> armarLineas(Integer idReceta, List<Integer> materias,
-            List<BigDecimal> cantidades) {
+	private List<DetalleRecetaRequestDto> armarLineas(Integer idReceta, List<Integer> materias,
+			List<BigDecimal> cantidades) {
 
-        List<DetalleRecetaRequestDto> lineas = new ArrayList<>();
-        if (materias == null) {
-            return lineas;
-        }
-        for (int i = 0; i < materias.size(); i++) {
-            // una fila que se agregó y quedó sin materia prima no se manda
-            if (materias.get(i) == null) {
-                continue;
-            }
-            DetalleRecetaRequestDto linea = new DetalleRecetaRequestDto();
-            linea.setIdReceta(idReceta);
-            linea.setIdMateria(materias.get(i));
-            linea.setCantidad(cantidades != null && i < cantidades.size() ? cantidades.get(i) : null);
-            lineas.add(linea);
-        }
-        return lineas;
-    }
+		List<DetalleRecetaRequestDto> lineas = new ArrayList<>();
+		if (materias == null) {
+			return lineas;
+		}
+		for (int i = 0; i < materias.size(); i++) {
+			// una fila que se agregó y quedó sin materia prima no se manda
+			if (materias.get(i) == null) {
+				continue;
+			}
+			DetalleRecetaRequestDto linea = new DetalleRecetaRequestDto();
+			linea.setIdReceta(idReceta);
+			linea.setIdMateria(materias.get(i));
+			linea.setCantidad(cantidades != null && i < cantidades.size() ? cantidades.get(i) : null);
+			lineas.add(linea);
+		}
+		return lineas;
+	}
 
-    private List<DetalleRecetaRequestDto> unaFilaVacia() {
-        return new ArrayList<>(List.of(new DetalleRecetaRequestDto()));
-    }
+	private List<DetalleRecetaRequestDto> unaFilaVacia() {
+		return new ArrayList<>(List.of(new DetalleRecetaRequestDto()));
+	}
 
-    private void agregarOpciones(Model model) {
-        model.addAttribute("opcionesReceta", servicioReceta.listarOpciones());
-        model.addAttribute("opcionesMateria", servicioMateriaPrima.listarOpciones());
-    }
+	private void agregarOpciones(Model model) {
+		model.addAttribute("opcionesReceta", servicioReceta.listarOpciones());
+		model.addAttribute("opcionesMateria", servicioMateriaPrima.listarOpciones());
+	}
 }

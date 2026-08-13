@@ -11,48 +11,40 @@ import com.andiana.api.infraestructura.repositorio.IInventarioProductoJpaReposit
 
 public class InventarioProductoRepositorioImpl implements IInventarioProductoRepositorio {
 
-    private final IInventarioProductoJpaRepositorio jpaRepositorio;
-    private final IInventarioProductoJpaMapper entityMapper;
+	private final IInventarioProductoJpaRepositorio jpaRepositorio;
+	private final IInventarioProductoJpaMapper entityMapper;
 
-    public InventarioProductoRepositorioImpl(
-            IInventarioProductoJpaRepositorio jpaRepositorio,
-            IInventarioProductoJpaMapper entityMapper) {
+	public InventarioProductoRepositorioImpl(IInventarioProductoJpaRepositorio jpaRepositorio,
+			IInventarioProductoJpaMapper entityMapper) {
 
-        this.jpaRepositorio = jpaRepositorio;
-        this.entityMapper = entityMapper;
-    }
+		this.jpaRepositorio = jpaRepositorio;
+		this.entityMapper = entityMapper;
+	}
 
-    @Override
-    public InventarioProducto guardar(InventarioProducto nuevoInventarioProducto) {
-        InventarioProductoEntity entidad = entityMapper.toEntity(nuevoInventarioProducto);
-        InventarioProductoEntity guardado = jpaRepositorio.save(entidad);
-        return entityMapper.toDominio(guardado);
-    }
+	@Override
+	public InventarioProducto guardar(InventarioProducto nuevoInventarioProducto) {
+		InventarioProductoEntity entidad = entityMapper.toEntity(nuevoInventarioProducto);
+		InventarioProductoEntity guardado = jpaRepositorio.save(entidad);
+		return entityMapper.toDominio(guardado);
+	}
 
-    @Override
-    public Optional<InventarioProducto> buscarPorid(int idInventarioProducto) {
-        return jpaRepositorio.findById(idInventarioProducto)
-                .map(entityMapper::toDominio);
-    }
+	@Override
+	public Optional<InventarioProducto> buscarPorid(int idInventarioProducto) {
+		return jpaRepositorio.findById(idInventarioProducto).map(entityMapper::toDominio);
+	}
 
-    @Override
-    public List<InventarioProducto> listarTodos() {
-        return jpaRepositorio.findAll()
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<InventarioProducto> listarTodos() {
+		return jpaRepositorio.findAll().stream().map(entityMapper::toDominio).toList();
+	}
 
-    @Override
-    public void eliminar(int idInventarioProducto) {
-        jpaRepositorio.deleteById(idInventarioProducto);
-    }
+	@Override
+	public void eliminar(int idInventarioProducto) {
+		jpaRepositorio.deleteById(idInventarioProducto);
+	}
 
-    @Override
-    public List<InventarioProducto> buscarPorLote(int idLote) {
-        return jpaRepositorio.findByIdLote(idLote)
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<InventarioProducto> buscarPorLote(int idLote) {
+		return jpaRepositorio.findByIdLote(idLote).stream().map(entityMapper::toDominio).toList();
+	}
 }

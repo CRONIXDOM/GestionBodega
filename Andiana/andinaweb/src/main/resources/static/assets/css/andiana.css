@@ -1,14 +1,7 @@
-/* ==========================================================================
-   Gaseosas Andinas S.A. — colores de la marca: blanco y amarillo.
-   Se carga despues de style.css y solo cambia la paleta; el resto de la
-   maquetacion se hereda tal cual.
-   ========================================================================== */
-
 :root {
-	/* amarillo de la marca. El texto encima va oscuro, no blanco: sobre
-	   amarillo el blanco no se lee. */
-	--andiana-amarillo: #f5c518;
-	--andiana-amarillo-fuerte: #d9a900;
+
+	--andiana-amarillo: #3CB3BD;
+	--andiana-amarillo-fuerte: #3CB3BD;
 	--andiana-amarillo-suave: #fff8dd;
 	--andiana-amarillo-borde: #f3e2a0;
 	--andiana-tinta: #2a2a24;
@@ -42,13 +35,11 @@ html:not([data-theme="dark"]) {
 	--admin-sidebar-shadow: 18px 0 42px rgba(90, 78, 20, 0.07);
 }
 
-/* el fondo del body venia con un degradado azulado fijo */
 body {
 	background: #ffffff;
 	color: var(--admin-text);
 }
 
-/* ---------- cabecera y marca ---------- */
 
 .brand-icon {
 	background: var(--andiana-amarillo);
@@ -66,7 +57,6 @@ body {
 	background: #ffffff;
 }
 
-/* ---------- menu lateral ---------- */
 
 .sidebar-nav .nav-link:hover,
 .sidebar-nav .nav-link:focus,
@@ -75,7 +65,6 @@ body {
 	color: var(--andiana-tinta);
 }
 
-/* la seccion activa se marca con una franja amarilla a la izquierda */
 .sidebar-nav .nav-link.active {
 	box-shadow: inset 3px 0 0 var(--andiana-amarillo);
 }
@@ -85,7 +74,6 @@ body {
 	color: var(--andiana-amarillo-fuerte);
 }
 
-/* el numero del paso, para que se lea el orden del proceso de un vistazo */
 .paso {
 	display: inline-flex;
 	align-items: center;
@@ -101,7 +89,6 @@ body {
 	flex: 0 0 22px;
 }
 
-/* ---------- botones ---------- */
 
 .btn-primary {
 	border-color: var(--andiana-amarillo);
@@ -130,7 +117,6 @@ body {
 	border-color: var(--andiana-amarillo-borde);
 }
 
-/* ---------- paneles y tablas ---------- */
 
 .panel,
 .metric-card {
@@ -157,7 +143,6 @@ body {
 	color: var(--andiana-amarillo-fuerte);
 }
 
-/* ---------- etiquetas ---------- */
 
 .badge.bg-secondary-subtle {
 	background: var(--andiana-amarillo-suave) !important;
@@ -169,7 +154,6 @@ body {
 	color: var(--andiana-amarillo-fuerte) !important;
 }
 
-/* ---------- formularios ---------- */
 
 .form-control,
 .form-select {
@@ -189,7 +173,6 @@ body {
 	background-color: var(--andiana-amarillo);
 }
 
-/* ---------- avisos ---------- */
 
 .alert-info {
 	border-color: var(--andiana-amarillo-borde);

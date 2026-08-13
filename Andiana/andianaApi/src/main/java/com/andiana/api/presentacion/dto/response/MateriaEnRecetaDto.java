@@ -4,11 +4,8 @@ import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-/** Una linea de la consulta "materias primas utilizadas en una receta". */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class MateriaEnRecetaDto {
 

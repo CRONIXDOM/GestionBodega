@@ -35,7 +35,6 @@ public class RecetaProduccionUseCaseImpl implements IRecetaProduccionUseCase {
 			throw new RuntimeException("El producto indicado no existe");
 		}
 
-		// la base exige que producto + version no se repitan (uk_receta)
 		boolean repetida = repositorio.buscarPorProducto(nuevoRecetaProduccion.getIdProducto()).stream()
 				.filter(otra -> nuevoRecetaProduccion.getIdReceta() == null
 						|| !nuevoRecetaProduccion.getIdReceta().equals(otra.getIdReceta()))
@@ -50,8 +49,7 @@ public class RecetaProduccionUseCaseImpl implements IRecetaProduccionUseCase {
 
 	@Override
 	public RecetaProduccion buscarPorId(int idReceta) {
-		return repositorio.buscarPorid(idReceta)
-				.orElseThrow(() -> new RuntimeException("Receta no encontrada"));
+		return repositorio.buscarPorid(idReceta).orElseThrow(() -> new RuntimeException("Receta no encontrada"));
 	}
 
 	@Override
@@ -61,8 +59,6 @@ public class RecetaProduccionUseCaseImpl implements IRecetaProduccionUseCase {
 
 	@Override
 	public void eliminar(int idReceta) {
-		// la base borra en cascada el detalle, asi que se avisa antes de que el
-		// usuario pierda la formula entera sin darse cuenta
 		int lineas = detalleRepositorio.buscarPorReceta(idReceta).size();
 		if (lineas > 0) {
 			throw new RuntimeException("No se puede eliminar la receta: todavía tiene " + lineas

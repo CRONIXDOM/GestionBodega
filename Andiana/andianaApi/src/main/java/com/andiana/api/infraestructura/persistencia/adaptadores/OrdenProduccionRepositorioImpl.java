@@ -11,40 +11,35 @@ import com.andiana.api.infraestructura.repositorio.IOrdenProduccionJpaRepositori
 
 public class OrdenProduccionRepositorioImpl implements IOrdenProduccionRepositorio {
 
-    private final IOrdenProduccionJpaRepositorio jpaRepositorio;
-    private final IOrdenProduccionJpaMapper entityMapper;
+	private final IOrdenProduccionJpaRepositorio jpaRepositorio;
+	private final IOrdenProduccionJpaMapper entityMapper;
 
-    public OrdenProduccionRepositorioImpl(
-            IOrdenProduccionJpaRepositorio jpaRepositorio,
-            IOrdenProduccionJpaMapper entityMapper) {
+	public OrdenProduccionRepositorioImpl(IOrdenProduccionJpaRepositorio jpaRepositorio,
+			IOrdenProduccionJpaMapper entityMapper) {
 
-        this.jpaRepositorio = jpaRepositorio;
-        this.entityMapper = entityMapper;
-    }
+		this.jpaRepositorio = jpaRepositorio;
+		this.entityMapper = entityMapper;
+	}
 
-    @Override
-    public OrdenProduccion guardar(OrdenProduccion nuevoOrdenProduccion) {
-        OrdenProduccionEntity entidad = entityMapper.toEntity(nuevoOrdenProduccion);
-        OrdenProduccionEntity guardado = jpaRepositorio.save(entidad);
-        return entityMapper.toDominio(guardado);
-    }
+	@Override
+	public OrdenProduccion guardar(OrdenProduccion nuevoOrdenProduccion) {
+		OrdenProduccionEntity entidad = entityMapper.toEntity(nuevoOrdenProduccion);
+		OrdenProduccionEntity guardado = jpaRepositorio.save(entidad);
+		return entityMapper.toDominio(guardado);
+	}
 
-    @Override
-    public Optional<OrdenProduccion> buscarPorid(int idOrdenProduccion) {
-        return jpaRepositorio.findById(idOrdenProduccion)
-                .map(entityMapper::toDominio);
-    }
+	@Override
+	public Optional<OrdenProduccion> buscarPorid(int idOrdenProduccion) {
+		return jpaRepositorio.findById(idOrdenProduccion).map(entityMapper::toDominio);
+	}
 
-    @Override
-    public List<OrdenProduccion> listarTodos() {
-        return jpaRepositorio.findAll()
-                .stream()
-                .map(entityMapper::toDominio)
-                .toList();
-    }
+	@Override
+	public List<OrdenProduccion> listarTodos() {
+		return jpaRepositorio.findAll().stream().map(entityMapper::toDominio).toList();
+	}
 
-    @Override
-    public void eliminar(int idOrdenProduccion) {
-        jpaRepositorio.deleteById(idOrdenProduccion);
-    }
+	@Override
+	public void eliminar(int idOrdenProduccion) {
+		jpaRepositorio.deleteById(idOrdenProduccion);
+	}
 }

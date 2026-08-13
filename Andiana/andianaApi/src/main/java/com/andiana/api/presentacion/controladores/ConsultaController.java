@@ -11,7 +11,6 @@ import com.andiana.api.aplicacion.casosuso.entrada.IConsultaUseCase;
 import com.andiana.api.presentacion.dto.response.ConteoRecetaDto;
 import com.andiana.api.presentacion.dto.response.MateriaEnRecetaDto;
 
-/** Las dos consultas que pidio la gerencia. */
 @RestController
 @RequestMapping("/consulta")
 public class ConsultaController {
@@ -23,14 +22,12 @@ public class ConsultaController {
 		this.consultaUseCase = consultaUseCase;
 	}
 
-	/** Materias primas utilizadas en una receta. */
 	@GetMapping("/receta/{idReceta}/materias")
 	public List<MateriaEnRecetaDto> materiasDeLaReceta(@PathVariable int idReceta) {
 
 		return consultaUseCase.materiasDeLaReceta(idReceta);
 	}
 
-	/** Numero de materias primas por receta. */
 	@GetMapping("/recetas/conteo-materias")
 	public List<ConteoRecetaDto> conteoDeMateriasPorReceta() {
 

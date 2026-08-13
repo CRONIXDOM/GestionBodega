@@ -27,7 +27,8 @@ public class InventarioProductoController {
 	private final IInventarioProductoUseCase inventarioProductoUseCase;
 	private final IInventarioProductoDtoMapper mapper;
 
-	public InventarioProductoController(IInventarioProductoUseCase inventarioProductoUseCase, IInventarioProductoDtoMapper mapper) {
+	public InventarioProductoController(IInventarioProductoUseCase inventarioProductoUseCase,
+			IInventarioProductoDtoMapper mapper) {
 
 		this.inventarioProductoUseCase = inventarioProductoUseCase;
 		this.mapper = mapper;

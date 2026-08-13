@@ -27,7 +27,8 @@ public class RecetaProduccionController {
 	private final IRecetaProduccionUseCase recetaProduccionUseCase;
 	private final IRecetaProduccionDtoMapper mapper;
 
-	public RecetaProduccionController(IRecetaProduccionUseCase recetaProduccionUseCase, IRecetaProduccionDtoMapper mapper) {
+	public RecetaProduccionController(IRecetaProduccionUseCase recetaProduccionUseCase,
+			IRecetaProduccionDtoMapper mapper) {
 
 		this.recetaProduccionUseCase = recetaProduccionUseCase;
 		this.mapper = mapper;
