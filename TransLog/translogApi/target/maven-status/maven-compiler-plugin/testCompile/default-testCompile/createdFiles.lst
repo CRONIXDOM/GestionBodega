@@ -1,0 +1,10 @@
+com/translog/api/aplicacion/ConsultaUseCaseImplTest.class
+com/translog/api/aplicacion/DespachosEnMemoria.class
+com/translog/api/aplicacion/DespachoUseCaseImplTest.class
+com/translog/api/aplicacion/VehiculosEnMemoria.class
+com/translog/api/arquitectura/IndependenciaDeFrameworksTest.class
+com/translog/api/aplicacion/RepositorioEnMemoria.class
+com/translog/api/aplicacion/CiudadsEnMemoria.class
+com/translog/api/aplicacion/RutasEnMemoria.class
+com/translog/api/aplicacion/EnviosEnMemoria.class
+com/translog/api/aplicacion/ConductorsEnMemoria.class

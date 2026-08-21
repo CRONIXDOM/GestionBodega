@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Rutas</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Operación</p>
+					<h1 class="h3 mb-1">Rutas</h1>
+					<p class="text-muted mb-0">Los trayectos definidos, con su distancia aproximada.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/ruta/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nueva</a>
+			</div>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table id="tablaRuta" class="table align-middle mb-0" data-page-size="15">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Origen</th>
+							<th scope="col">Destino</th>
+							<th scope="col">Distancia</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listaruta}">
+							<td class="fw-semibold" th:text="${indice.idRuta}"></td>
+							<td th:text="${ciudades.get(indice.idCiudadOrigen)} ?: ('#' + ${indice.idCiudadOrigen})"></td>
+							<td th:text="${ciudades.get(indice.idCiudadDestino)} ?: ('#' + ${indice.idCiudadDestino})"></td>
+							<td><span class="fw-semibold" th:text="${indice.distanciaKm}"></span> <span class="text-muted small">km</span></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/ruta/editar/{id}(id=${indice.idRuta})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/ruta/eliminar/{id}(id=${indice.idRuta})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(listaruta)}">
+							<td colspan="5" class="text-center text-muted py-4">Todavía no hay rutas definidas.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

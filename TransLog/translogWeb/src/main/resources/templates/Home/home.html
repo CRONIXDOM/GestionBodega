@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Panel</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">TransLog Ecuador S.A.</p>
+					<h1 class="h3 mb-1">Panel de control</h1>
+					<p class="text-muted mb-0">Transporte y distribución de paquetes entre ciudades.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Envíos</div>
+					<div class="h3 mb-0" th:text="${envios}">0</div>
+					<div class="text-muted small"><span th:text="${sinAsignar}">0</span> sin asignar</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Despachos</div>
+					<div class="h3 mb-0" th:text="${despachos}">0</div>
+					<div class="text-muted small">registrados</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Vehículos</div>
+					<div class="h3 mb-0" th:text="${vehiculosDisponibles}">0</div>
+					<div class="text-muted small">disponibles</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-uppercase text-muted small">Conductores</div>
+					<div class="h3 mb-0" th:text="${conductoresHabilitados}">0</div>
+					<div class="text-muted small">habilitados</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="panel mt-3 p-4">
+			<h2 class="h5 mb-3">La regla que gobierna el despacho</h2>
+			<p class="mb-2 text-muted">Un despacho solo se registra cuando se cumplen las seis condiciones:</p>
+			<ol class="mb-0" style="line-height: 2;">
+				<li>Tiene una <strong>ruta definida</strong>.</li>
+				<li>Su <strong>vehículo está disponible</strong>.</li>
+				<li>Su <strong>conductor está habilitado</strong>.</li>
+				<li>Los envíos <strong>corresponden al origen y destino</strong> de esa ruta.</li>
+				<li>Ninguno de esos envíos <strong>está ya en otro despacho</strong>.</li>
+				<li>Entre todos <strong>no superan la capacidad</strong> del vehículo.</li>
+			</ol>
+		</section>
+	</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/CiudadsEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/ConductorsEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/ConsultaUseCaseImplTest.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/DespachoUseCaseImplTest.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/DespachosEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/EnviosEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/RepositorioEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/RutasEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/aplicacion/VehiculosEnMemoria.java
+/home/user/GestionBodega/TransLog/translogApi/src/test/java/com/translog/api/arquitectura/IndependenciaDeFrameworksTest.java

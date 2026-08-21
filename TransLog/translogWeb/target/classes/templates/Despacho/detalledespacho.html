@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Detalle del despacho</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Despachos · Detalle</p>
+					<h1 class="h3 mb-1" th:text="'Despacho ' + ${despacho.idDespacho}">Despacho</h1>
+					<p class="text-muted mb-0">
+						<span th:text="${despacho.fechaDespacho}"></span> ·
+						<span th:text="${etiquetaRuta.get(despacho.idRuta)}"></span> ·
+						<span th:text="${etiquetaVehiculo.get(despacho.idVehiculo)}"></span> ·
+						<span th:text="${etiquetaConductor.get(despacho.idConductor)}"></span>
+					</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-light btn-sm" th:href="@{/despacho}"><i class="bi bi-arrow-left"
+					aria-hidden="true"></i> Volver</a>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Envíos</div>
+					<div class="h3 mb-0" th:text="${#lists.size(envios)}">0</div>
+					<div class="text-muted small">en este despacho</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Peso total</div>
+					<div class="h3 mb-0" th:text="${#aggregates.sum(envios.![peso])} ?: 0">0</div>
+					<div class="text-muted small">kilogramos</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="panel p-3 h-100">
+					<div class="text-muted small text-uppercase">Estado</div>
+					<div class="h5 mb-0 mt-2" th:text="${despacho.estado}">—</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="panel mt-3">
+			<div class="p-3 border-bottom">
+				<h2 class="h6 mb-0"><i class="bi bi-box-seam" aria-hidden="true"></i> Envíos que transporta</h2>
+			</div>
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col">N° de envío</th>
+							<th scope="col">Peso</th>
+							<th scope="col">Valor declarado</th>
+							<th scope="col">Registrado</th>
+							<th scope="col">Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="e : ${envios}">
+							<td class="fw-semibold" th:text="'Envío ' + ${e.idEnvio}"></td>
+							<td><span class="fw-semibold" th:text="${e.peso}"></span> <span class="text-muted small">kg</span></td>
+							<td th:text="${e.valorDeclarado}"></td>
+							<td th:text="${e.fechaRegistro}"></td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${e.estado}"></span></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(envios)}">
+							<td colspan="5" class="text-center text-muted py-4">Este despacho no tiene envíos.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

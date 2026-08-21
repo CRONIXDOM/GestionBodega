@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Despacho</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Operación</p>
+					<h1 class="h3 mb-1">Registro de Despacho</h1>
+					<p class="text-muted mb-0">Elige la ruta, el vehículo y el conductor, y marca los envíos que va a llevar.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-9">
+				<div th:if="${error}" class="alert alert-danger" role="alert">
+					<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+				</div>
+
+				<form class="panel" th:action="@{/despacho/guardar}" th:object="${despacho}" method="post">
+					<input type="hidden" th:field="*{idDespacho}">
+
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Ruta <span class="text-danger">*</span></label>
+							<select class="form-select" id="idRuta" th:field="*{idRuta}" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesRuta}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Al elegirla se cargan abajo los envíos que puede transportar.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Fecha del despacho <span class="text-danger">*</span></label>
+							<input class="form-control" type="date" id="fechaDespacho" name="fechaDespacho"
+								th:value="${despacho.fechaDespacho}" required>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Vehículo <span class="text-danger">*</span></label>
+							<select class="form-select" id="idVehiculo" th:field="*{idVehiculo}" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesVehiculo}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Tiene que estar disponible y con capacidad suficiente.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Conductor <span class="text-danger">*</span></label>
+							<select class="form-select" id="idConductor" th:field="*{idConductor}" required>
+								<option value="">Seleccione...</option>
+								<option th:each="op : ${opcionesConductor}" th:value="${op.id}" th:text="${op.etiqueta}"></option>
+							</select>
+							<div class="form-text">Tiene que estar habilitado.</div>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Estado <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{estado}" required>
+								<option value="">Seleccione...</option>
+								<option th:value="'ACTIVO'" th:text="'ACTIVO'"></option>
+								<option th:value="'FINALIZADO'" th:text="'FINALIZADO'"></option>
+								<option th:value="'CANCELADO'" th:text="'CANCELADO'"></option>
+							</select>
+						</div>
+					</div>
+
+					<hr class="my-4">
+
+					<h2 class="h6 mb-1">Envíos que va a transportar</h2>
+					<p class="text-muted small">
+						Solo se ofrecen los envíos que van del origen al destino de la ruta elegida y que todavía no
+						están en ningún otro despacho. Entre todos no pueden superar la capacidad del vehículo.
+					</p>
+
+					<div th:if="${#lists.isEmpty(enviosDisponibles)}" class="alert alert-info mb-0" role="alert">
+						<i class="bi bi-info-circle" aria-hidden="true"></i>
+						<span th:if="${despacho.idRuta == null}">Elige una ruta para ver qué envíos puede llevar.</span>
+						<span th:unless="${despacho.idRuta == null}">No hay envíos libres para esa ruta.</span>
+					</div>
+
+					<div th:unless="${#lists.isEmpty(enviosDisponibles)}" class="table-responsive">
+						<table class="table align-middle mb-0">
+							<thead>
+								<tr>
+									<th scope="col" style="width: 60px;">Llevar</th>
+									<th scope="col">N° de envío</th>
+									<th scope="col">Peso</th>
+									<th scope="col">Valor declarado</th>
+									<th scope="col">Registrado</th>
+									<th scope="col">Estado</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="e : ${enviosDisponibles}">
+									<td>
+										<input class="form-check-input" type="checkbox" name="idsDeEnvios"
+											th:value="${e.idEnvio}" th:id="'envio' + ${e.idEnvio}"
+											th:checked="${yaCargados != null and #lists.contains(yaCargados, e.idEnvio)}"
+											data-peso th:attr="data-peso=${e.peso}">
+									</td>
+									<td><label class="fw-semibold mb-0" th:for="'envio' + ${e.idEnvio}"
+										th:text="'Envío ' + ${e.idEnvio}"></label></td>
+									<td><span class="fw-semibold" th:text="${e.peso}"></span> <span class="text-muted small">kg</span></td>
+									<td th:text="${e.valorDeclarado}"></td>
+									<td th:text="${e.fechaRegistro}"></td>
+									<td><span class="badge bg-secondary-subtle text-body" th:text="${e.estado}"></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="alert alert-info mt-3 mb-0" id="totalCarga" role="status">
+						Marca los envíos para ver cuánto pesa la carga.
+					</div>
+
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/despacho}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<script th:inline="none">
+			// Al cambiar la ruta se recarga el formulario, porque los envíos que se
+			// pueden llevar dependen de ella. Se conserva lo demás ya elegido.
+			(function () {
+				var ruta = document.getElementById("idRuta");
+				if (ruta) {
+					ruta.addEventListener("change", function () {
+						if (!ruta.value) { return; }
+						var f = document.getElementById("fechaDespacho");
+						var v = document.getElementById("idVehiculo");
+						var c = document.getElementById("idConductor");
+						var id = document.querySelector('input[name="idDespacho"]');
+						var url = "/despacho/envios?idRuta=" + encodeURIComponent(ruta.value);
+						if (id && id.value) { url += "&idDespacho=" + encodeURIComponent(id.value); }
+						if (v && v.value) { url += "&idVehiculo=" + encodeURIComponent(v.value); }
+						if (c && c.value) { url += "&idConductor=" + encodeURIComponent(c.value); }
+						if (f && f.value) { url += "&fechaDespacho=" + encodeURIComponent(f.value); }
+						window.location.href = url;
+					});
+				}
+
+				// La cuenta del peso en pantalla, para que el usuario vea si se pasa
+				// antes de enviar. El servidor la vuelve a hacer igual.
+				var aviso = document.getElementById("totalCarga");
+				var casillas = document.querySelectorAll('input[name="idsDeEnvios"]');
+				if (!aviso || !casillas.length) { return; }
+
+				function actualizar() {
+					var total = 0, cuantos = 0;
+					casillas.forEach(function (casilla) {
+						if (casilla.checked) {
+							total += parseFloat(casilla.getAttribute("data-peso")) || 0;
+							cuantos++;
+						}
+					});
+					aviso.textContent = cuantos === 0
+							? "Marca los envíos para ver cuánto pesa la carga."
+							: cuantos + " envío(s) marcados, " + total.toFixed(2) + " kg en total.";
+				}
+				casillas.forEach(function (casilla) { casilla.addEventListener("change", actualizar); });
+				actualizar();
+			})();
+		</script>
+	</div>
+</body>
+</html>

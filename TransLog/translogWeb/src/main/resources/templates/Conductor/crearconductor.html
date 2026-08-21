@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Conductor</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Flota</p>
+					<h1 class="h3 mb-1">Registro de Conductor</h1>
+					<p class="text-muted mb-0">Completa los datos del conductor.</p>
+				</div>
+			</div>
+		</div>
+
+		<section class="row g-3 mt-1">
+			<div class="col-12 col-xl-7">
+				<div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+				<form class="panel" th:action="@{/conductor/guardar}" th:object="${conductor}" method="post">
+					<input type="hidden" th:field="*{idConductor}">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label">Nombre <span class="text-danger">*</span></label>
+							<input class="form-control" type="text" th:field="*{nombre}" required>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Licencia <span class="text-danger">*</span></label>
+							<input class="form-control" type="text" th:field="*{licencia}" required>
+						</div>
+						<div class="col-md-6">
+							<label class="form-label">Estado <span class="text-danger">*</span></label>
+							<select class="form-select" th:field="*{estado}" required>
+								<option value="">Seleccione...</option>
+								<option th:value="'HABILITADO'" th:text="'HABILITADO'"></option>
+								<option th:value="'NO_HABILITADO'" th:text="'NO_HABILITADO'"></option>
+							</select>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end gap-2 mt-4">
+						<a class="btn btn-light" th:href="@{/conductor}">
+							<i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
+						</a>
+						<button class="btn btn-primary" type="submit">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i> Guardar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

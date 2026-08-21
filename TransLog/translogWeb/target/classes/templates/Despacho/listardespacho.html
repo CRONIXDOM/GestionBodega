@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Despachos</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Operación</p>
+					<h1 class="h3 mb-1">Despachos</h1>
+					<p class="text-muted mb-0">Cada despacho lleva una ruta, un vehículo, un conductor y sus envíos.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/despacho/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
+		</div>
+
+		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-check2-circle" aria-hidden="true"></i> <span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table id="tablaDespacho" class="table align-middle mb-0" data-page-size="15">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Fecha</th>
+							<th scope="col">Ruta</th>
+							<th scope="col">Vehículo</th>
+							<th scope="col">Conductor</th>
+							<th scope="col">Estado</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listadespacho}">
+							<td class="fw-semibold" th:text="${indice.idDespacho}"></td>
+							<td th:text="${indice.fechaDespacho}"></td>
+							<td th:text="${etiquetaRuta.get(indice.idRuta)} ?: ('#' + ${indice.idRuta})"></td>
+							<td th:text="${etiquetaVehiculo.get(indice.idVehiculo)} ?: ('#' + ${indice.idVehiculo})"></td>
+							<td th:text="${etiquetaConductor.get(indice.idConductor)} ?: ('#' + ${indice.idConductor})"></td>
+							<td><span class="badge bg-secondary-subtle text-body" th:text="${indice.estado}"></span></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/despacho/detalle/{id}(id=${indice.idDespacho})}"><i
+									class="bi bi-eye" aria-hidden="true"></i> Ver detalle</a>
+								<a class="btn btn-light btn-sm" th:href="@{/despacho/editar/{id}(id=${indice.idDespacho})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/despacho/eliminar/{id}(id=${indice.idDespacho})}"
+									onclick="return confirm('Se eliminará el despacho. Sus envíos volverán a quedar libres. ¿Continuar?')"><i
+									class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(listadespacho)}">
+							<td colspan="7" class="text-center text-muted py-4">Todavía no hay despachos registrados.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

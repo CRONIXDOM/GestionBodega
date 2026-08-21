@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Conductores</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Flota</p>
+					<h1 class="h3 mb-1">Conductores</h1>
+					<p class="text-muted mb-0">Quiénes pueden conducir un despacho.</p>
+				</div>
+			</div>
+			<div class="heading-actions">
+				<a class="btn btn-primary btn-sm" th:href="@{/conductor/nuevo}"><i class="bi bi-plus-circle"
+					aria-hidden="true"></i> Nuevo</a>
+			</div>
+		</div>
+
+		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-check2-circle" aria-hidden="true"></i> <span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+			<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> <span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<section class="panel mt-3">
+			<div class="p-3 pb-0">
+				<div class="input-group table-search" style="max-width: 340px;">
+					<span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" data-table-search="tablaConductor" placeholder="Buscar...">
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table id="tablaConductor" class="table align-middle mb-0" data-page-size="15">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Licencia</th>
+							<th scope="col">Estado</th>
+							<th scope="col" class="text-end">Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="indice:${listaconductor}">
+							<td class="fw-semibold" th:text="${indice.idConductor}"></td>
+							<td th:text="${indice.nombre}"></td>
+							<td><span class="badge bg-secondary-subtle text-body font-monospace" th:text="${indice.licencia}"></span></td>
+							<td><span class="badge"
+								th:classappend="${indice.estado == 'HABILITADO'} ? 'text-bg-success' : 'text-bg-secondary'"
+								th:text="${indice.estado}"></span></td>
+							<td class="text-end">
+								<a class="btn btn-light btn-sm" th:href="@{/conductor/editar/{id}(id=${indice.idConductor})}"><i
+									class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+								<a class="btn btn-outline-danger btn-sm" th:href="@{/conductor/eliminar/{id}(id=${indice.idConductor})}"
+									onclick="return confirm('¿Seguro que deseas eliminar?')"><i class="bi bi-trash"
+									aria-hidden="true"></i> Eliminar</a>
+							</td>
+						</tr>
+						<tr data-empty-row th:if="${#lists.isEmpty(listaconductor)}">
+							<td colspan="5" class="text-center text-muted py-4">Todavía no hay registros.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

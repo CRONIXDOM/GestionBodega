@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TransLog Ecuador S.A.</title>
+
+<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/assets/vendors/bootstrap-icons/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+<link rel="stylesheet" th:href="@{/assets/css/translog.css}">
+</head>
+
+<body>
+	<div class="admin-shell">
+		<div class="sidebar-backdrop" data-sidebar-close></div>
+
+		<aside class="admin-sidebar" id="adminSidebar" aria-label="Navegación principal">
+			<div class="sidebar-header">
+				<a class="brand-mark" th:href="@{/}" aria-label="Gaseosas TransLog">
+					<span class="brand-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+					<span class="brand-copy">
+						<span class="brand-title">TransLog</span>
+						<span class="brand-subtitle">Logística</span>
+					</span>
+				</a>
+			</div>
+
+			<nav class="sidebar-nav">
+				<!-- Las opciones van en el orden en que se usa el sistema: primero lo
+				     que hay que tener definido, despues lo que ocurre cada dia. -->
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Catálogos</span>
+				<a class="nav-link" th:href="@{/ciudad}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/ciudad')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
+					<span class="nav-text">Ciudades</span>
+				</a>
+				<a class="nav-link" th:href="@{/ruta}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/ruta')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></span>
+					<span class="nav-text">Rutas</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Flota</span>
+				<a class="nav-link" th:href="@{/vehiculo}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/vehiculo')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
+					<span class="nav-text">Vehículos</span>
+				</a>
+				<a class="nav-link" th:href="@{/conductor}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/conductor')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+					<span class="nav-text">Conductores</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Operación</span>
+				<a class="nav-link" th:href="@{/envio}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/envio')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+					<span class="nav-text">Envíos</span>
+				</a>
+				<a class="nav-link" th:href="@{/despacho}" th:classappend="${rutaActual != null and #strings.startsWith(rutaActual, '/despacho')} ? 'active'">
+					<span class="nav-icon"><i class="bi bi-truck-front" aria-hidden="true"></i></span>
+					<span class="nav-text">Despachos</span>
+				</a>
+
+				<span class="text-uppercase text-muted small fw-bold px-3 pt-3 pb-1 d-block">Gerencia</span>
+				<a class="nav-link" th:href="@{/consulta/despachos-con-mas-envios}">
+					<span class="nav-icon"><i class="bi bi-bar-chart" aria-hidden="true"></i></span>
+					<span class="nav-text">Despachos con más envíos</span>
+				</a>
+			</nav>
+
+			<div class="sidebar-footer">
+				<span class="status-dot"></span>
+				<span class="sidebar-footer-text">Sistema operativo</span>
+			</div>
+		</aside>
+
+		<div class="admin-main">
+			<nav class="navbar admin-navbar navbar-expand bg-white">
+				<div class="container-fluid px-3 px-lg-4">
+					<button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
+						aria-expanded="true" aria-label="Mostrar/ocultar menú">
+						<span></span> <span></span> <span></span>
+					</button>
+
+					<div class="ms-3 flex-grow-1">
+						<span class="fw-bold text-body">TransLog Ecuador S.A.</span>
+					</div>
+				</div>
+			</nav>
+
+			<main class="dashboard-content">
+				<div class="container-fluid px-3 px-lg-4 py-4">
+					<div layout:fragment="contenidopaginas"></div>
+				</div>
+			</main>
+
+			<footer class="admin-footer">
+				<div class="container-fluid px-3 px-lg-4">
+					<span>TransLog Ecuador S.A. — Transporte y distribución de paquetes.</span>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

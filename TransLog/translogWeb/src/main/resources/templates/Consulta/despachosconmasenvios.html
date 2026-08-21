@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/Plantilla/plantillaui">
+<head>
+<meta charset="UTF-8">
+<title>Despachos con más envíos</title>
+</head>
+<body>
+	<div layout:fragment="contenidopaginas">
+		<div class="page-heading">
+			<div class="page-heading-copy">
+				<span class="page-icon"><i class="bi bi-bar-chart" aria-hidden="true"></i></span>
+				<div>
+					<p class="eyebrow mb-1">Consulta</p>
+					<h1 class="h3 mb-1">Despachos con mayor cantidad de envíos</h1>
+					<p class="text-muted mb-0">
+						De más envíos a menos, con la fecha del despacho y la ruta correspondiente.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="alert alert-info mt-3" role="alert">
+			<i class="bi bi-info-circle" aria-hidden="true"></i>
+			Solo se cuentan los despachos que hoy siguen cumpliendo la regla de negocio: ruta definida, vehículo
+			disponible, conductor habilitado, envíos que corresponden a la ruta y peso dentro de la capacidad del
+			vehículo.
+		</div>
+
+		<section class="panel mt-3">
+			<div class="table-responsive">
+				<table class="table align-middle mb-0">
+					<thead>
+						<tr>
+							<th scope="col" style="width: 70px;">#</th>
+							<th scope="col">Despacho</th>
+							<th scope="col">Fecha</th>
+							<th scope="col">Cantidad de envíos</th>
+							<th scope="col">Ruta</th>
+							<th scope="col">Vehículo</th>
+							<th scope="col">Conductor</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="linea, iter : ${ranking}">
+							<td>
+								<span class="badge" th:classappend="${iter.index == 0} ? 'text-bg-primary' : 'bg-secondary-subtle text-body'"
+									th:text="${iter.count}">1</span>
+							</td>
+							<td class="fw-semibold" th:text="'Despacho ' + ${linea.idDespacho}"></td>
+							<td th:text="${linea.fechaDespacho}"></td>
+							<td>
+								<span class="h5 mb-0" th:text="${linea.cantidadEnvios}">0</span>
+								<span class="text-muted small">envío(s)</span>
+							</td>
+							<td th:text="${linea.ruta}"></td>
+							<td th:text="${linea.vehiculo}"></td>
+							<td th:text="${linea.conductor}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(ranking)}">
+							<td colspan="7" class="text-center text-muted py-4">
+								No hay despachos válidos que mostrar.
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</body>
+</html>
